@@ -6,13 +6,13 @@ about:
   links:
     - icon: twitter
       text: Twitter
-      href: https://twitter.com
+      href: https://twitter.com/LettryL
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://linkedin.com/in/layal-christine-lettry-529b4471/
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/Layalchristine24
 ---
 
 About this blog

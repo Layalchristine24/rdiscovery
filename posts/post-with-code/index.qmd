@@ -1,13 +1,50 @@
 ---
-title: "Post With Code"
-author: "Harlow Malloc"
-date: "2023-09-29"
-categories: [news, code, analysis]
+title: "Detect date and time variables with openxlsx"
+author: "Layal C. Lettry"
+date: "2023-10-07"
+categories: [code, openxlsx]
 image: "image.jpg"
 ---
 
-This is a post with executable code.
+# Detect date variables
 
-```{r}
-1 + 1
+When you try to read an excel file, the dates don't always look the way you would expect. You may see a vector of integers (or doubles) rather than a vector of dates. If you are using [openxlsx](https://github.com/ycphs/openxlsx), you can set `detectDates = TRUE` in the function `read.xlsx()`.
+
+```{r load_libraries, eval=TRUE, message=FALSE, warning=FALSE}
+library(openxlsx)
+library(tidyverse)
+library(readxl)
+```
+
+```{r detectdates, eval=TRUE, message=FALSE, warning=FALSE}
+xlsxfile_path <- system.file("extdata", "readTest.xlsx", package = "openxlsx")
+
+# Vector of doubles instead of dates
+xlsxfile_with_problems <- read.xlsx(xlsxfile_path, sheet = 3) |> 
+  as_tibble()
+xlsxfile_with_problems
+glimpse(xlsxfile_with_problems)
+
+# Vector of dates
+xlsxfile <- read.xlsx(xlsxfile_path, sheet = 3, detectDates = TRUE)  |> 
+  as_tibble()
+xlsxfile
+glimpse(xlsxfile)
+```
+
+# Convert double variables to date and time variables
+
+Another way to convert a vector of integers is to use the function `convertToDate()` or `convertToDateTime()`.
+
+```{r convertodate, eval=TRUE, message=FALSE, warning=FALSE}
+other_file <- readxl_example(path = "type-me.xlsx")
+xlsxfile_datetime <- read.xlsx(other_file, sheet = 3) |> 
+  as_tibble() |> 
+  slice(2:3) |> 
+  select(`maybe.a.datetime?`) |> 
+  pull()
+xlsxfile_datetime
+
+convertToDate(xlsxfile_datetime[1])
+convertToDateTime(xlsxfile_datetime[2])
 ```

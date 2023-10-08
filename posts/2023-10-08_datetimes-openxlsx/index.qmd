@@ -48,3 +48,11 @@ xlsxfile_datetime
 convertToDate(xlsxfile_datetime[1])
 convertToDateTime(xlsxfile_datetime[2])
 ```
+
+
+# Links
+These examples are inspired by:
+
+- [https://rdrr.io/cran/openxlsxhttps://rdrr.io/cran/openxlsx](https://rdrr.io/cran/openxlsx/man/read.xlsx.html)
+
+- [https://readxl.tidyverse.org](https://readxl.tidyverse.org)

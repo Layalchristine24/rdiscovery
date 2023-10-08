@@ -1,0 +1,106 @@
+---
+title: "Rename variables in a data frame using an external lookup table"
+author: "Layal C. Lettry"
+date: "2023-10-08"
+categories: [unquote-splice, tidy evaluation, rename, any_of]
+image: "image.jpg"
+---
+
+# Rename variables in a data frame using an external lookup table
+
+Suppose that a data frame is present with certain columns that possess the appropriate names, however, the remaining columns require renaming. An existing lookup table is ready to be used for setting new names to these specific columns. 
+
+I found the solution by using tidy evaluation tools, namely the unquote-splice `!!!`, and by reading the [article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse). 
+
+```{r}
+#| label: load_libraries
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+Here is the data frame with 3 variables, namely `var1`, `var2` and `var4`.
+
+```{r}
+#| label: data
+#| message: false
+#| warning: false
+
+test_tib <- tribble(
+  ~var1,      ~var2,   ~var4,
+  "x",        "a",     1L,
+  "y",        "b",     2L,
+  "z",        "c",     3L
+)
+```
+
+Define the lookup table with the new names. Transform this lookup table into a named vector using `deframe()`. Do not forget that the first argument of `deframe()` should be the new names of the variable and the second one should have the actual names.
+
+```{r}
+#| label: lookup
+#| message: false
+#| warning: false
+
+new_names <- tribble(
+  ~names_var, ~new_names_var,
+  "var1",     "Variable 1",
+  "var2",     "Variable 2",
+  "var3",     "Variable 3",
+  "var4",     "Variable 4"
+)
+
+new_names_vec <- deframe(select(new_names, new_names_var, names_var))
+```
+
+# Solution using tidy evaluation and base R
+
+Our goal is to unpack the vector of column name pairs that are actually in our data frame. We could achieve this by using unquote-splice `!!!` which will splice the list of names into the dynamic dots `...` of `rename()`.
+
+However, the column `var3` is not found. An error appears.
+
+```{r}
+#| label: error
+#| error: true
+#| message: false
+#| warning: false
+
+test_tib |>
+  rename(!!!new_names_vec)
+```
+
+Select only the variables which are in the named vector `new_names_vec`.
+
+```{r}
+#| label: base_r_solution
+#| message: false
+#| warning: false
+test_tib |>
+  rename(!!!new_names_vec[new_names_vec %in% names(test_tib)])
+```
+
+# Solution using dplyr
+
+Instead of selecting the common variables, you can use `any_of()` which does this selection automatically.
+
+```{r}
+#| label: dplyr_solution
+#| message: false
+#| warning: false
+test_tib |>
+  rename(any_of(new_names_vec))
+```
+
+
+# Sources
+
+These examples are inspired by:
+
+- [Article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse)
+
+- [https://dcl-prog.stanford.edu/tidy-eval-detailed.html](https://dcl-prog.stanford.edu/tidy-eval-detailed.html)
+
+- [https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments](https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments)
+
+- [https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1](https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1)
+
+- [https://rlang.r-lib.org/reference/dyn-dots.html](https://rlang.r-lib.org/reference/dyn-dots.html)

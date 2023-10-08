@@ -8,9 +8,9 @@ image: "image.jpg"
 
 # Rename variables in a data frame using an external lookup table
 
-Suppose that a data frame is present with certain columns that possess the appropriate names, however, the remaining columns require renaming. An existing lookup table is ready to be used for setting new names to these specific columns. 
+Suppose that a data frame is present with certain columns that possess the appropriate names, however, the remaining columns require renaming. An existing lookup table is ready to be used for setting new names to these specific columns.
 
-I found the solution by using tidy evaluation tools, namely the unquote-splice `!!!`, and by reading the [article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse). 
+I found the solution by using tidy evaluation tools, namely the unquote-splice `!!!`, and by reading the [article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse).
 
 ```{r}
 #| label: load_libraries
@@ -32,6 +32,7 @@ test_tib <- tribble(
   "y",        "b",     2L,
   "z",        "c",     3L
 )
+test_tib
 ```
 
 Define the lookup table with the new names. Transform this lookup table into a named vector using `deframe()`. Do not forget that the first argument of `deframe()` should be the new names of the variable and the second one should have the actual names.
@@ -48,8 +49,10 @@ new_names <- tribble(
   "var3",     "Variable 3",
   "var4",     "Variable 4"
 )
+new_names
 
 new_names_vec <- deframe(select(new_names, new_names_var, names_var))
+new_names_vec
 ```
 
 # Solution using tidy evaluation and base R
@@ -90,17 +93,16 @@ test_tib |>
   rename(any_of(new_names_vec))
 ```
 
-
 # Sources
 
 These examples are inspired by:
 
-- [Article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse)
+-   [Article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse)
 
-- [https://dcl-prog.stanford.edu/tidy-eval-detailed.html](https://dcl-prog.stanford.edu/tidy-eval-detailed.html)
+-   <https://dcl-prog.stanford.edu/tidy-eval-detailed.html>
 
-- [https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments](https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments)
+-   <https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments>
 
-- [https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1](https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1)
+-   [https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1](https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1)
 
-- [https://rlang.r-lib.org/reference/dyn-dots.html](https://rlang.r-lib.org/reference/dyn-dots.html)
+-   <https://rlang.r-lib.org/reference/dyn-dots.html>

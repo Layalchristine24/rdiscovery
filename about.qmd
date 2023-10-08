@@ -12,7 +12,13 @@ about:
       href: https://linkedin.com/in/layal-christine-lettry-529b4471/
     - icon: github
       text: Github
-      href: https://github.com/Layalchristine24
+      href: https://github.com/Layalchristine24/rdiscovery
 ---
 
-About this blog
+In this blog, I intend to compose a post detailing each discovery that I have made through the regular utilization of R. 
+
+I consider it to be mainly a daybook where I can easily find my solutions again. You may find some simple cases, but also more complex ones. 
+
+Hopefully, you will also encounter something of value to yourself!
+
+I wish you a pleasant reading!

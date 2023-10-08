@@ -1,8 +1,8 @@
 ---
 title: "Detect date and time variables with openxlsx"
 author: "Layal C. Lettry"
-date: "2023-10-07"
-categories: [code, openxlsx]
+date: "2023-10-08"
+categories: [code, openxlsx, date, datetime]
 image: "image.jpg"
 ---
 

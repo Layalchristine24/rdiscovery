@@ -2,7 +2,7 @@
 title: "Progress bars"
 author: "Layal C. Lettry"
 date: "2023-10-12"
-categories: [openxlsx, date, datetime]
+categories: [cli, purrr, walk, progress]
 image: "image.jpg"
 ---
 

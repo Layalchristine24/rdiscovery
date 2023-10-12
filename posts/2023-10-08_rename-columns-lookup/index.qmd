@@ -81,7 +81,7 @@ test_tib |>
   rename(!!!new_names_vec[new_names_vec %in% names(test_tib)])
 ```
 
-# Solution using dplyr
+# Solution using \{dplyr\}
 
 Instead of selecting the common variables, you can use `any_of()` which does this selection automatically.
 

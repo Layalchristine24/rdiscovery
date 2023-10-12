@@ -25,4 +25,4 @@ purrr::walk(1:3, Sys.sleep, .progress = TRUE)
 
 ## The \{cli\} package
 
-You can also create a progress bar with the \{cli\} package. Please refer to [this article](https://cli.r-lib.org/articles/progress.html) presents several possibilities to create a progress bar. 
+You can also create a progress bar with the \{cli\} package. Please refer to [this article](https://cli.r-lib.org/articles/progress.html) which presents several possibilities to create a progress bar. 

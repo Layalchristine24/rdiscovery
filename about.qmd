@@ -15,9 +15,9 @@ about:
       href: https://github.com/Layalchristine24/rdiscovery
 ---
 
-In this blog, I intend to compose a post detailing each discovery that I have made through the regular utilization of R. 
+In this blog, I intend to compose a post detailing each discovery that I have made through the regular utilization of R.
 
-I consider it to be mainly a daybook where I can easily find my solutions again. You may find some simple cases, but also more complex ones. 
+I consider it to be mainly a daybook where I can easily find my solutions and my findings again. You may find some simple cases, but also more complex ones. I will also report and demonstrate useful packages or repositories from other developers to whom I assign the copyright for the content of these particular posts.
 
 Hopefully, you will also encounter something of value to yourself!
 

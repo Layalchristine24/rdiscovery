@@ -1,0 +1,14 @@
+{
+  "hash": "d042ee2a54fcf3f8fe3e005cc3f627bc",
+  "result": {
+    "markdown": "---\ntitle: \"Progress bars\"\nauthor: \"Layal C. Lettry\"\ndate: \"2023-10-12\"\ncategories: [openxlsx, date, datetime]\nimage: \"image.jpg\"\n---\n\n\n# Progress bars\n\nSometimes, you want to include a progress bar in your pipeline, to see how much\ncode has been executed and how much is left. \n\nHere are some possibilities to do that.\n\n## The \\{purrr\\} package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npurrr::walk(1:3, Sys.sleep, .progress = TRUE)\n```\n:::\n\n\n## The \\{cli\\} package\n\nYou can also create a progress bar with the \\{cli\\} package. Please refer to [this article](https://cli.r-lib.org/articles/progress.html) presents several possibilities to create a progress bar. \n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

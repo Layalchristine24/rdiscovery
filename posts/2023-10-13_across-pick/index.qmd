@@ -1,0 +1,81 @@
+---
+title: "Perform transformations on several variables with {dplyr}"
+author: "Layal C. Lettry"
+date: "2023-10-12"
+categories: [dplyr, across, pick]
+image: "image.jpg"
+---
+
+# Convert character variables into numeric
+
+Suppose you have a data frame with several character variables which you want to 
+transform into numeric ones. You an use the function `across()`.
+
+```{r convert_to_num}
+#| label: purrr_walk
+#| message: false
+#| warning: false
+library(dplyr)
+chr_data <- tibble::tribble(
+  ~year, ~country,       ~sex,    ~age, ~is_married, ~has_child,
+  "1990", "Italy",       "Man",   "28", "No",        "Yes",
+  "1990", "France",      "Woman", "68", "Yes",       "No",
+  "1990", "France",      "Woman", "22", "No",        "No",
+  "1990", "Italy",       "Man",   "56", "Yes",       "Yes",
+  "2000", "Switzerland", "Woman", "42", "Yes",       "Yes",
+  "2000", "France",      "Woman", "13", "No",        "No",
+  "2000", "Italy",       "Man",   "43", "Yes",       "No",
+  "1990", "Switzerland", "Woman", "23", "No",        "Yes",
+  "1990", "Italy",       "Man",   "36", "Yes",       "Yes",
+  "2000", "Switzerland", "Woman", "32", "Yes",       "No",
+  "1990", "Switzerland", "Man",   "23", "No",        "No",
+  "2000", "France",      "Man",   "63", "Yes",       "Yes"
+)
+
+glimpse(chr_data)
+
+# Convert year and age into 
+num_data <- 
+  chr_data |> 
+  mutate(across(c(year, age), as.numeric))
+
+glimpse(num_data)
+```
+
+
+# Convert character variables into logical
+
+Let's convert the `sex`, `is_married` and `has_child` character variables into logical ones.
+
+```{r convert_to_log}
+data <- num_data |> 
+  mutate(across(c(is_married, has_child), \(x) if_else(x == "Yes", TRUE, FALSE)),
+         is_woman = if_else(sex == "Woman", TRUE, FALSE)) |> 
+  select(-sex) |> 
+  arrange(year, country)
+
+data
+```
+
+# Perform summary statistics on multiple variables
+
+Let's compute the mean of several variables grouped by year and country.
+
+```{r mean}
+my_mean <- function(data, group_vars, mean_vars){
+  data |> 
+    group_by(pick({{ group_vars }})) |> 
+    reframe(across({{ mean_vars }}, 
+                   ~ mean(., na.rm = TRUE), 
+                   .names = "mean_{.col}")
+            )
+}
+
+data |> 
+  my_mean(group_vars = c("year", "country"),
+          mean_vars = c("age", "is_married", "has_child", "is_woman"))
+
+```
+
+# Source
+These examples are inspired from [this article's section](https://dplyr.tidyverse.org/articles/programming.html#transforming-user-supplied-variables). 

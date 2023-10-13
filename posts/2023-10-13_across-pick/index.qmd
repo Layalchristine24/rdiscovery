@@ -1,7 +1,7 @@
 ---
 title: "Perform transformations on several variables with {dplyr}"
 author: "Layal C. Lettry"
-date: "2023-10-12"
+date: "2023-10-13"
 categories: [dplyr, across, pick]
 image: "image.jpg"
 ---

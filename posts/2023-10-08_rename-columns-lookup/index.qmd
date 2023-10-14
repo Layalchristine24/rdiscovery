@@ -93,16 +93,16 @@ test_tib |>
   rename(any_of(new_names_vec))
 ```
 
-# Sources
+# References
 
 These examples are inspired by:
 
--   [Article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse)
+-   [Article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse),
 
--   <https://dcl-prog.stanford.edu/tidy-eval-detailed.html>
+-   <https://dcl-prog.stanford.edu/tidy-eval-detailed.html>,
 
--   <https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments>
+-   <https://adv-r.hadley.nz/quasiquotation.html#unquoting-many-arguments>,
 
--   [https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1](https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1)
+-   <https://rlang.r-lib.org/reference/topic-inject.html#splicing-with--1>,
 
--   <https://rlang.r-lib.org/reference/dyn-dots.html>
+-   <https://rlang.r-lib.org/reference/dyn-dots.html>.

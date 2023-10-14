@@ -6,7 +6,7 @@ categories: [tidyverse, now, deprecated, superseded, defunct, questioning, reexp
 image: "image.jpg"
 ---
 
-# Package {now}
+# The now package
 
 Thanks to [Antoine Fabri](https://x.com/antoine_fabri?s=20)'s [post](https://x.com/antoine_fabri/status/1712063122989547718?s=20), I discovered the package [now](https://github.com/moodymudskipper/now) which allows to remove deprecated, superseded, defunct, questioning or reexported functions from tidyverse packages.
 
@@ -32,5 +32,7 @@ left_join(enframe(before, value = "before"), enframe(after, value = "after"),
   arrange(keep_ratio) |>
   knitr::kable()
 ```
+
+# References 
 
 I assign the copyright for the content of the code above to [Antoine Fabri](https://x.com/antoine_fabri?s=20).

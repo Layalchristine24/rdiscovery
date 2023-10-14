@@ -1,5 +1,5 @@
 ---
-title: "Detect date and time variables with {openxlsx}"
+title: "Detect date and time variables with openxlsx"
 author: "Layal C. Lettry"
 date: "2023-10-08"
 categories: [openxlsx, date, datetime]
@@ -8,7 +8,7 @@ image: "image.jpg"
 
 # Detect date variables
 
-When you try to read an excel file, the dates don't always look the way you would expect. You may see a vector of integers (or doubles) rather than a vector of dates. If you are using [{openxlsx}](https://github.com/ycphs/openxlsx), you can set `detectDates = TRUE` in the function `read.xlsx()`.
+When you try to read an excel file, the dates don't always look the way you would expect. You may see a vector of integers (or doubles) rather than a vector of dates. If you are using [openxlsx](https://github.com/ycphs/openxlsx), you can set `detectDates = TRUE` in the function `read.xlsx()`.
 
 ```{r}
 #| label: load_libraries
@@ -58,10 +58,10 @@ convertToDate(xlsxfile_datetime[1])
 convertToDateTime(xlsxfile_datetime[2])
 ```
 
-# Sources
+# References
 
 These examples are inspired by:
 
--   [https://rdrr.io/cran/openxlsxhttps://rdrr.io/cran/openxlsx](https://rdrr.io/cran/openxlsx/man/read.xlsx.html)
+-   <https://rdrr.io/cran/openxlsxhttps://rdrr.io/cran/openxlsx>
 
--   <https://readxl.tidyverse.org>
+-   <https://readxl.tidyverse.org>.

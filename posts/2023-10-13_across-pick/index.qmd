@@ -1,5 +1,5 @@
 ---
-title: "Perform transformations on several variables with {dplyr}"
+title: "Perform transformations on several variables with `dplyr::across()` and `dplyr::pick()`"
 author: "Layal C. Lettry"
 date: "2023-10-13"
 categories: [dplyr, across, pick]
@@ -11,8 +11,8 @@ image: "image.jpg"
 Suppose you have a data frame with several character variables which you want to 
 transform into numeric ones. You an use the function `across()`.
 
-```{r convert_to_num}
-#| label: purrr_walk
+```{r}
+#| label: convert_to_num
 #| message: false
 #| warning: false
 library(dplyr)
@@ -47,7 +47,10 @@ glimpse(num_data)
 
 Let's convert the `sex`, `is_married` and `has_child` character variables into logical ones.
 
-```{r convert_to_log}
+```{r}
+#| label: convert_to_log
+#| message: false
+#| warning: false
 data <- num_data |> 
   mutate(across(c(is_married, has_child), \(x) if_else(x == "Yes", TRUE, FALSE)),
          is_woman = if_else(sex == "Woman", TRUE, FALSE)) |> 
@@ -61,7 +64,10 @@ data
 
 Let's compute the mean of several variables grouped by year and country.
 
-```{r mean}
+```{r}
+#| label: mean
+#| message: false
+#| warning: false
 my_mean <- function(data, group_vars, mean_vars){
   data |> 
     group_by(pick({{ group_vars }})) |> 
@@ -77,5 +83,6 @@ data |>
 
 ```
 
-# Source
+# References
+
 These examples are inspired from [this article's section](https://dplyr.tidyverse.org/articles/programming.html#transforming-user-supplied-variables). 

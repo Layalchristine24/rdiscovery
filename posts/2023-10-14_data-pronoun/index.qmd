@@ -1,5 +1,5 @@
 ---
-title: "Perform transformations on several variables with `.data` pronoun"
+title: "Perform transformations on several variables with and `.env` and `.data` pronouns"
 author: "Layal C. Lettry"
 date: "2023-10-14"
 categories: [rlang, pronouns, magrittr]

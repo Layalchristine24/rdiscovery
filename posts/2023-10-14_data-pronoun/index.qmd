@@ -1,0 +1,74 @@
+---
+title: "Perform transformations on several variables with `.data` pronoun"
+author: "Layal C. Lettry"
+date: "2023-10-12"
+categories: [rlang, pronouns, magrittr]
+image: "image.jpg"
+---
+
+# Problem
+
+Let's assume that you would like to know the number of occurrences for each instance of the following data.
+
+```{r}
+#| label: mydata
+#| message: false
+#| warning: false
+
+mydata <- tibble::tribble(
+  ~year,      ~country, ~age, ~is_married, ~has_child, ~is_woman,
+   1990,      "France",   68,        TRUE,      FALSE,      TRUE,
+   1990,      "France",   22,       FALSE,      FALSE,      TRUE,
+   1990,       "Italy",   28,       FALSE,       TRUE,     FALSE,
+   1990,       "Italy",   56,        TRUE,       TRUE,     FALSE,
+   1990,       "Italy",   36,        TRUE,       TRUE,     FALSE,
+   1990, "Switzerland",   23,       FALSE,       TRUE,      TRUE,
+   1990, "Switzerland",   23,       FALSE,      FALSE,     FALSE,
+   2000,      "France",   13,       FALSE,      FALSE,      TRUE,
+   2000,      "France",   63,        TRUE,       TRUE,     FALSE,
+   2000,       "Italy",   43,        TRUE,      FALSE,     FALSE,
+   2000, "Switzerland",   42,        TRUE,       TRUE,      TRUE,
+   2000, "Switzerland",   32,        TRUE,      FALSE,      TRUE
+  )
+
+mydata
+```
+
+## With a for loop
+
+```{r}
+#| label: for_loop
+#| message: false
+#| warning: false
+for (var in names(mydata)) {
+  mydata |>
+    dplyr::count(.data[[var]]) |>
+    print()
+}
+```
+
+
+## With the function `purrr::map()`
+
+```{r}
+#| label: purrr_map
+#| message: false
+#| warning: false
+mydata |>
+  names() |>
+  purrr::map(\(.x) dplyr::count(mydata, .data[[.x]]))
+```
+
+# What is the difference between the `.data` pronoun and the magrittr `.`?
+
+I learnt in this [article's section](https://rlang.r-lib.org/reference/dot-data.html) that it is safer to use the rlang `.data` pronoun than the magrittr `.` one in a data-masked context. With grouped data, `.` relates to the whole data whereas `.data` represents the current sliced data.
+
+The `.data` pronoun is automatically generated when you use [data-masking functions](https://rlang.r-lib.org/reference/topic-data-mask-ambiguity.html#:~:text=Data%20masking%20is%20an%20R,defined%20in%20the%20current%20environment).
+
+# References
+
+The previous code and explanations are inspired from:
+
+- <https://dplyr.tidyverse.org/articles/programming.html#loop-over-multiple-variables>,
+
+- <https://rlang.r-lib.org/reference/dot-data.html>.

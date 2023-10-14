@@ -1,7 +1,7 @@
 ---
 title: "Perform transformations on several variables with `.data` pronoun"
 author: "Layal C. Lettry"
-date: "2023-10-12"
+date: "2023-10-14"
 categories: [rlang, pronouns, magrittr]
 image: "image.jpg"
 ---
@@ -33,6 +33,18 @@ mydata <- tibble::tribble(
 
 mydata
 ```
+## The `.env` pronoun
+Let's say we also want to have a variable called `is_parent` which can be deduced from the variable `has_child`. We can define the default value `TRUE` for `is_parent` and make it dependent of the `has_child`. This default variable can be retrieved with the `.env` pronoun.
+
+```{r}
+is_parent <- TRUE
+
+parent_data <- 
+  mydata |>
+    dplyr::mutate(is_parent = as.logical(has_child * .env$is_parent)) 
+
+parent_data
+```
 
 ## With a for loop
 
@@ -40,8 +52,8 @@ mydata
 #| label: for_loop
 #| message: false
 #| warning: false
-for (var in names(mydata)) {
-  mydata |>
+for (var in names(parent_data)) {
+  parent_data |>
     dplyr::count(.data[[var]]) |>
     print()
 }
@@ -54,9 +66,9 @@ for (var in names(mydata)) {
 #| label: purrr_map
 #| message: false
 #| warning: false
-mydata |>
+parent_data |>
   names() |>
-  purrr::map(\(.x) dplyr::count(mydata, .data[[.x]]))
+  purrr::map(\(.x) dplyr::count(parent_data, .data[[.x]]))
 ```
 
 # What is the difference between the `.data` pronoun and the magrittr `.`?

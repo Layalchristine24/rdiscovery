@@ -34,6 +34,7 @@ mydata <- tibble::tribble(
 mydata
 ```
 ## The `.env` pronoun
+
 Let's say we also want to have a variable called `is_parent` which can be deduced from the variable `has_child`. We can define the default value `TRUE` for `is_parent` and make it dependent of the `has_child`. This default variable can be retrieved with the `.env` pronoun.
 
 ```{r}

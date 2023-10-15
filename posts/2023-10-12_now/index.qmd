@@ -22,17 +22,22 @@ The [README.md](https://github.com/moodymudskipper/now#readme) file is explains 
 #| label: clean_package
 #| message: false
 #| warning: false
-# removing additionally all experimental and questioning features, along with reexports
 library(tidyverse)
 
 before <- sapply(tidyverse_packages(), \(pkg) length(getNamespaceExports(pkg)))
 
-now::clean_up_tidyverse(c("experimental", "superseded", "deprecated", "defunct", "questioning", "reexports"))
+now::clean_up_tidyverse(
+  c(
+    "experimental", "superseded", "deprecated", "defunct", "questioning",
+    "reexports"
+  )
+)
 
 after <- sapply(tidyverse_packages(), \(pkg) length(getNamespaceExports(pkg)))
 
-left_join(enframe(before, value = "before"), enframe(after, value = "after"), 
-          by = "name") |> 
+left_join(enframe(before, value = "before"), enframe(after, value = "after"),
+  by = "name"
+) |>
   filter(after != before) |>
   mutate(keep_ratio = sprintf("%2.0f%%", 100 * after / before)) |>
   arrange(keep_ratio) |>

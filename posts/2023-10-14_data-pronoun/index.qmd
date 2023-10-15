@@ -2,7 +2,7 @@
 title: "Perform transformations on several variables with `.env` and `.data` pronouns"
 author: "Layal C. Lettry"
 date: "2023-10-15"
-categories: [rlang, pronouns, magrittr]
+categories: [rlang, pronouns, magrittr, data-masking]
 image: "image.jpg"
 ---
 
@@ -33,6 +33,7 @@ mydata <- tibble::tribble(
 
 mydata
 ```
+
 ## The `.env` pronoun
 
 Let's say we also want to have a variable called `is_parent` which can be deduced from the variable `has_child`. We can define the default value `TRUE` for `is_parent` and make it dependent of the `has_child`. This default variable can be retrieved with the `.env` pronoun.
@@ -59,7 +60,6 @@ for (var in names(parent_data)) {
     print()
 }
 ```
-
 
 ## With the function `purrr::map()`
 
@@ -89,7 +89,6 @@ palmerpenguins::penguins |>
 
 ```
 
-
 # What is the difference between the `.data` and the magrittr `.` pronouns?
 
 I learnt in this [article's section](https://rlang.r-lib.org/reference/dot-data.html) that it is safer to use the rlang `.data` pronoun than the magrittr `.` one in a data-masked context. With grouped data, `.` relates to the whole data whereas `.data` represents the current sliced data.
@@ -100,6 +99,6 @@ The `.data` pronoun is automatically generated when you use [data-masking functi
 
 The previous code and explanations are inspired from:
 
-- <https://dplyr.tidyverse.org/articles/programming.html#loop-over-multiple-variables>,
+-   <https://dplyr.tidyverse.org/articles/programming.html#loop-over-multiple-variables>,
 
-- <https://rlang.r-lib.org/reference/dot-data.html>.
+-   <https://rlang.r-lib.org/reference/dot-data.html>.

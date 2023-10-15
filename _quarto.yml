@@ -10,6 +10,8 @@ website:
         href: https://github.com/
       - icon: twitter
         href: https://twitter.com
+  site-url: "https://rdiscovery.netlify.app"
+  
 format:
   html:
     theme: 

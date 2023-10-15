@@ -13,6 +13,9 @@ about:
     - icon: github
       text: Github
       href: https://github.com/Layalchristine24/rdiscovery
+    - icon: mastodon
+      text: Mastodon
+      href: https://fosstodon.org/@layal
 ---
 
 In this blog, I intend to compose a post detailing each discovery that I have made through the regular utilization of R.

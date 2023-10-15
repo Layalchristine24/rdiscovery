@@ -7,9 +7,13 @@ website:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/
+        href: https://github.com/Layalchristine24/rdiscovery
       - icon: twitter
-        href: https://twitter.com
+        href: https://twitter.com/LettryL
+      - icon: linkedin
+        href: https://linkedin.com/in/layal-christine-lettry-529b4471/
+      - icon: mastodon
+        href: https://fosstodon.org/@layal
   site-url: "https://rdiscovery.netlify.app"
   
 format:

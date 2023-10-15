@@ -4,6 +4,12 @@ author: "Layal C. Lettry"
 date: "2023-10-12"
 categories: [cli, purrr, walk, progress]
 image: "image.jpg"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
 ---
 
 # Progress bars

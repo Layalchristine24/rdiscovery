@@ -4,6 +4,12 @@ author: "Layal C. Lettry"
 date: "2023-10-15"
 categories: [rlang, pronouns, magrittr, data-masking]
 image: "image.jpg"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
 ---
 
 # Problem
@@ -48,6 +54,8 @@ parent_data <-
 parent_data
 ```
 
+# Solution
+
 ## With a for loop
 
 ```{r}
@@ -72,7 +80,9 @@ parent_data |>
   purrr::map(\(.x) dplyr::count(parent_data, .data[[.x]]))
 ```
 
-# What is the difference between the `.data` and the `.env` pronouns?
+# Theory
+
+## What is the difference between the `.data` and the `.env` pronouns?
 
 The `.env` pronoun allows to use variables which were previously defined in the environment, whereas the `.data` pronoun takes the variables which are in the data frame.
 
@@ -89,7 +99,7 @@ palmerpenguins::penguins |>
 
 ```
 
-# What is the difference between the `.data` and the magrittr `.` pronouns?
+## What is the difference between the `.data` and the magrittr `.` pronouns?
 
 I learnt in this [article's section](https://rlang.r-lib.org/reference/dot-data.html) that it is safer to use the rlang `.data` pronoun than the magrittr `.` one in a data-masked context. With grouped data, `.` relates to the whole data whereas `.data` represents the current sliced data.
 

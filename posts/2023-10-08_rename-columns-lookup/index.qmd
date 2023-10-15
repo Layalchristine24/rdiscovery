@@ -4,6 +4,12 @@ author: "Layal C. Lettry"
 date: "2023-10-08"
 categories: [unquote-splice, tidy evaluation, rename, any_of]
 image: "image.jpg"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
 ---
 
 # Problem

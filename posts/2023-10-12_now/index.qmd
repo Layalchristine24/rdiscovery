@@ -4,6 +4,12 @@ author: "Layal C. Lettry"
 date: "2023-10-12"
 categories: [tidyverse, now, deprecated, superseded, defunct, questioning, reexported]
 image: "image.jpg"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
 ---
 
 # The now package
@@ -33,6 +39,6 @@ left_join(enframe(before, value = "before"), enframe(after, value = "after"),
   knitr::kable()
 ```
 
-# References 
+# References
 
 I assign the copyright for the content of the code above to [Antoine Fabri](https://x.com/antoine_fabri?s=20).

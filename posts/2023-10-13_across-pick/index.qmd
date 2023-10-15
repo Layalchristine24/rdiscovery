@@ -4,12 +4,17 @@ author: "Layal C. Lettry"
 date: "2023-10-13"
 categories: [dplyr, across, pick]
 image: "image.jpg"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
 ---
 
 # Convert character variables into numeric
 
-Suppose you have a data frame with several character variables which you want to 
-transform into numeric ones. You an use the function `across()`.
+Suppose you have a data frame with several character variables which you want to transform into numeric ones. You an use the function `across()`.
 
 ```{r}
 #| label: convert_to_num
@@ -41,7 +46,6 @@ num_data <-
 
 glimpse(num_data)
 ```
-
 
 # Convert character variables into logical
 
@@ -85,4 +89,4 @@ data |>
 
 # References
 
-These examples are inspired from [this article's section](https://dplyr.tidyverse.org/articles/programming.html#transforming-user-supplied-variables). 
+These examples are inspired from [this article's section](https://dplyr.tidyverse.org/articles/programming.html#transforming-user-supplied-variables).

@@ -22,6 +22,7 @@ format:
       light: cosmo
       dark: darkly
     css: styles.css
+    include-after-body: plausible.html
 
 editor: visual
 execute:

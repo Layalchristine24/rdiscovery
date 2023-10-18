@@ -30,6 +30,10 @@ website:
           text: Homepage
         - href: https://rdiscovery.netlify.app
           text: rdiscovery blog
+  page-footer:
+    center:
+      - href: https://rdiscovery.netlify.app
+        text: rdiscovery.netlify.app
   site-url: https://rdiscovery.netlify.app
   repo-url: https://github.com/Layalchristine24/rdiscovery
   open-graph: true

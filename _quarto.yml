@@ -6,7 +6,7 @@ website:
   description: "Explore R with Layal Christine Lettry"
   navbar:
     title: false
-    background: "#eee"
+    background: "#92C5DE"
     left:
       - href: index.qmd
         text: Home

@@ -1,0 +1,16 @@
+{
+  "hash": "2c3cc6a744947daa31d2556b03e05fdf",
+  "result": {
+    "markdown": "---\ntitle: \"rdiscovery\"\nsubtitle: A blog by Layal Christine Lettry\nlisting:\n  contents: posts\n  feed: true\n  sort: \"date desc\"\n  type: default\n  categories: true\n  sort-ui: false\n  filter-ui: false\npage-layout: full\ntitle-block-banner: true\nimage: profile_cat.jpg\n---\n\n::: {.cell}\n\n:::\n\n\n<!-- Mastodon verification -->\n<a rel=\"me\" style=\"display:none\" href=\"https://fosstodon.org/@layal\">Hidden link used to verify my account on fosstodon.org</a> \n<a rel=\"me\" style=\"display:none\" href=\"https://linkedin.com/in/layal-christine-lettry-529b4471/\">Hidden link used to verify my account on LinkedIn</a>\n<a rel=\"me\" style=\"display:none\" href=\"https://twitter.com/LettryL\">Hidden link used to verify my account on Twitter</a> \n<a rel=\"me\" style=\"display:none\" href=\"https://github.com/Layalchristine24\">Hidden link used to verify my account on GitHub</a> \n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

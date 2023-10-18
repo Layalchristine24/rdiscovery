@@ -1,5 +1,6 @@
 ---
 title: "rdiscovery"
+subtitle: A blog by Layal Christine Lettry
 listing:
   contents: posts
   feed: true
@@ -10,4 +11,62 @@ listing:
   filter-ui: false
 page-layout: full
 title-block-banner: true
+image: profile_cat.jpg
 ---
+
+```{r write-redirects}
+#| echo: false
+# list names of post folders
+posts <- list.dirs(
+  path = here::here("posts"),
+  full.names = FALSE,
+  recursive = FALSE
+)
+
+# extract the slugs
+slugs <- gsub("^.*_", "", posts)
+
+# lines to insert to a netlify _redirect file
+post_redirects <- paste0("/", slugs, " ", "/posts/", posts)
+
+# function to extract post categories from index.qmd files
+get_post_categories <- function(post) {
+  file <- here::here("posts", post) |> fs::path("index.qmd")
+  if(!fs::file_exists(file)) {
+    return(character(0))
+  }
+  file |>
+    readLines() |> 
+    stringr::str_subset("^categories:") |>
+    stringr::str_extract("\\[.*\\]") |> 
+    stringr::str_remove_all("[\\[\\]]") |>
+    stringr::str_split(", ") |> 
+    unlist()
+}
+
+# extract the categories
+categories <- purrr::map(posts, get_post_categories) |> 
+  unlist() |> 
+  unique()
+
+# extract categories in nice form
+keys <- categories |> 
+  stringr::str_to_lower() |>
+  stringr::str_replace_all(" ", "-")
+
+# extract categories in ugly form
+values <- categories |>
+  stringr::str_replace_all(" ", "%20")
+
+# category redirects
+category_redirects <- paste0("/category/", keys, " ", "/#category=", values)
+
+# write the _redirect file
+writeLines(c(post_redirects, category_redirects), here::here("_site", "_redirects"))
+```
+
+<!-- Mastodon verification -->
+<a rel="me" style="display:none" href="https://fosstodon.org/@layal">Hidden link used to verify my account on fosstodon.org</a> 
+<a rel="me" style="display:none" href="https://linkedin.com/in/layal-christine-lettry-529b4471/">Hidden link used to verify my account on LinkedIn</a>
+<a rel="me" style="display:none" href="https://twitter.com/LettryL">Hidden link used to verify my account on Twitter</a> 
+<a rel="me" style="display:none" href="https://github.com/Layalchristine24">Hidden link used to verify my account on GitHub</a> 

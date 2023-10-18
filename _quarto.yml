@@ -3,18 +3,37 @@ project:
 
 website:
   title: "rdiscovery"
+  description: "Explore R with Layal Christine Lettry"
   navbar:
+    title: false
+    background: "#eee"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: index.xml
+        text: RSS
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/Layalchristine24/rdiscovery
-      - icon: twitter
-        href: https://twitter.com/LettryL
-      - icon: linkedin
-        href: https://linkedin.com/in/layal-christine-lettry-529b4471/
-      - icon: mastodon
-        href: https://fosstodon.org/@layal
-  site-url: "https://rdiscovery.netlify.app"
+        href: https://github.com/Layalchristine24
+      - text: Social
+        menu:
+        - icon: twitter
+          href: https://twitter.com/LettryL
+        - icon: linkedin
+          href: https://linkedin.com/in/layal-christine-lettry-529b4471/
+        - icon: mastodon
+          href: https://fosstodon.org/@layal
+      - text: Sites
+        menu:
+        - href: http://layalchristinelettry.rbind.io/
+          text: Homepage
+        - href: https://rdiscovery.netlify.app
+          text: rdiscovery blog
+  site-url: https://rdiscovery.netlify.app
+  repo-url: https://github.com/Layalchristine24/rdiscovery
+  open-graph: true
+  search: false
   
 format:
   html:

@@ -6,9 +6,9 @@ listing:
   feed: true
   sort: "date desc"
   type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
+  categories: cloud
+  sort-ui: [title, date]
+  filter-ui: [title, date]
 page-layout: full
 title-block-banner: true
 image: profile_cat.jpg

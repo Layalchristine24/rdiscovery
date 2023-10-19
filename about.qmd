@@ -18,7 +18,7 @@ about:
       href: https://fosstodon.org/@layal
 ---
 
-In this blog, I intend to compose a post detailing each discovery that I have made through the regular utilization of R.
+In this blog, I intend to compose a post for each noteworthy discovery that I have made through the regular utilization of R.
 
 I consider it to be mainly a daybook, where I can classify my solutions and links to related topics. You may find some simple cases, but also more complex ones. I will also report and demonstrate useful packages or repositories from other developers to whom I assign the copyright for the content of these particular posts.
 

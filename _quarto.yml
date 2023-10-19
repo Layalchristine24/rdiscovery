@@ -14,22 +14,37 @@ website:
         text: RSS
     right:
       - about.qmd
-      - icon: github
-        href: https://github.com/Layalchristine24
-      - text: Social
-        menu:
-        - icon: twitter
-          href: https://twitter.com/LettryL
-        - icon: linkedin
-          href: https://linkedin.com/in/layal-christine-lettry-529b4471/
-        - icon: mastodon
-          href: https://fosstodon.org/@layal
       - text: Sites
         menu:
         - href: http://layalchristinelettry.rbind.io/
           text: Homepage
         - href: https://rdiscovery.netlify.app
-          text: rdiscovery blog
+          text: rdiscovery Blog
+      - text: GitHub
+        menu:
+        - icon: github
+          href: https://github.com/Layalchristine24/rdiscovery
+          text: Blog Repository
+        - icon: github
+          href: https://github.com/Layalchristine24
+          text: Layalchristine24 Profile
+        - icon: github
+          href: https://github.com/cynkra
+          text: cynkra GmbH
+        - icon: github
+          href: https://github.com/asam-group
+          text: ASAM Group
+      - text: Social
+        menu:
+        - icon: twitter
+          href: https://twitter.com/LettryL
+          text: Twitter
+        - icon: linkedin
+          href: https://linkedin.com/in/layal-christine-lettry-529b4471/
+          text: LinkedIn
+        - icon: mastodon
+          href: https://fosstodon.org/@layal
+          text: Mastodon
   page-footer:
     center:
       - href: https://rdiscovery.netlify.app

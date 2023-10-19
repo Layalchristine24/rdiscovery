@@ -66,7 +66,5 @@ writeLines(c(post_redirects, category_redirects), here::here("_site", "_redirect
 ```
 
 <!-- Mastodon verification -->
-<a rel="me" style="display:none" href="https://fosstodon.org/@layal">Hidden link used to verify my account on fosstodon.org</a> 
-<a rel="me" style="display:none" href="https://linkedin.com/in/layal-christine-lettry-529b4471/">Hidden link used to verify my account on LinkedIn</a>
-<a rel="me" style="display:none" href="https://twitter.com/LettryL">Hidden link used to verify my account on Twitter</a> 
-<a rel="me" style="display:none" href="https://github.com/Layalchristine24">Hidden link used to verify my account on GitHub</a> 
+
+<a rel="me" style="display:none" href="https://fosstodon.org/@layal">Hidden link used to verify my account on fosstodon.org</a> <a rel="me" style="display:none" href="https://linkedin.com/in/layal-christine-lettry-529b4471/">Hidden link used to verify my account on LinkedIn</a> <a rel="me" style="display:none" href="https://twitter.com/LettryL">Hidden link used to verify my account on Twitter</a> <a rel="me" style="display:none" href="https://github.com/Layalchristine24">Hidden link used to verify my account on GitHub</a>

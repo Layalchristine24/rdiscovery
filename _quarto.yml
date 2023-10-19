@@ -4,9 +4,13 @@ project:
 website:
   title: "rdiscovery"
   description: "Explore R with Layal Christine Lettry"
+  page-navigation: true
+  reader-mode: true  
+  favicon: "images/favicon/apple-touch-icon.png"
   navbar:
     title: false
     background: "#0571B0"
+    logo: "images/favicon/apple-touch-icon.png"
     left:
       - href: index.qmd
         text: Home
@@ -65,12 +69,12 @@ website:
   site-url: https://rdiscovery.netlify.app
   repo-url: https://github.com/Layalchristine24/rdiscovery
   open-graph: true
-  search: false
+  search: true
   
 format:
   html:
     theme: 
-      light: cosmo
+      light: sandstone
       dark: darkly
     css: styles.css
     include-after-body: plausible.html

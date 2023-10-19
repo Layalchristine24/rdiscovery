@@ -12,8 +12,6 @@ website:
     background: "#0571B0"
     logo: "images/favicon/apple-touch-icon.png"
     left:
-      - href: index.qmd
-        text: Home
       - href: index.xml
         text: RSS
     right:

@@ -12,6 +12,8 @@ format:
     number-sections: false
 ---
 
+*Looping through all the variables in a data frame with the `.env` and `.data` pronouns.*
+
 # Problem
 
 Let's assume that you would like to know the number of occurrences for each instance of the following data.

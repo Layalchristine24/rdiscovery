@@ -1,7 +1,7 @@
 {
-  "hash": "b495d8c9fca6d6beb2f6781acc04f187",
+  "hash": "8bb264f7a2848da356e151df127bb824",
   "result": {
-    "markdown": "---\ntitle: \"Progress bars\"\nauthor: \"Layal C. Lettry\"\ndate: \"2023-10-12\"\ncategories: [cli, purrr, walk, progress]\nimage: \"image.jpg\"\nformat:\n  html:\n    toc: true\n    toc-title: Contents\n    toc-location: right\n    number-sections: false\n---\n\n\n# Progress bars\n\nSometimes, you want to include a progress bar in your pipeline, to see how much code has been executed and how much is left.\n\nHere are some possibilities to do that.\n\n## The purrr package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npurrr::walk(1:3, Sys.sleep, .progress = TRUE)\n```\n:::\n\n\n## The cli package\n\nYou can also create a progress bar with the cli package. Please refer to [this article](https://cli.r-lib.org/articles/progress.html) which presents several possibilities to create a progress bar.\n",
+    "markdown": "---\ntitle: \"Progress bars\"\nauthor: \"Layal C. Lettry\"\ndate: \"2023-10-12\"\ncategories: [cli, purrr, walk, progress]\nimage: \"image.jpg\"\nformat:\n  html:\n    toc: true\n    toc-title: Contents\n    toc-location: right\n    number-sections: false\n---\n\n\n*Keeping track of the codes progress.*\n\n# Progress bars\n\nSometimes, you want to include a progress bar in your pipeline, to see how much code has been executed and how much is left.\n\nHere are some possibilities to do that.\n\n## The purrr package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npurrr::walk(1:3, Sys.sleep, .progress = TRUE)\n```\n:::\n\n\n## The cli package\n\nYou can also create a progress bar with the cli package. Please refer to [this article](https://cli.r-lib.org/articles/progress.html) which presents several possibilities to create a progress bar.\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

@@ -12,6 +12,8 @@ format:
     number-sections: false
 ---
 
+*Addressing the challenge of renaming multiple variables through an external lookup table using tidy evaluation techniques.*
+
 # Problem
 
 Let's assume that a data frame is present with certain columns that possess the appropriate names, however, the remaining columns require renaming. An existing lookup table is ready to be used for setting new names to these specific columns.
@@ -63,7 +65,7 @@ new_names_vec
 
 We can solve this using tidy evaluation tools, namely the unquote-splice `!!!`, or the dplyr functions `any_of()`. Reading the [article written by Tim Tiefenbach](https://tim-tiefenbach.de/post/2022-rename-columns/#dplyr-tidyverse), I was able to come up with the solutions below.
 
-## Using tidy evaluation and base R
+## Using `!!!`
 
 Our goal is to unpack the vector of column name pairs that are actually in our data frame. We could achieve this by using unquote-splice `!!!` which will splice the list of names into the dynamic dots `...` of `rename()`.
 
@@ -89,7 +91,7 @@ test_tib |>
   rename(!!!new_names_vec[new_names_vec %in% names(test_tib)])
 ```
 
-## Using dplyr
+## Using `any_of()`
 
 Instead of selecting the common variables, you can use `any_of()` which does this selection automatically.
 

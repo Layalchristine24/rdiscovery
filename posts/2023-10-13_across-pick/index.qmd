@@ -12,6 +12,8 @@ format:
     number-sections: false
 ---
 
+*Transforming many variables quickly and easily with just one line of code.*
+
 # Convert character variables into numeric
 
 Suppose you have a data frame with several character variables which you want to transform into numeric ones. You an use the function `across()`.

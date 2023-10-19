@@ -2,7 +2,7 @@
 title: "Extract only stable functions from a tidyverse package"
 author: "Layal C. Lettry"
 date: "2023-10-12"
-categories: [tidyverse, now, deprecated, superseded, defunct, questioning, reexported]
+categories: [tidyverse, now, lifecycle]
 image: "image.jpg"
 format:
   html:
@@ -11,6 +11,8 @@ format:
     toc-location: right
     number-sections: false
 ---
+
+*Exploring the now package to write code without any obsolete functions.*
 
 # The now package
 

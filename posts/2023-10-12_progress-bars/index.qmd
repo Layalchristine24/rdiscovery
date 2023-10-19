@@ -12,6 +12,8 @@ format:
     number-sections: false
 ---
 
+*Keeping track of the codes progress.*
+
 # Progress bars
 
 Sometimes, you want to include a progress bar in your pipeline, to see how much code has been executed and how much is left.

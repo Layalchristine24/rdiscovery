@@ -6,11 +6,11 @@ website:
   description: "Explore R with Layal Christine Lettry"
   page-navigation: true
   reader-mode: true  
-  favicon: "images/favicon/apple-touch-icon.png"
+  favicon: "image/favicon/apple-touch-icon.png"
   navbar:
     title: false
     background: "#0571B0"
-    logo: "images/favicon/apple-touch-icon.png"
+    logo: "image/favicon/apple-touch-icon.png"
     left:
       - href: index.xml
         text: RSS
@@ -18,7 +18,7 @@ website:
       - about.qmd
       - text: Sites
         menu:
-        - href: http://layalchristinelettry.rbind.io/
+        - href: https://layalchristinelettry.rbind.io
           text: Homepage
         - href: https://rdiscovery.netlify.app
           text: rdiscovery Blog

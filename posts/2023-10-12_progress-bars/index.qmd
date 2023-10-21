@@ -1,9 +1,15 @@
 ---
-title: "Progress bars"
-author: "Layal C. Lettry"
-date: "2023-10-12"
+title: Progress bars
+author: 
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+date: 2023-10-12
 categories: [cli, purrr, walk, progress]
-image: "image.jpg"
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-10-12_progress-bars/
 format:
   html:
     toc: true
@@ -12,7 +18,7 @@ format:
     number-sections: false
 ---
 
-*Keeping track of the codes progress.*
+*Keeping track of the code's progress*
 
 # Progress bars
 

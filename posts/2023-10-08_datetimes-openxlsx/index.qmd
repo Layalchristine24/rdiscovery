@@ -1,9 +1,15 @@
 ---
-title: "Detect date and time variables with openxlsx"
-author: "Layal C. Lettry"
-date: "2023-10-08"
+title: Detect date and time variables with openxlsx
+author: 
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+date: 2023-10-08
 categories: [openxlsx, date, datetime]
-image: "image.jpg"
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-10-08_datetimes-openxlsx/
 format:
   html:
     toc: true
@@ -12,7 +18,7 @@ format:
     number-sections: false
 ---
 
-*Discovering solutions to the challenge of accurate date and time variable detection in Excel data with R.*
+*Discovering solutions to the challenge of accurate date and time variable detection in Excel data with R*
  
 # Detect date variables
 

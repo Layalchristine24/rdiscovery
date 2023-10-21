@@ -1,9 +1,15 @@
 ---
-title: "Extract only stable functions from a tidyverse package"
-author: "Layal C. Lettry"
-date: "2023-10-12"
+title: Extract only stable functions from a tidyverse package
+author: 
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+date: 2023-10-12
 categories: [tidyverse, now, lifecycle]
-image: "image.jpg"
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-10-12_now/
 format:
   html:
     toc: true
@@ -12,7 +18,7 @@ format:
     number-sections: false
 ---
 
-*Exploring the now package to write code without any obsolete functions.*
+*Exploring the now package to write code without any obsolete functions*
 
 # The now package
 

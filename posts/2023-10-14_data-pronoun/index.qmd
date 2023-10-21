@@ -1,9 +1,15 @@
 ---
-title: "Perform transformations on several variables with `.env` and `.data` pronouns"
-author: "Layal C. Lettry"
-date: "2023-10-15"
+title: Perform transformations on several variables with `.env` and `.data` pronouns
+author: 
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+date: 2023-10-15
 categories: [rlang, pronouns, magrittr, data-masking]
-image: "image.jpg"
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-10-14_data-pronoun/
 format:
   html:
     toc: true
@@ -12,7 +18,7 @@ format:
     number-sections: false
 ---
 
-*Looping through all the variables in a data frame with the `.env` and `.data` pronouns.*
+*Looping through all the variables in a data frame with the `.env` and `.data` pronouns*
 
 # Problem
 

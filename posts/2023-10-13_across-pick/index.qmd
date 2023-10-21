@@ -1,9 +1,15 @@
 ---
-title: "Perform transformations on several variables with `dplyr::across()` and `dplyr::pick()`"
-author: "Layal C. Lettry"
-date: "2023-10-13"
+title: Perform transformations on several variables with `dplyr::across()` and `dplyr::pick()`
+author: 
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+date: 2023-10-13
 categories: [dplyr, across, pick]
-image: "image.jpg"
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-10-13_across-pick/
 format:
   html:
     toc: true
@@ -12,7 +18,7 @@ format:
     number-sections: false
 ---
 
-*Transforming many variables quickly and easily with just one line of code.*
+*Transforming many variables quickly and easily with just one line of code*
 
 # Convert character variables into numeric
 

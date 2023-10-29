@@ -24,6 +24,8 @@ website:
           text: rdiscovery Blog
         - href: https://lclettry-pub.netlify.app
           text: My Publications, Contributions and Talks
+        - href: https://lclettry-pronews.netlify.app
+          text: My Professional News
       - text: GitHub
         menu:
         - icon: github

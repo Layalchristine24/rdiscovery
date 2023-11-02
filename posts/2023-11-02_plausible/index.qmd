@@ -1,0 +1,120 @@
+---
+title: Website Traffic Metrics with Plausible Analytics
+subtitle: Use Plausible Analytics as an alternative to Google Analytics
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2023-11-02
+categories: [Plausible Analytics, plausible, quarto, hugo, website traffic metrics, Google Analytics]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-11-02_plausible/
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+---
+
+*How can you monitor your website statistics for your Hugo and Quarto websites?*
+
+### Introduction
+In this article, I will explain how to utilize [Plausible Analytics](https://plausible.io) with a Hugo website featuring the [Hugo Apéro](https://hugo-apero-docs.netlify.app) theme and with a Quarto website.
+
+### Motivation
+When I wanted to install [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision) for my personal Hugo and Quarto websites to gather usage statistics, I came across [this GitHub issue](https://github.com/rstudio/blogdown/issues/731), which piqued my interest.
+
+According to [Seth Ariel Green](https://github.com/setgree), the author of [the GitHub issue](https://github.com/rstudio/blogdown/issues/731), using [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision) was discouraged, and an alternative tool was recommended to track website traffic, namely [Plausible Analytics](https://plausible.io).
+
+As a result, I sought information on how to install [Plausible Analytics](https://plausible.io) to begin measuring site traffic metrics for my personal website built with [Hugo Apéro](https://hugo-apero-docs.netlify.app). Unfortunately, I couldn't find a clear description of the installation process. This article aims to share my experience with you.
+
+### Why Choose Plausible Analytics Over Google Analytics?
+
+#### Background
+In 2022, some countries banned the use of [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision), citing it as unlawful and in violation of the [General Data Protection Regulation (GDPR)](https://gdpr.eu/what-is-gdpr/#:~:text=The%20General%20Data%20Protection%20Regulation,to%20people%20in%20the%20EU.). Countries such as [France](https://www.cnil.fr/en/use-google-analytics-and-data-transfers-united-states-cnil-orders-website-manageroperator-comply), [Italy](https://www.cpomagazine.com/data-protection/italy-bans-google-analytics-over-improper-eu-us-data-transfers/), [Austria](https://matomo.org/blog/2022/01/google-analytics-gdpr-violation/), and [Denmark](https://cookie-script.com/privacy-laws/danish-dpa-outlaws-using-google-analytics), among others, implemented these restrictions. Additional information is available on [this webpage](https://plausible.io/blog/google-analytics-illegal).
+
+#### Advantages of Plausible Analytics
+Three key advantages of using Plausible Analytics over Google Analytics are as follows[^1]:
+
+1. [Plausible Analytics](https://plausible.io) is a lightweight and straightforward analytics tool that provides clear statistics on a single page. This contrasts with [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision), which requires exploration and understanding of its various options and dashboards.
+
+2. The analytics script of [Plausible Analytics](https://plausible.io) is smaller and lighter than that of [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision), resulting in no slowdown for your website.
+
+3. [Plausible Analytics](https://plausible.io) prioritizes visitor privacy and avoids the use of cookies.
+
+For more reasons to choose [Plausible Analytics](https://plausible.io), you can refer to its [GitHub repository](https://github.com/plausible/analytics/) since it is open-source.
+
+[^1]: [My reference](https://plausible.io/simple-web-analytics).
+
+### Integration of Plausible Analytics into your website 
+
+To start tracking your website stats with [Plausible Analytics](https://plausible.io), follow these steps:
+
+1. [Register your account](https://plausible.io/docs/register-account).
+
+2. [Add your website details](https://plausible.io/docs/add-website).
+
+#### If you have a Hugo Website with the Hugo Apéro Theme
+
+3. [Add your JavaScript snippet to the `<head>` of your website](https://plausible.io/docs/plausible-script). If your website is built with [Hugo Apéro](https://hugo-apero-docs.netlify.app), follow these sub-steps:
+
+    i) Create a new file in `themes/hugo-apero/layouts/partials/head_custom.html`, similar to what's done in [this commit](https://github.com/Layalchristine24/Layalchristine24.github.io/commit/b223aef03f779a6708450815fa29015425498679)).
+    
+    ii) Insert `{{ partial "head_custom.html" . }}` into `themes/hugo-apero/layouts/partials/head.html`, as shown in [this line of code](https://github.com/Layalchristine24/Layalchristine24.github.io/blob/9d677ec48047c31eb84076725c547e877cd6c0fc/themes/hugo-apero/layouts/partials/head.html#L3).
+
+
+#### If you have a Quarto Website or Blog
+
+3. [Add your JavaScript snippet to the `<head>` of your website](https://plausible.io/docs/plausible-script). Follow these sub-steps:
+
+
+    i) Create a new html file at the root of your quarto project which you will call "plausible.html", similar to what's done in the [plausible file](https://github.com/Layalchristine24/rdiscovery/blob/main/plausible.html) of this blog.
+    
+    ii) Insert the following code into your [_quarto.yml](https://github.com/Layalchristine24/rdiscovery/blob/c5467f0c66732df26cf81f87ce6eb289db4b3c9b/_quarto.yml#L84) file.
+    
+
+```
+format:
+  html:
+    include-after-body: plausible.html
+```
+
+
+#### Start tracking your website stats
+
+4. Push your modifications and deploy your website.
+
+5. Verify that the script is installed on your website by inspecting the page source and searching for the string "data-domain."
+
+6. If everything went as planned, you will receive an email beginning with "Congrats! The Plausible script has been installed correctly on your website."
+
+<p style="text-align: center; font-weight: bold;">Congratulations, you've done it!</p>
+
+## Analyze Your Data with the R Package [`plausibler`](https://github.com/giocomai/plausibler)
+
+With the R package [`plausibler`](https://github.com/giocomai/plausibler), you can query and summarize your website traffic metrics directly from your R console. To get started, generate an API key, which you can easily obtain. Access your settings page by clicking on the three vertical dots next to your username at the top right of the [Plausible Analytics](https://plausible.io) page. In the "API Keys" section, generate and copy an API key into the `plausibler::pa_set()` function, as explained in the `README` file of the GitHub repository [`plausibler`](https://github.com/giocomai/plausibler).
+
+Then, follow the instructions in the `README` to access all your website statistics directly within your R session.
+
+## Acknowledgements
+
+Many thanks to 
+
+ - [Plausible Analytics](https://plausible.io), 
+ 
+ - [Giorgio Comai](https://github.com/giocomai), the author of [`plausibler`](https://github.com/giocomai/plausibler),
+ 
+ - [Seth Ariel Green](https://github.com/setgree) for [his GitHub issue](https://github.com/rstudio/blogdown/issues/731), which led me to discover [Plausible Analytics](https://plausible.io).
+

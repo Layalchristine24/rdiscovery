@@ -106,7 +106,7 @@ format:
 
 With the R package [`plausibler`](https://github.com/giocomai/plausibler), you can query and summarize your website traffic metrics directly from your R console. To get started, generate an API key, which you can easily obtain. Access your settings page by clicking on the three vertical dots next to your username at the top right of the [Plausible Analytics](https://plausible.io) page. In the "API Keys" section, generate and copy an API key into the `plausibler::pa_set()` function, as explained in the `README` file of the GitHub repository [`plausibler`](https://github.com/giocomai/plausibler).
 
-Then, follow the instructions in the `README` to access all your website statistics directly within your R session.
+Then, follow the instructions in the [`README`](https://github.com/giocomai/plausibler#plausibler) to access all your website statistics directly within your R session.
 
 ## Acknowledgements
 

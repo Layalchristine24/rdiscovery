@@ -5,6 +5,15 @@ author:
       given: Layal Christine
       family: Lettry
       orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
 date: 2023-10-08
 categories: [openxlsx, date, datetime]
 image: image.jpg
@@ -19,7 +28,7 @@ format:
 ---
 
 *Discovering solutions to the challenge of accurate date and time variable detection in Excel data with R*
- 
+
 # Detect date variables
 
 When you try to read an Excel file, the dates don't always look the way you would expect. You may see a vector of integers (or doubles) rather than a vector of dates. If you are using [openxlsx](https://github.com/ycphs/openxlsx), you can set `detectDates = TRUE` in the function `read.xlsx()`.

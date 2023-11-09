@@ -18,7 +18,7 @@ website:
       - about.qmd
       - text: Sites
         menu:
-        - href: https://layalchristinelettry.rbind.io
+        - href: https://lclettry.com
           text: Homepage
         - href: https://rdiscovery.netlify.app
           text: rdiscovery Blog

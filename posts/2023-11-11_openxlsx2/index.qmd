@@ -1,0 +1,66 @@
+---
+title: Analysis of the differences between openxlsx and openxlsx2
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2023-11-11
+categories: [openxlsx, openxlsx2]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2023-11-11_openxlsx2/
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+---
+
+
+
+*What are the main differences between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2)?*
+
+### Introduction
+
+In this blog post, I intend to explain the main differences between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2), which I came across thanks to this [Github Gist](https://gist.github.com/JanMarvin/a0d89bb8e128899477654dd2d4f4402d) and my own experience.
+
+See <https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html>.
+
+```{r}
+#| label: diff_openxlsx
+#| tbl-cap: "Table for differences between openxlsx and openxlsx2"
+#| message: false
+#| warning: false
+#| echo: false
+
+library(knitr)
+
+table <- tibble::tribble(
+  ~Action,          ~openxlsx,            ~openxlsx2,
+  'Create a workbook', '`wb <- createWorkbook()`',  '`wb <- wb_workbook()`', 
+  'Add a worksheet "ws1"', '`ws1 <- addWorksheet(wb = wb, sheetName = "ws1")`', '`wb$add_worksheet("ws1")`',
+  'Add data to "ws1"', '`writeData(wb = wb, sheet = "ws1", x = cars, startCol = 2)`', 'w`b$add_data(x = cars, start_col = 2)`'
+)
+```
+
+
+```{r}
+#| label: print_diff_openxlsx
+#| tbl-cap: "Differences between openxlsx and openxlsx2"
+#| tbl-colwidths: [40,60,60]
+#| echo: false
+#| output: asis
+kable(table)
+
+```

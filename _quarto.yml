@@ -74,6 +74,11 @@ website:
     center:
       - href: https://rdiscovery.netlify.app
         text: rdiscovery.netlify.app
+    right: 
+      - href: privacy.html
+        text: Privacy Policy
+      - href: terms_and_conditions.html
+        text: Terms and Conditions
   site-url: https://rdiscovery.netlify.app
   repo-url: https://github.com/Layalchristine24/rdiscovery
   open-graph: true

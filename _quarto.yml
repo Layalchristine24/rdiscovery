@@ -12,14 +12,14 @@ website:
     background: "#0571B0"
     logo: "image/favicon/apple-touch-icon.png"
     left:
-      - href: index.xml
-        text: RSS
-      - href: privacy.html
-        text: Privacy Policy
-      - href: terms_and_conditions.html
-        text: Terms and Conditions
+      - text: About
+        menu:
+        - about.qmd
+        - href: privacy.html
+          text: Privacy Policy
+        - href: terms_and_conditions.html
+          text: Terms and Conditions
     right:
-      - about.qmd
       - text: Sites
         menu:
         - href: https://lclettry.com

@@ -27,8 +27,6 @@ format:
     number-sections: false
 ---
 
-
-
 *What are the main differences between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2)?*
 
 ### Introduction
@@ -41,7 +39,7 @@ The provided tables are designed to offer a clear overview of the differences be
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
 
-If you lean towards utilizing pipes, please turn to the last column in the tables within the subsequent sections. This column specifies the corresponding function and its recommended usage with pipes. If the column is empty, it implies that the same function can be employed seamlessly with either pipes or chains.
+If you lean towards utilizing pipes, please turn to the last column in the tables within the subsequent sections. This column specifies the corresponding function and its recommended usage with pipes. If the function is the same in both columns, it can be used with pipes or chains.
 
 Kindly explore [this specific vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles) for an example that contrasts openxlsx and openxlsx2. Unlike openxlsx, which lacks integration with pipes or chains, openxlsx2 offers flexibility in its application.
 
@@ -57,24 +55,24 @@ Kindly explore [this specific vignette section](https://janmarvin.github.io/open
 library(knitr)
 
 table_read_wb <- tibble::tribble(
-  ~Action,             ~openxlsx,                    ~`openxlsx2 Chained`, ~`openxlsx2 Piped`, 
-  'Read xlsx or xlsm files', '',  '`wb_to_df(file = file)`', '',
-  'Read xlsx or xlsm files', '`read.xlsx(xlsxFile = file)`',  '`read_xlsx(file = file)`','', 
-  'Read xlsx or xlsm files', '`readWorkbook(xlsxFile = file)`',  '`wb_read(file = file)`','' 
-
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Load file", "", "`wb_load()`", "`wb_load()`",
+  "Read file", "", "`wb_to_df()`", "`wb_to_df()`",
+  "Read file", "`read.xlsx()`", "`read_xlsx()`", "`read_xlsx()`",
+  "Read file", "`readWorkbook()`", "`wb_read()`", "`wb_read()`"
 )
 ```
 
-
+Please note that while openxlsx2 can read `xlsx` or `xlsm` files, openxlsx can only read `xlsx` files.
 
 ```{r}
 #| label: print_table_read_wb
 #| tbl-cap: "Read an existing Excel workbook"
-#| tbl-colwidths: [40,70,70,70]
+#| tbl-colwidths: [50,60,60,60]
 #| echo: false
 #| output: asis
-kable(table_read_wb)
-
+kable(table_read_wb) |>
+  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
 Please be aware that the recently introduced functions in openxlsx2, namely `read_xlsx()` and `wb_read()`, serve as mere wrappers for `wb_to_df()`. Their purpose is to facilitate a seamless transition between openxlsx and openxlsx2.
@@ -91,11 +89,10 @@ Please be aware that the recently introduced functions in openxlsx2, namely `rea
 library(knitr)
 
 table_write_wb <- tibble::tribble(
-  ~Action,             ~openxlsx,                    ~`openxlsx2 Chained`, ~`openxlsx2 Piped`,
-  'Create a temporary xlsx file', '`out <- temp_xlsx(name = "myxlsx")`', '`out2 <- temp_xlsx(name = "myxlsx")`', '', 
-  'Write a xlsx file', '`write.xlsx(my_df, file = out, colNames = TRUE)`',  '`write_xlsx(my_df, file = out2, col_names = TRUE)`', '', 
-  'Create a temporary xlsm file', '', '`out2_xlsm <- temp_xlsx(name = "myxlsm", macros = TRUE)`', '', 
-  'Write a xlsm files', '',  '`write_xlsx(my_df, file = out2_xlsm, colNames = TRUE)`', ''
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Create temporary xlsm file", "", "`temp_xlsx(macros = TRUE)`", "`temp_xlsx(macros = TRUE)`",
+  "Create temporary xlsx file", "`temp_xlsx()`", "`temp_xlsx()`", "`temp_xlsx()`",
+  "Write file", "`write.xlsx()`", "`write_xlsx()`", "`write_xlsx()`"
 )
 ```
 
@@ -103,15 +100,17 @@ table_write_wb <- tibble::tribble(
 ```{r}
 #| label: print_table_write_wb
 #| tbl-cap: "Write an xlsx or xlsm workbook"
-#| tbl-colwidths: [40,70,70,70]
+#| tbl-colwidths: [50,60,60,60]
 #| echo: false
 #| output: asis
-kable(table_write_wb)
-
+kable(table_write_wb) |>
+  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
 
 ### Create an Excel Workbook from Scratch
+
+Let's say you would like to create a workbook called `wb` and a worksheet called `ws` where you want to write data `x`. 
 
 ```{r}
 #| label: table_create_wb
@@ -122,10 +121,11 @@ kable(table_write_wb)
 library(knitr)
 
 table_create_wb <- tibble::tribble(
-  ~Action,             ~openxlsx,                    ~`openxlsx2 Chained`, ~`openxlsx2 Piped`,
-  'Create a workbook', '`wb <- createWorkbook()`',  '`wb <- wb_workbook()`', '', 
-  'Add a worksheet "ws1"', '`ws1 <- addWorksheet(wb = wb, sheetName = "ws1")`', '`wb$add_worksheet("ws1")`', '`wb_add_worksheet("ws1")`',
-  'Add data to "ws1"', '`writeData(wb = wb, sheet = "ws1", x = cars, startCol = 2)`', '`wb$add_data(x = cars, start_col = 2)`', '`wb_add_data(x = cars, start_col = 2)`'
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Create workbook", "`createWorkbook()`", "`wb_workbook()`", "`wb_workbook()`",
+  "Add worksheet ", "`addWorksheet(wb, ws)`", "`wb$add_worksheet(ws)`", "`wb_add_worksheet(ws)`",
+  "Add data to worksheet", "`writeData(wb, ws, x)`", "`wb$add_data(x)`", "`wb_add_data(x)`",
+  "Inspect workbook", "`openXL(wb)`", "`wb$open()`", "`wb_open()`"
 )
 ```
 
@@ -133,12 +133,30 @@ table_create_wb <- tibble::tribble(
 ```{r}
 #| label: print_table_create_wb
 #| tbl-cap: "Create a workbook and write data"
-#| tbl-colwidths: [40,70,70,70]
+#| tbl-colwidths: [50,60,60,60]
 #| echo: false
 #| output: asis
-kable(table_create_wb)
-
+kable(table_create_wb) |>
+  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
+#### Example
+
+```{r}
+library(openxlsx2)
+# With Pipes
+wb <- wb_workbook(creator = "Layal Christine Lettry",
+  title = "My Test",
+  subject = "Create a Workbook",
+  category = "Test",
+  datetime_created = Sys.time(),
+  theme = "Office Theme",
+  keywords = "test",
+  comments = "This is my test",
+  manager = "Me",
+  company = "My Company") 
+  
+
+```
 
 ### Add 

@@ -22,6 +22,7 @@ citation:
 format:
   html:
     toc: true
+    toc-depth: 6
     toc-title: Contents
     toc-location: right
     number-sections: false
@@ -35,7 +36,7 @@ Within this blog post, my aim is to elucidate the primary distinctions between [
 
 The provided tables are designed to offer a clear overview of the differences between openxlsx and openxlsx2. They serve as a concise presentation, illustrating the content of the vignette titled "Update from openxlsx," which can be explored in detail [here](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html).
 
-### Chaining vs Piping
+### Chaining versus Piping
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
 
@@ -44,6 +45,10 @@ If you lean towards using pipes, please turn to the last column in the tables wi
 In the tables below, we've highlighted the key arguments for each function. For a deeper dive into the specifics of each function's arguments, check out the examples in the following sections.
 
 Kindly explore [this specific vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles) for an example that contrasts openxlsx and openxlsx2. Unlike openxlsx, which lacks integration with pipes or chains, openxlsx2 offers flexibility in its application.
+
+In the upcoming examples, I'll use pipes, but feel free to use chains if you prefer.
+
+Building a workbook with pipes or chains, instead of relying on isolated functions, is already a significant improvement!
 
 ### Read an existing Excel Workbook
 
@@ -125,8 +130,8 @@ library(knitr)
 table_create_wb <- tibble::tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Create workbook", "`createWorkbook()`", "`wb_workbook()`", "`wb_workbook()`",
-  "Add worksheet ", "`addWorksheet(wb, ws)`", "`wb$add_worksheet(ws)`", "`wb_add_worksheet(ws)`",
-  "Add data to worksheet", "`writeData(wb, ws, x)`", "`wb$add_data(x)`", "`wb_add_data(x)`",
+  "Add worksheet ", "`addWorksheet(wb, 'ws')`", "`wb$add_worksheet('ws')`", "`wb_add_worksheet('ws')`",
+  "Add data to worksheet", "`writeData(wb, 'ws', x)`", "`wb$add_data(x)`", "`wb_add_data(x)`",
   "Inspect workbook", "`openXL(wb)`", "`wb$open()`", "`wb_open()`",
   "Save workbook", "`saveWorkbook(wb, file)", "`wb$save(file)`", "`wb_save(file)`"
 )
@@ -145,6 +150,10 @@ kable(table_create_wb) |>
 
 #### Example
 
+In this example, our aim is to explore various options for creating, saving, and importing an Excel workbook.
+
+##### Create a workbook with multiple sheets
+
 ```{r}
 #| label: ex_table_create_wb_1
 #| message: false
@@ -152,7 +161,7 @@ kable(table_create_wb) |>
 
 library(openxlsx2)
 library(palmerpenguins)
-# With Pipes
+
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
   title = "My Test",
@@ -178,46 +187,87 @@ wb <- wb_workbook(
     first_header = c("TOP", "OF FIRST", "PAGE"),
     first_footer = c("BOTTOM", "OF FIRST", "PAGE")
   ) |>
-  wb_add_data(x = penguins, 
-                start_col = 3,
-  start_row = 10,
-  array = FALSE,
-  col_names = TRUE,
-  row_names = FALSE,
-  with_filter = FALSE) 
+  wb_add_data(
+    x = penguins,
+    start_col = 3,
+    start_row = 10,
+    array = FALSE,
+    col_names = TRUE,
+    row_names = FALSE,
+    with_filter = FALSE
+  ) |>
+  wb_add_worksheet(
+    sheet = "my_second_sheet",
+    tab_color = "red",
+    zoom = 75L,
+    visible = TRUE,
+    orientation = "landscape"
+  ) |>
+  wb_add_data(
+    x = penguins_raw,
+    dims = wb_dims(2, 1),
+    col_names = TRUE,
+    row_names = TRUE,
+    with_filter = TRUE
+  )
 ```
 
 
-Then you could execute the following to ...
+##### Inspect and write the workbook data
+
+You can perform the following steps to examine the data and save it to a temporary xlsx file.
 
 ```{r}
 #| label: ex_table_create_wb_2
 #| message: false
 #| warning: false
 
-# ...inspect the workbook
-wb |> 
-  wb_open() 
+# Inspect the workbook
+wb |>
+  wb_open()
 
-# ...create a new temporary file
+# Create a new temporary file
 myfile <- temp_xlsx()
 
-# ...write the workbook into a temporary xlsx file
-wb |> 
-  wb_save(file = myfile, overwrite = TRUE) 
+# Write the workbook into a temporary xlsx file
+wb |>
+  wb_save(file = myfile, overwrite = TRUE)
 
-# ...import the data of your file into a data frame
-my_df <- myfile |> 
-  wb_to_df() 
+# Open the xlsx file
+browseURL(myfile)
+```
 
-my_df |> 
+Please be aware that in order to view the headers and footers, you should click on "View" and select "Header and Footer" (for Mac users). This option enables you to distinguish between the landscape and portrait orientations on the two sheets.
+
+##### Import workbook and start working on the data with dplyr
+
+```{r}
+#| label: ex_table_create_wb_3
+#| message: false
+#| warning: false
+
+# Import the data of your file into a data frame
+my_df <- myfile |>
+  wb_to_df(
+    sheet = 1,
+    detect_dates = TRUE,
+    col_names = TRUE
+  )
+
+# Display the first few rows of the data frame
+my_df |>
   head()
 
-my_df |> 
+# Provide a summary of the data frame structure
+my_df |>
   dplyr::glimpse()
+
+# Provide the class of the data frame
+class(my_df)
+
+# Convert it into a tibble
+my_tib <- tibble::as_tibble(my_df)
+my_tib
 ```
 
 
-
-
-### Add 

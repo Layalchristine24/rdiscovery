@@ -39,7 +39,9 @@ The provided tables are designed to offer a clear overview of the differences be
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
 
-If you lean towards utilizing pipes, please turn to the last column in the tables within the subsequent sections. This column specifies the corresponding function and its recommended usage with pipes. If the function is the same in both columns, it can be used with pipes or chains.
+If you lean towards using pipes, please turn to the last column in the tables within the subsequent sections. This column specifies the corresponding function and its recommended usage with pipes. If the function is the same in both columns, it can be used with pipes or chains.
+
+In the tables below, we've highlighted the key arguments for each function. For a deeper dive into the specifics of each function's arguments, check out the examples in the following sections.
 
 Kindly explore [this specific vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles) for an example that contrasts openxlsx and openxlsx2. Unlike openxlsx, which lacks integration with pipes or chains, openxlsx2 offers flexibility in its application.
 
@@ -125,7 +127,8 @@ table_create_wb <- tibble::tribble(
   "Create workbook", "`createWorkbook()`", "`wb_workbook()`", "`wb_workbook()`",
   "Add worksheet ", "`addWorksheet(wb, ws)`", "`wb$add_worksheet(ws)`", "`wb_add_worksheet(ws)`",
   "Add data to worksheet", "`writeData(wb, ws, x)`", "`wb$add_data(x)`", "`wb_add_data(x)`",
-  "Inspect workbook", "`openXL(wb)`", "`wb$open()`", "`wb_open()`"
+  "Inspect workbook", "`openXL(wb)`", "`wb$open()`", "`wb_open()`",
+  "Save workbook", "`saveWorkbook(wb, file)", "`wb$save(file)`", "`wb_save(file)`"
 )
 ```
 
@@ -143,9 +146,15 @@ kable(table_create_wb) |>
 #### Example
 
 ```{r}
+#| label: ex_table_create_wb_1
+#| message: false
+#| warning: false
+
 library(openxlsx2)
+library(palmerpenguins)
 # With Pipes
-wb <- wb_workbook(creator = "Layal Christine Lettry",
+wb <- wb_workbook(
+  creator = "Layal Christine Lettry",
   title = "My Test",
   subject = "Create a Workbook",
   category = "Test",
@@ -154,9 +163,61 @@ wb <- wb_workbook(creator = "Layal Christine Lettry",
   keywords = "test",
   comments = "This is my test",
   manager = "Me",
-  company = "My Company") 
-  
-
+  company = "My Company"
+) |>
+  wb_add_worksheet(
+    sheet = "my_first_sheet",
+    tab_color = "blue",
+    zoom = 150L,
+    visible = TRUE,
+    orientation = "portrait",
+    header = c("ODD HEAD LEFT", "ODD HEAD CENTER", "ODD HEAD RIGHT"),
+    footer = c("ODD FOOT RIGHT", "ODD FOOT CENTER", "ODD FOOT RIGHT"),
+    even_header = c("EVEN HEAD LEFT", "EVEN HEAD CENTER", "EVEN HEAD RIGHT"),
+    even_footer = c("EVEN FOOT RIGHT", "EVEN FOOT CENTER", "EVEN FOOT RIGHT"),
+    first_header = c("TOP", "OF FIRST", "PAGE"),
+    first_footer = c("BOTTOM", "OF FIRST", "PAGE")
+  ) |>
+  wb_add_data(x = penguins, 
+                start_col = 3,
+  start_row = 10,
+  array = FALSE,
+  col_names = TRUE,
+  row_names = FALSE,
+  with_filter = FALSE) 
 ```
+
+
+Then you could execute the following to ...
+
+```{r}
+#| label: ex_table_create_wb_2
+#| message: false
+#| warning: false
+
+# ...inspect the workbook
+wb |> 
+  wb_open() 
+
+# ...create a new temporary file
+myfile <- temp_xlsx()
+
+# ...write the workbook into a temporary xlsx file
+wb |> 
+  wb_save(file = myfile, overwrite = TRUE) 
+
+# ...import the data of your file into a data frame
+my_df <- myfile |> 
+  wb_to_df() 
+
+my_df |> 
+  head()
+
+my_df |> 
+  dplyr::glimpse()
+```
+
+
+
 
 ### Add 

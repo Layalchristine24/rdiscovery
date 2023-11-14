@@ -156,7 +156,7 @@ class(my_xslx_read)
 class(my_wb_read)
 ```
 
-# Write a file (xlsx or xlsm)
+# Write a File (xlsx or xlsm)
 
 ```{r}
 #| label: table_write_wb
@@ -185,7 +185,6 @@ kable(table_write_wb) |>
 ```
 
 ## Example
-
 
 Let's say we want to put the information about `palmerpenguins::penguins` in a new Excel file.
 
@@ -258,7 +257,7 @@ kable(table_create_wb) |>
 
 In this example, our aim is to explore various options for creating, saving, and importing an Excel workbook.
 
-### Create a workbook with multiple sheets
+### Create a Workbook with Multiple Sheets
 
 :::: {.columns}
 
@@ -270,6 +269,8 @@ In this example, our aim is to explore various options for creating, saving, and
 #| label: chain_ex_table_create_wb_1
 #| message: false
 #| warning: false
+start_col_ws1 <- 3
+start_row_ws1 <- 10
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
@@ -298,8 +299,8 @@ wb <- wb_workbook(
 )$
   add_data(
   x = penguins,
-  start_col = 3,
-  start_row = 10,
+  start_col = start_col_ws1,
+  start_row = start_row_ws1,
   array = FALSE,
   col_names = TRUE,
   row_names = FALSE,
@@ -336,6 +337,7 @@ wb <- wb_workbook(
 #| label: pipe_ex_table_create_wb_1
 #| message: false
 #| warning: false
+#| eval: false
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
@@ -364,8 +366,8 @@ wb <- wb_workbook(
   ) |>
   wb_add_data(
     x = penguins,
-    start_col = 3,
-    start_row = 10,
+    start_col = start_col_ws1,
+    start_row = start_row_ws1,
     array = FALSE,
     col_names = TRUE,
     row_names = FALSE,
@@ -391,7 +393,7 @@ wb <- wb_workbook(
 
 ::::
 
-### Inspect and write the workbook data
+### Inspect and Write the Workbook Data
 
 You can perform the following steps to examine the data and save it to a temporary xlsx file.
 
@@ -433,6 +435,7 @@ browseURL(myfile)
 #| label: pipe_ex_table_create_wb_2
 #| message: false
 #| warning: false
+#| eval: false
 
 # Inspect the workbook
 wb |>
@@ -455,7 +458,7 @@ browseURL(myfile)
 
 Please be aware that in order to view the headers and footers, you should click on "View" and select "Header and Footer" (for Mac users). This option enables you to distinguish between the landscape and portrait orientations on the two sheets.
 
-### Import workbook and start working on the data with dplyr
+### Import a Workbook and Start Working on the Data with dplyr
 
 Here, no operations are available for chaining.
 
@@ -487,3 +490,276 @@ class(my_df)
 my_tib <- as_tibble(my_df)
 my_tib
 ```
+
+
+# Add a Drop-Down List to Your Workbook
+
+To add a drop-down list, you must first add the data to a separate sheet[^1]. We also want to keep it hidden. You can then create a drop-down list with `wb_add_data_validation()`.
+
+It is also possible to apply various styles to the values of your drop-down list with `wb_add_conditional_formatting()`.
+
+[^1]: Please refer to my older [blog post on openxlsx.demo](https://rdiscovery.netlify.app/posts/2023-04-02_openxlsxdemo/#step-2-create-a-drop-down-list).
+
+```{r}
+#| label: table_features
+#| tbl-cap: "Add features to the workbook"
+#| message: false
+#| warning: false
+#| echo: false
+
+table_features_wb <- tribble(
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Add a drop-down list", "`dataValidation()`", "`wb$add_data_validation()`", "`wb_add_data_validation()`",
+  "Add conditional formatting", "`conditionalFormatting()`", "`wb$add_conditional_formatting()`", "`wb_add_conditional_formatting()`"
+)
+```
+
+
+```{r}
+#| label: print_table_features
+#| tbl-cap: "Add features to the workbook"
+#| tbl-colwidths: [50,60,60,60]
+#| echo: false
+#| output: asis
+kable(table_features_wb) |>
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+```
+
+
+## Example
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+#### Chained
+
+```{r}
+#| label: chain_ex_table_features_ddl
+#| message: false
+#| warning: false
+
+wb_ddl <- wb$
+  add_worksheet("drop-down_list", visible = "hidden")$
+  add_data(
+  x = c("huge", "big", "normal", "small", "tiny"),
+  start_col = 1,
+  start_row = 1
+)$
+  add_data(
+  sheet = "my_first_sheet",
+  x = "size",
+  start_col = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+  start_row = start_row_ws1
+)$
+  add_data_validation(
+  sheet = "my_first_sheet",
+  dims = wb_dims(
+    x = penguins,
+    cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+    from_row = start_row_ws1
+  ),
+  operator = "equal",
+  type = "list",
+  value = "'drop-down_list'!$A$1:$A$5"
+)
+```
+
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+
+#### Piped
+
+```{r}
+#| label: pipe_ex_table_features_ddl
+#| message: false
+#| warning: false
+#| eval: false
+
+wb_ddl <- wb |>
+  wb_add_worksheet("drop-down_list", visible = "hidden") |>
+  wb_add_data(
+    x = c("huge", "big", "normal", "small", "tiny"),
+    start_col = 1,
+    start_row = 1
+  ) |>
+  wb_add_data(
+    sheet = "my_first_sheet",
+    x = "size",
+    start_col = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+    start_row = start_row_ws1
+  ) |>
+  wb_add_data_validation(
+    sheet = "my_first_sheet",
+    dims = wb_dims(
+      x = penguins,
+      cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+      from_row = start_row_ws1
+    ),
+    operator = "equal",
+    type = "list",
+    value = "'drop-down_list'!$A$1:$A$5"
+  )
+```
+
+:::
+
+::::
+
+#### Add Colors to Your Drop-Down Values
+In order to make it look better, we can format each of the values of the drop-down list.
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+##### Chained
+
+```{r}
+#| label: chain_ex_table_features_cond_format
+#| message: false
+#| warning: false
+
+dims <- wb_dims(
+  x = penguins,
+  cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+  from_row = start_row_ws1
+)
+
+wb_cf <- wb_ddl$
+  add_dxfs_style(
+  name = "style_huge",
+  bg_fill = wb_color("#AAAAAA")
+)$
+  add_dxfs_style(
+  name = "style_big",
+  bg_fill = wb_color("#6FA8DC")
+)$
+  add_dxfs_style(
+  name = "style_normal",
+  bg_fill = wb_color("#00AA00")
+)$
+  add_dxfs_style(
+  name = "style_small",
+  bg_fill = wb_color("#CCCC00")
+)$
+  add_dxfs_style(
+  name = "style_tiny",
+  bg_fill = wb_color("#CC0000"),
+  font_color = wb_color("#EEEEEE")
+)$
+  add_conditional_formatting(
+  dims = dims,
+  type = "containsText",
+  rule = "huge",
+  style = "style_huge"
+)$
+  add_conditional_formatting(
+  dims = dims,
+  type = "containsText",
+  rule = "big",
+  style = "style_big"
+)$
+  add_conditional_formatting(
+  dims = dims,
+  type = "containsText",
+  rule = "normal",
+  style = "style_normal"
+)$
+  add_conditional_formatting(
+  dims = dims,
+  type = "containsText",
+  rule = "small",
+  style = "style_small"
+)$
+  add_conditional_formatting(
+  dims = dims,
+  type = "containsText",
+  rule = "tiny",
+  style = "style_tiny"
+) 
+```
+
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+
+##### Piped
+
+```{r}
+#| label: pipe_ex_table_features_cond_format
+#| message: false
+#| warning: false
+#| eval: false
+dims <- wb_dims(
+  x = penguins,
+  cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+  from_row = start_row_ws1
+)
+
+wb_cf <- wb_ddl |>
+  wb_add_dxfs_style(
+    name = "style_huge",
+    bg_fill = wb_color("#AAAAAA")
+  ) |>
+  wb_add_dxfs_style(
+    name = "style_big",
+    bg_fill = wb_color("#6FA8DC")
+  ) |>
+  wb_add_dxfs_style(
+    name = "style_normal",
+    bg_fill = wb_color("#00AA00")
+  ) |>
+  wb_add_dxfs_style(
+    name = "style_small",
+    bg_fill = wb_color("#CCCC00")
+  ) |>
+  wb_add_dxfs_style(
+    name = "style_tiny",
+    bg_fill = wb_color("#CC0000"),
+    font_color = wb_color("#EEEEEE")
+  ) |>
+  wb_add_conditional_formatting(
+    dims = dims,
+    type = "containsText",
+    rule = "huge",
+    style = "style_huge"
+  ) |>
+  wb_add_conditional_formatting(
+    dims = dims,
+    type = "containsText",
+    rule = "big",
+    style = "style_big"
+  ) |>
+  wb_add_conditional_formatting(
+    dims = dims,
+    type = "containsText",
+    rule = "normal",
+    style = "style_normal"
+  ) |>
+  wb_add_conditional_formatting(
+    dims = dims,
+    type = "containsText",
+    rule = "small",
+    style = "style_small"
+  ) |>
+  wb_add_conditional_formatting(
+    dims = dims,
+    type = "containsText",
+    rule = "tiny",
+    style = "style_tiny"
+  )
+```
+
+:::
+
+::::

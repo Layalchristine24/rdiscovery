@@ -186,17 +186,23 @@ Let's say we want to put the information about `palmerpenguins::penguins` in a n
 
 Then, we would like to include `palmerpenguins::penguins_raw` in the same Excel file.
 
+Eventually, we want an xlsm file. 
+
 ```{r}
 #| label: example_table_write_wb
 #| message: false
 #| warning: false
 
+# Write a data frame into an xlsx file
 my_tempfile <- temp_xlsx()
+basename(my_tempfile)
 write_xlsx(penguins, my_tempfile, col_names = TRUE)
 read_xlsx(my_tempfile) |>
   as_tibble()
 
+# Write a list of data frames into an xlsx file
 my_2nd_tempfile <- temp_xlsx()
+basename(my_2nd_tempfile)
 write_xlsx(
   list(
     "penguins" = penguins,
@@ -211,8 +217,15 @@ browseURL(my_2nd_tempfile) # open in Excel
 read_xlsx(my_2nd_tempfile, sheet = "penguins") |>
   as_tibble()
 
-browseURL(my_2nd_tempfile)
+browseURL(my_2nd_tempfile) # open in Excel
 read_xlsx(my_2nd_tempfile, sheet = "penguins_raw") |>
+  as_tibble()
+
+# Write a data frame into an xlsm file
+my_3rd_tempfile <- temp_xlsx(macros = TRUE)
+basename(my_3rd_tempfile)
+write_xlsx(penguins, my_3rd_tempfile, col_names = TRUE)
+read_xlsx(my_3rd_tempfile) |>
   as_tibble()
 ```
 

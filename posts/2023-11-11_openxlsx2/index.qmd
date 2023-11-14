@@ -338,6 +338,8 @@ wb <- wb_workbook(
 #| message: false
 #| warning: false
 #| eval: false
+start_col_ws1 <- 3L
+start_row_ws1 <- 10L
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",

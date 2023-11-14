@@ -42,7 +42,7 @@ In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the additi
 
 In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this ["vignette section"](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
 
-Therefore, functions can now be seamlessly piped or chained. This change was triggered by the restructuration of the internal framework of openxlsx.
+Therefore, functions can now be seamlessly chained. Moreover, operation pipelines can now be used in openxlsx2 as opposed to openxlsx. This change was triggered by the restructuration of the internal framework of openxlsx.
 
 For those seeking a deeper understanding of R6, please refer to [Chapter 6 of "Advanced R" by Hadley Wickham](https://adv-r.hadley.nz/r6.html#r6). This chapter provides comprehensive insights into the principles and applications of R6.
 
@@ -86,6 +86,74 @@ kable(table_read_wb) |>
 ```
 
 Please be aware that the recently introduced functions in openxlsx2, namely `read_xlsx()` and `wb_read()`, serve as mere wrappers for `wb_to_df()`. Their purpose is to facilitate a seamless transition between openxlsx and openxlsx2.
+
+## Example
+
+In this example, I want to illustrate how to read an Excel file efficiently. 
+
+You can use `wb_to_df()`, `wb_read()` or `read_xlsx()` which almost have all arguments in common, since `wb_read()` and `read_xlsx()` are wrappers of `wb_to_df()`.
+
+When you read an Excel file, you can define the types of the columns directly.
+Please refer to the [Details section](https://janmarvin.github.io/openxlsx2/reference/wb_to_df.html#details) for more information. Please keep in mind that the `type` argument must be a named numeric where each variables belongs to one of these instances: 
+
+- 0: character
+
+- 1: numeric
+
+- 2: date
+
+- 3: posixt (datetime)
+
+- 4: logical
+
+```{r}
+#| label: example_table_read_wb
+#| message: false
+#| warning: false
+library(openxlsx2)
+file <- system.file("extdata", "openxlsx2_example.xlsx", package = "openxlsx2")
+
+# With wb_load
+my_wb_loaded <- wb_load(file)
+my_wb_loaded
+wb_open(my_wb_loaded) # take a look at the raw xlsx file
+my_df_loaded <- wb_to_df(my_wb_loaded,
+  sheet = 1,
+  skip_empty_cols = TRUE,
+  skip_empty_rows = TRUE,
+  show_formula = TRUE,
+  na.strings = c("#NUM!", "#VALUE!"),
+  types = c(
+    "Var1" = 4, "Var2" = 1, "Var3" = 1, "Var4" = 0, "Var5" = 2,
+    "Var6" = 0, "Var7" = 0, "Var8" = 3
+  )
+)
+my_df_loaded
+
+# With read_xlsx
+my_xslx_read <- read_xlsx(file,
+                          convert = FALSE # to keep all variables as characters
+                          )
+dplyr::glimpse(my_xslx_read)
+
+# With wb_read
+my_wb_read <- wb_read(file,
+                      detect_dates = TRUE)
+dplyr::glimpse(my_wb_read)
+
+
+```
+
+Note that all returned objects have the class `data.frame`. 
+
+```{r}
+#| label: example_table_read_wb_class
+#| message: false
+#| warning: false
+class(my_df_loaded)
+class(my_xslx_read)
+class(my_wb_read)
+```
 
 # Write a file (xlsx or xlsm)
 

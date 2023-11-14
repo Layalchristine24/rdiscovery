@@ -25,7 +25,7 @@ format:
     toc-depth: 6
     toc-title: Contents
     toc-location: right
-    number-sections: false
+    number-sections: true
 ---
 
 *What are the main differences between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2)?*
@@ -154,8 +154,13 @@ In this example, our aim is to explore various options for creating, saving, and
 
 ##### Create a workbook with multiple sheets
 
+:::: {.columns}
+
+::: {.column width="50%"}
+###### Piped
+
 ```{r}
-#| label: ex_table_create_wb_1
+#| label: pipe_ex_table_create_wb_1
 #| message: false
 #| warning: false
 
@@ -212,13 +217,89 @@ wb <- wb_workbook(
   )
 ```
 
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="40%"}
+###### Chained
+
+```{r}
+#| label: chain_ex_table_create_wb_1
+#| message: false
+#| warning: false
+
+library(openxlsx2)
+library(palmerpenguins)
+
+wb <- wb_workbook(
+  creator = "Layal Christine Lettry",
+  title = "My Test",
+  subject = "Create a Workbook",
+  category = "Test",
+  datetime_created = Sys.time(),
+  theme = "Office Theme",
+  keywords = "test",
+  comments = "This is my test",
+  manager = "Me",
+  company = "My Company"
+)$
+  add_worksheet(
+  sheet = "my_first_sheet",
+  tab_color = "blue",
+  zoom = 150L,
+  visible = TRUE,
+  orientation = "portrait",
+  header = c("ODD HEAD LEFT", "ODD HEAD CENTER", "ODD HEAD RIGHT"),
+  footer = c("ODD FOOT RIGHT", "ODD FOOT CENTER", "ODD FOOT RIGHT"),
+  even_header = c("EVEN HEAD LEFT", "EVEN HEAD CENTER", "EVEN HEAD RIGHT"),
+  even_footer = c("EVEN FOOT RIGHT", "EVEN FOOT CENTER", "EVEN FOOT RIGHT"),
+  first_header = c("TOP", "OF FIRST", "PAGE"),
+  first_footer = c("BOTTOM", "OF FIRST", "PAGE")
+)$
+  add_data(
+  x = penguins,
+  start_col = 3,
+  start_row = 10,
+  array = FALSE,
+  col_names = TRUE,
+  row_names = FALSE,
+  with_filter = FALSE
+)$
+  add_worksheet(
+  sheet = "my_second_sheet",
+  tab_color = "red",
+  zoom = 75L,
+  visible = TRUE,
+  orientation = "landscape"
+)$
+  add_data(
+  x = penguins_raw,
+  dims = wb_dims(2, 1),
+  col_names = TRUE,
+  row_names = TRUE,
+  with_filter = TRUE
+)
+```
+
+:::
+
+::::
 
 ##### Inspect and write the workbook data
 
 You can perform the following steps to examine the data and save it to a temporary xlsx file.
 
+:::: {.columns}
+
+::: {.column width="50%"}
+
+###### Piped
+
 ```{r}
-#| label: ex_table_create_wb_2
+#| label: pipe_ex_table_create_wb_2
 #| message: false
 #| warning: false
 
@@ -237,9 +318,45 @@ wb |>
 browseURL(myfile)
 ```
 
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="40%"}
+
+##### Chained
+
+You can perform the following steps to examine the data and save it to a temporary xlsx file.
+
+```{r}
+#| label: chain_ex_table_create_wb_2
+#| message: false
+#| warning: false
+
+# Inspect the workbook
+wb$open()
+
+# Create a new temporary file
+myfile <- temp_xlsx()
+
+# Write the workbook into a temporary xlsx file
+wb$save(file = myfile, overwrite = TRUE)
+
+# Open the xlsx file
+browseURL(myfile)
+```
+
+:::
+
+::::
+
 Please be aware that in order to view the headers and footers, you should click on "View" and select "Header and Footer" (for Mac users). This option enables you to distinguish between the landscape and portrait orientations on the two sheets.
 
 ##### Import workbook and start working on the data with dplyr
+
+Here, there is no operations which could be chained. 
 
 ```{r}
 #| label: ex_table_create_wb_3
@@ -269,5 +386,3 @@ class(my_df)
 my_tib <- tibble::as_tibble(my_df)
 my_tib
 ```
-
-

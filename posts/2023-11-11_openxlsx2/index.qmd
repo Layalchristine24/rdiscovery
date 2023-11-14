@@ -38,9 +38,13 @@ The provided tables are designed to offer a clear overview of the differences be
 
 # Chaining versus Piping
 
-In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
+In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations. 
 
-If you lean towards using pipes, please turn to the last column in the tables within the subsequent sections. This column specifies the corresponding function and its recommended usage with pipes. If the function is the same in both columns, it can be used with pipes or chains.
+In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this ["vignette section"](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
+
+Therefore, functions can now be seamlessly piped or chained. This change was triggered by the restructuration of the internal framework of openxlsx.
+
+For those seeking a deeper understanding of R6, please refer to [Chapter 6 of "Advanced R" by Hadley Wickham](https://adv-r.hadley.nz/r6.html#r6). This chapter provides comprehensive insights into the principles and applications of R6.
 
 In the tables below, we've highlighted the key arguments for each function. For a deeper dive into the specifics of each function's arguments, check out the examples in the following sections.
 
@@ -48,7 +52,6 @@ Kindly explore [this specific vignette section](https://janmarvin.github.io/open
 
 In the forthcoming examples, I will employ pipes and chains to illustrate diverse applications of the openxlsx2 functions. Feel free to use your preferred method!
 
-Building a workbook with pipes or chains, instead of relying on isolated functions, is already a significant improvement!
 
 # Read an existing Excel Workbook
 

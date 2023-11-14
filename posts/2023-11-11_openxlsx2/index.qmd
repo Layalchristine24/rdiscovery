@@ -803,13 +803,13 @@ kable(table_protect_filter_freeze_data) |>
 
 It's important to note that when you use `wb_add_filter()`, every column in between the specified ones will also inherit a filter. So, if you don't want a filter to be added to certain columns, you'll need to rearrange your dataset accordingly to achieve the desired outcome.
 
-In this example, we will do the following improvements:
+In the following example, we will make the following improvements:
 
 - Add a filter to the two first columns, namely `species` and `island`
 
-- Set the first active row to the one which contains data, juste below the column names, and the first active column to the `island` column (the second one)
+- Set the first active row to the one that contains data, just below the column names, and the first active column to to the `island` column (the second one)
 
-- Protect the second worksheet, namely "my_second_sheet"  
+- Protect the second worksheet called "my_second_sheet"  
 
 :::: {.columns}
 

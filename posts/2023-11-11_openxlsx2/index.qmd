@@ -40,7 +40,7 @@ The provided tables are designed to offer a clear overview of the differences be
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations. 
 
-In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared two significant developments in this [vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the inclusion of pugixml to reliably parse XML files and the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
+In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this [vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
 
 Therefore, functions can now be seamlessly chained. Moreover, operation pipelines can now be used in openxlsx2 as opposed to openxlsx. This change was triggered by the restructuration of the internal framework of openxlsx.
 
@@ -156,7 +156,7 @@ class(my_xslx_read)
 class(my_wb_read)
 ```
 
-# Write a File (xlsx or xlsm)
+# Write a File 
 
 ```{r}
 #| label: table_write_wb
@@ -219,6 +219,53 @@ read_xlsx(my_2nd_tempfile, sheet = "penguins") |>
 browseURL(my_2nd_tempfile)
 read_xlsx(my_2nd_tempfile, sheet = "penguins_raw") |>
   as_tibble()
+```
+
+# Parse XML Files
+
+Aside from the transition to R6, another significant improvement in openxlsx2, compared to openxlsx, is the inclusion of pugixml to reliably parse XML files.
+
+```{r}
+#| label: read_xml_example
+#| message: false
+#| warning: false
+# source: https://www.geeksforgeeks.org/working-with-xml-files-in-r-programming/
+path_xml <- file.path(here::here(), "posts", "2023-11-11_openxlsx2", "records.xml")
+
+# Read an xml file
+my_xml_file <- read_xml(path_xml)
+my_xml_file
+
+# Return node
+node_records <- xml_node(my_xml_file, level1 = "RECORDS")
+node_records
+node_student <- xml_node(my_xml_file, level1 = "RECORDS", level2 = "STUDENT")
+node_student
+node_name <- xml_node(my_xml_file,
+  level1 = "RECORDS", level2 = "STUDENT",
+  level3 = "NAME"
+)
+node_name
+node_branch <- xml_node(my_xml_file,
+  level1 = "RECORDS", level2 = "STUDENT",
+  level3 = "BRANCH"
+)
+node_branch
+
+# Load character string to pugixml and returns an external pointer
+as_xml(node_student)
+as_xml(node_name)
+as_xml(node_branch)
+
+# Return value
+xml_value(my_xml_file, level1 = "RECORDS", level2 = "STUDENT", level3 = "NAME")
+xml_value(my_xml_file, level1 = "RECORDS", level2 = "STUDENT", level3 = "BRANCH")
+xml_value(my_xml_file, level1 = "RECORDS", level2 = "STUDENT", level3 = "ID")
+xml_value(my_xml_file, level1 = "RECORDS", level2 = "STUDENT", level3 = "MARKS")
+
+# Return attributes
+xml_attr(my_xml_file, level1 = "RECORDS", level2 = "STUDENT")
+xml_attr(my_xml_file, level1 = "RECORDS")
 ```
 
 

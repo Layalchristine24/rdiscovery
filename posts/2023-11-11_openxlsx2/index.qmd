@@ -132,16 +132,15 @@ my_df_loaded
 
 # With read_xlsx
 my_xslx_read <- read_xlsx(file,
-                          convert = FALSE # to keep all variables as characters
-                          )
+  convert = FALSE # to keep all variables as characters
+)
 dplyr::glimpse(my_xslx_read)
 
 # With wb_read
 my_wb_read <- wb_read(file,
-                      detect_dates = TRUE)
+  detect_dates = TRUE
+)
 dplyr::glimpse(my_wb_read)
-
-
 ```
 
 Note that all returned objects have the class `data.frame`. 
@@ -183,6 +182,46 @@ table_write_wb <- tibble::tribble(
 #| output: asis
 kable(table_write_wb) |>
   kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+```
+
+## Example
+
+
+Let's say we want to put the information about `palmerpenguins::penguins` in a new Excel file.
+
+Then, we would like to include `palmerpenguins::penguins_raw` in the same Excel file. 
+
+
+```{r}
+#| label: example_table_write_wb
+#| message: false
+#| warning: false
+library(palmerpenguins)
+library(openxlsx2)
+
+my_tempfile <- temp_xlsx()
+write_xlsx(penguins, my_tempfile, col_names = TRUE)
+read_xlsx(my_tempfile) |>
+  tibble::as_tibble()
+
+my_2nd_tempfile <- temp_xlsx()
+write_xlsx(
+  list(
+    "penguins" = penguins,
+    "penguins_raw" = penguins_raw
+  ),
+  my_2nd_tempfile,
+  start_col = c(1, 2),
+  start_row = c(2, 3),
+  col_names = TRUE
+)
+browseURL(my_2nd_tempfile) # open in Excel
+read_xlsx(my_2nd_tempfile, sheet = "penguins") |>
+  tibble::as_tibble()
+
+browseURL(my_2nd_tempfile)
+read_xlsx(my_2nd_tempfile, sheet = "penguins_raw") |>
+  tibble::as_tibble()
 ```
 
 

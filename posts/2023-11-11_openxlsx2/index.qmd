@@ -208,8 +208,8 @@ write_xlsx(
     "penguins_raw" = penguins_raw
   ),
   my_2nd_tempfile,
-  start_col = c(1, 2),
-  start_row = c(2, 3),
+  start_col = c(1L, 2L),
+  start_row = c(2L, 3L),
   col_names = TRUE
 )
 browseURL(my_2nd_tempfile) # open in Excel
@@ -269,8 +269,8 @@ In this example, our aim is to explore various options for creating, saving, and
 #| label: chain_ex_table_create_wb_1
 #| message: false
 #| warning: false
-start_col_ws1 <- 3
-start_row_ws1 <- 10
+start_col_ws1 <- 3L
+start_row_ws1 <- 10L
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
@@ -494,6 +494,8 @@ my_tib
 
 # Add a Drop-Down List to Your Workbook
 
+Let's assume you have a workbook called `wb`.
+
 To add a drop-down list, you must first add the data to a separate sheet[^1]. We also want to keep it hidden. You can then create a drop-down list with `wb_add_data_validation()`.
 
 It is also possible to apply various styles to the values of your drop-down list with `wb_add_conditional_formatting()`.
@@ -501,13 +503,13 @@ It is also possible to apply various styles to the values of your drop-down list
 [^1]: Please refer to my older [blog post on openxlsx.demo](https://rdiscovery.netlify.app/posts/2023-04-02_openxlsxdemo/#step-2-create-a-drop-down-list).
 
 ```{r}
-#| label: table_features
-#| tbl-cap: "Add features to the workbook"
+#| label: table_ddl
+#| tbl-cap: "Add a Drop-Down List to Your Workbook"
 #| message: false
 #| warning: false
 #| echo: false
 
-table_features_wb <- tribble(
+table_ddl <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Add a drop-down list", "`dataValidation()`", "`wb$add_data_validation()`", "`wb_add_data_validation()`",
   "Add conditional formatting", "`conditionalFormatting()`", "`wb$add_conditional_formatting()`", "`wb_add_conditional_formatting()`"
@@ -516,12 +518,12 @@ table_features_wb <- tribble(
 
 
 ```{r}
-#| label: print_table_features
-#| tbl-cap: "Add features to the workbook"
+#| label: print_table_ddl
+#| tbl-cap: "Add a Drop-Down List to Your Workbook"
 #| tbl-colwidths: [50,60,60,60]
 #| echo: false
 #| output: asis
-kable(table_features_wb) |>
+kable(table_ddl) |>
   add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
@@ -543,8 +545,8 @@ wb_ddl <- wb$
   add_worksheet("drop-down_list", visible = "hidden")$
   add_data(
   x = c("huge", "big", "normal", "small", "tiny"),
-  start_col = 1,
-  start_row = 1
+  start_col = 1L,
+  start_row = 1L
 )$
   add_data(
   sheet = "my_first_sheet",
@@ -585,8 +587,8 @@ wb_ddl <- wb |>
   wb_add_worksheet("drop-down_list", visible = "hidden") |>
   wb_add_data(
     x = c("huge", "big", "normal", "small", "tiny"),
-    start_col = 1,
-    start_row = 1
+    start_col = 1L,
+    start_row = 1L
   ) |>
   wb_add_data(
     sheet = "my_first_sheet",
@@ -682,7 +684,7 @@ wb_cf <- wb_ddl$
   type = "containsText",
   rule = "tiny",
   style = "style_tiny"
-) 
+)
 ```
 
 :::
@@ -757,6 +759,118 @@ wb_cf <- wb_ddl |>
     type = "containsText",
     rule = "tiny",
     style = "style_tiny"
+  )
+```
+
+:::
+
+::::
+
+
+# Filter Data, Protect Worksheet and Freeze your a Worksheet Pane
+
+Let's say you have a workbook called `wb` and you would like to add some filters, 
+to protect a worksheet and to freeze data.
+
+```{r}
+#| label: table_protect_filter_freeze_data
+#| tbl-cap: "Manage and Secure your Data"
+#| message: false
+#| warning: false
+#| echo: false
+
+table_protect_filter_freeze_data <- tribble(
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Filter data", "`addFilter()`", "`wb$add_filter()`", "`wb_add_filter()`",
+  "Protect worksheet", "`protectWorksheet()`", "`wb$protect_worksheet()`", "`wb_protect_worksheet()`",
+  "Freeze data", "`freezePane()`", "`wb$freeze_pane()`", "`wb_freeze_pane()`"
+)
+```
+
+
+```{r}
+#| label: print_table_protect_filter_freeze_data
+#| tbl-cap: "Manage and Secure your Data"
+#| tbl-colwidths: [50,60,60,60]
+#| echo: false
+#| output: asis
+kable(table_protect_filter_freeze_data) |>
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+```
+
+
+## Example
+
+It's important to note that when you use `wb_add_filter()`, every column in between the specified ones will also inherit a filter. So, if you don't want a filter to be added to certain columns, you'll need to rearrange your dataset accordingly to achieve the desired outcome.
+
+In this example, we will do the following improvements:
+
+- Add a filter to the two first columns, namely `species` and `island`
+
+- Set the first active row to the one which contains data, juste below the column names, and the first active column to the `island` column (the second one)
+
+- Protect the second worksheet, namely "my_second_sheet"  
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+##### Chained
+
+```{r}
+#| label: chain_ex_table_protect_filter_freeze_data
+#| message: false
+#| warning: false
+wb_pff <- wb_cf$
+  add_filter(
+  sheet = "my_first_sheet",
+  rows = start_row_ws1,
+  cols = start_col_ws1 - 1 + c(
+    which(names(penguins) == "species"),
+    which(names(penguins) == "island")
+  )
+)$
+  freeze_pane(
+  first_active_row = start_row_ws1 + 1,
+  first_active_col = start_col_ws1 +
+    which(names(penguins) == "island")
+)$
+  protect_worksheet(
+  sheet = "my_second_sheet"
+)
+```
+
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+
+##### Piped
+
+```{r}
+#| label: pipe_ex_table_protect_filter_freeze_data
+#| message: false
+#| warning: false
+#| eval: false
+wb_pff <- wb_cf |>
+  wb_add_filter(
+    sheet = "my_first_sheet",
+    rows = start_row_ws1,
+    cols = start_col_ws1 - 1 + c(
+      which(names(penguins) == "species"),
+      which(names(penguins) == "island")
+    )
+  ) |>
+  wb_freeze_pane(
+    first_active_row = start_row_ws1 + 1,
+    first_active_col = start_col_ws1 +
+      which(names(penguins) == "island")
+  ) |>
+  wb_protect_worksheet(
+    sheet = "my_second_sheet"
   )
 ```
 

@@ -261,7 +261,7 @@ In this example, our aim is to explore various options for creating, saving, and
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 #### Chained
 
@@ -324,11 +324,11 @@ wb <- wb_workbook(
 
 :::
 
-::: {.column width="10%"}
+::: {.column width="5%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 
 #### Piped
@@ -401,7 +401,7 @@ You can perform the following steps to examine the data and save it to a tempora
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 #### Chained
 
@@ -425,11 +425,11 @@ browseURL(myfile)
 
 :::
 
-::: {.column width="10%"}
+::: {.column width="5%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 #### Piped
 
@@ -534,7 +534,7 @@ kable(table_ddl) |>
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 #### Chained
 
@@ -571,11 +571,11 @@ wb_ddl <- wb$
 
 :::
 
-::: {.column width="10%"}
+::: {.column width="5%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 #### Piped
 
@@ -620,7 +620,7 @@ In order to make it look better, we can format each of the values of the drop-do
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 ##### Chained
 
@@ -691,11 +691,11 @@ wb_cf <- wb_ddl$
 
 :::
 
-::: {.column width="10%"}
+::: {.column width="5%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 ##### Piped
 
@@ -815,7 +815,7 @@ In the following example, we will make the following improvements:
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 ##### Chained
 
@@ -834,21 +834,30 @@ wb_pff <- wb_cf$
 )$
   freeze_pane(
   first_active_row = start_row_ws1 + 1,
-  first_active_col = start_col_ws1 +
-    which(names(penguins) == "island")
+  first_active_col = start_col_ws1 + 1
 )$
   protect_worksheet(
   sheet = "my_second_sheet"
+)$
+  protect_worksheet(
+  sheet = "my_first_sheet",
+  protect = TRUE,
+  # Formatting cells / columns is allowed,
+  # but inserting / deleting columns is protected:
+  c(
+    formatCells = FALSE, formatColumns = FALSE,
+    insertColumns = TRUE, deleteColumns = TRUE
+  )
 )
 ```
 
 :::
 
-::: {.column width="10%"}
+::: {.column width="5%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="45%"}
+::: {.column width="47.5%"}
 
 ##### Piped
 
@@ -868,11 +877,20 @@ wb_pff <- wb_cf |>
   ) |>
   wb_freeze_pane(
     first_active_row = start_row_ws1 + 1,
-    first_active_col = start_col_ws1 +
-      which(names(penguins) == "island")
+    first_active_col = start_col_ws1 + 1
   ) |>
   wb_protect_worksheet(
     sheet = "my_second_sheet"
+  ) |>
+  wb_protect_worksheet(
+    sheet = "my_first_sheet",
+    protect = TRUE,
+    # Formatting cells / columns is allowed,
+    # but inserting / deleting columns is protected:
+    c(
+      formatCells = FALSE, formatColumns = FALSE,
+      insertColumns = TRUE, deleteColumns = TRUE
+    )
   )
 ```
 
@@ -922,3 +940,199 @@ These helpers could be used to apply these formatting functions:
 - `int2col()`: Convert integer to Excel column
 
 ## Example
+
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+
+##### Chained
+
+```{r}
+#| label: chain_ex_table_style_workbook
+#| message: false
+#| warning: false
+
+ws1_colnames <- wb_dims(
+  rows = start_row_ws1,
+  cols = seq_len(
+    ncol(penguins) + 1
+  ) +
+    start_col_ws1 - 1
+)
+
+ws1_data <- wb_dims(
+  x = penguins,
+  from_row = start_row_ws1,
+  rows = seq_len(nrow(penguins)),
+  from_col = start_col_ws1,
+  cols = seq_len(ncol(penguins) + 1)
+)
+
+col_bmg <- wb_dims(
+  x = penguins,
+  from_row = start_row_ws1,
+  rows = seq_len(nrow(penguins)),
+  cols = which(names(penguins) == "body_mass_g") +
+    start_col_ws1 - 1
+)
+
+col_size <- wb_dims(
+  x = penguins,
+  cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+  from_row = start_row_ws1
+)
+
+wb_format <- wb_pff$
+  add_font(
+  sheet = 1,
+  dims = ws1_colnames, # add font to the original penguins variables
+  size = 12,
+  bold = TRUE
+)$
+  add_border(
+  sheet = 1,
+  dims = ws1_data,
+  bottom_border = "thin",
+  left_border = "thin",
+  right_border = "thin",
+  top_border = NULL
+)$
+  add_border(
+  sheet = 1,
+  dims = ws1_colnames,
+  bottom_border = "thick",
+  left_border = "thick",
+  right_border = "thick",
+  top_border = "thick"
+)$
+  add_cell_style(
+  dims = ws1_data,
+  vertical = "top",
+  horizontal = "left",
+  wrap_text = TRUE,
+  locked = FALSE
+)$
+  add_cell_style(
+  dims = ws1_colnames,
+  vertical = "center",
+  horizontal = "center",
+  wrap_text = TRUE
+)$
+  set_col_widths(
+  cols = int2col(
+    seq_len(ncol(penguins) + 1)
+  ),
+  widths = 22
+)$
+  add_numfmt(
+  dims = col_bmg,
+  numfmt = "#.0"
+)$
+  add_fill(
+  dims = col_size,
+  color = wb_color("#d9d2e9")
+)
+```
+
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+
+##### Piped
+
+```{r}
+#| label: pipe_ex_table_style_workbook
+#| message: false
+#| warning: false
+#| eval: false
+
+ws1_colnames <- wb_dims(
+  rows = start_row_ws1,
+  cols = seq_len(
+    ncol(penguins) + 1
+  ) +
+    start_col_ws1 - 1
+)
+
+ws1_data <- wb_dims(
+  x = penguins,
+  from_row = start_row_ws1,
+  rows = seq_len(nrow(penguins)),
+  from_col = start_col_ws1,
+  cols = seq_len(ncol(penguins) + 1)
+)
+
+col_bmg <- wb_dims(
+  x = penguins,
+  from_row = start_row_ws1,
+  rows = seq_len(nrow(penguins)),
+  cols = which(names(penguins) == "body_mass_g") +
+    start_col_ws1 - 1
+)
+
+col_size <- wb_dims(
+  x = penguins,
+  cols = which(names(penguins) == last(names(penguins))) + start_col_ws1,
+  from_row = start_row_ws1
+)
+
+wb_format <- wb_pff |>
+  wb_add_font(
+    sheet = 1,
+    dims = ws1_colnames, # add font to the original penguins variables
+    size = 12,
+    bold = TRUE
+  ) |>
+  wb_add_border(
+    sheet = 1,
+    dims = ws1_data,
+    bottom_border = "thin",
+    left_border = "thin",
+    right_border = "thin",
+    top_border = NULL
+  ) |>
+  wb_add_border(
+    sheet = 1,
+    dims = ws1_colnames,
+    bottom_border = "thick",
+    left_border = "thick",
+    right_border = "thick",
+    top_border = "thick"
+  ) |>
+  wb_add_cell_style(
+    dims = ws1_data,
+    vertical = "top",
+    horizontal = "left",
+    wrap_text = TRUE,
+    locked = FALSE
+  ) |>
+  wb_add_cell_style(
+    dims = ws1_colnames,
+    vertical = "center",
+    horizontal = "center",
+    wrap_text = TRUE
+  ) |>
+  wb_set_col_widths(
+    cols = int2col(
+      seq_len(ncol(penguins) + 1)
+    ),
+    widths = 22
+  ) |>
+  wb_add_numfmt(
+    dims = col_bmg,
+    numfmt = "#.0"
+  ) |>
+  wb_add_fill(
+    dims = col_size,
+    color = wb_color("#d9d2e9")
+  )
+```
+
+:::
+
+::::

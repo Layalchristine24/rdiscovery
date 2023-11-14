@@ -14,7 +14,7 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2023-11-11
+date: 2023-11-14
 categories: [openxlsx, openxlsx2]
 image: image.jpg
 citation: 
@@ -38,9 +38,9 @@ The provided tables are designed to offer a clear overview of the differences be
 
 # Chaining versus Piping
 
-In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations. 
+In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
 
-In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this [vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
+In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this [vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`.
 
 Therefore, functions can now be seamlessly chained. Moreover, operation pipelines can now be used in openxlsx2 as opposed to openxlsx. This change was triggered by the restructuration of the internal framework of openxlsx.
 
@@ -51,7 +51,6 @@ In the tables below, we've highlighted the key arguments for each function. For 
 Kindly explore [this specific vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles) for an example that contrasts openxlsx and openxlsx2. Unlike openxlsx, which lacks integration with pipes or chains, openxlsx2 offers flexibility in its application.
 
 In the forthcoming examples, I will employ pipes and chains to illustrate diverse applications of the openxlsx2 functions. Feel free to use your preferred method!
-
 
 # Read an existing Excel Workbook
 
@@ -92,22 +91,21 @@ Please be aware that the recently introduced functions in openxlsx2, namely `rea
 
 ## Example
 
-In this example, I want to illustrate how to read an Excel file efficiently. 
+In this example, I want to illustrate how to read an Excel file efficiently.
 
 You can use `wb_to_df()`, `wb_read()` or `read_xlsx()` which almost have all arguments in common, since `wb_read()` and `read_xlsx()` are wrappers of `wb_to_df()`.
 
-When you read an Excel file, you can define the types of the columns directly.
-Please refer to the [Details section](https://janmarvin.github.io/openxlsx2/reference/wb_to_df.html#details) for more information. Please keep in mind that the `type` argument must be a named numeric where each variables belongs to one of these instances: 
+When you read an Excel file, you can define the types of the columns directly. Please refer to the [Details section](https://janmarvin.github.io/openxlsx2/reference/wb_to_df.html#details) for more information. Please keep in mind that the `type` argument must be a named numeric where each variables belongs to one of these instances:
 
-- 0: character
+-   0: character
 
-- 1: numeric
+-   1: numeric
 
-- 2: date
+-   2: date
 
-- 3: posixt (datetime)
+-   3: posixt (datetime)
 
-- 4: logical
+-   4: logical
 
 ```{r}
 #| label: example_table_read_wb
@@ -145,7 +143,7 @@ my_wb_read <- wb_read(file,
 glimpse(my_wb_read)
 ```
 
-Note that all returned objects have the class `data.frame`. 
+Note that all returned objects have the class `data.frame`.
 
 ```{r}
 #| label: example_table_read_wb_class
@@ -156,7 +154,7 @@ class(my_xslx_read)
 class(my_wb_read)
 ```
 
-# Write a File 
+# Write a File
 
 ```{r}
 #| label: table_write_wb
@@ -173,7 +171,6 @@ table_write_wb <- tribble(
 )
 ```
 
-
 ```{r}
 #| label: print_table_write_wb
 #| tbl-cap: "Write an xlsx or xlsm workbook"
@@ -188,8 +185,7 @@ kable(table_write_wb) |>
 
 Let's say we want to put the information about `palmerpenguins::penguins` in a new Excel file.
 
-Then, we would like to include `palmerpenguins::penguins_raw` in the same Excel file. 
-
+Then, we would like to include `palmerpenguins::penguins_raw` in the same Excel file.
 
 ```{r}
 #| label: example_table_write_wb
@@ -225,12 +221,16 @@ read_xlsx(my_2nd_tempfile, sheet = "penguins_raw") |>
 
 Aside from the transition to R6, another significant improvement in openxlsx2, compared to openxlsx, is the inclusion of pugixml to reliably parse XML files.
 
+
 ```{r}
 #| label: read_xml_example
 #| message: false
 #| warning: false
 # source: https://www.geeksforgeeks.org/working-with-xml-files-in-r-programming/
-path_xml <- file.path(here::here(), "posts", "2023-11-11_openxlsx2", "records.xml")
+path_xml <- file.path(
+  here::here(),
+  "posts", "2023-11-11_openxlsx2", "records.xml"
+)
 
 # Read an xml file
 my_xml_file <- read_xml(path_xml)
@@ -268,10 +268,9 @@ xml_attr(my_xml_file, level1 = "RECORDS", level2 = "STUDENT")
 xml_attr(my_xml_file, level1 = "RECORDS")
 ```
 
-
 # Create an Excel Workbook from Scratch
 
-Let's say you would like to create a workbook called `wb` and a worksheet called `ws` where you want to write data `x`. 
+Let's say you would like to create a workbook called `wb` and a worksheet called `ws` where you want to write data `x`.
 
 ```{r}
 #| label: table_create_wb
@@ -289,7 +288,6 @@ table_create_wb <- tribble(
 )
 ```
 
-
 ```{r}
 #| label: print_table_create_wb
 #| tbl-cap: "Create a workbook and write data"
@@ -306,10 +304,8 @@ In this example, our aim is to explore various options for creating, saving, and
 
 ### Create a Workbook with Multiple Sheets
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 #### Chained
 
 ```{r}
@@ -368,7 +364,6 @@ wb <- wb_workbook(
   with_filter = TRUE
 )
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -376,8 +371,6 @@ wb <- wb_workbook(
 :::
 
 ::: {.column width="47.5%"}
-
-
 #### Piped
 
 ```{r}
@@ -437,19 +430,15 @@ wb <- wb_workbook(
     with_filter = TRUE
   )
 ```
-
 :::
-
-::::
+:::
 
 ### Inspect and Write the Workbook Data
 
 You can perform the following steps to examine the data and save it to a temporary xlsx file.
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 #### Chained
 
 ```{r}
@@ -469,7 +458,6 @@ wb$save(file = myfile, overwrite = TRUE)
 # Open the xlsx file
 browseURL(myfile)
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -477,7 +465,6 @@ browseURL(myfile)
 :::
 
 ::: {.column width="47.5%"}
-
 #### Piped
 
 ```{r}
@@ -500,10 +487,8 @@ wb |>
 # Open the xlsx file
 browseURL(myfile)
 ```
-
 :::
-
-::::
+:::
 
 Please be aware that in order to view the headers and footers, you should click on "View" and select "Header and Footer" (for Mac users). This option enables you to distinguish between the landscape and portrait orientations on the two sheets.
 
@@ -540,16 +525,15 @@ my_tib <- as_tibble(my_df)
 my_tib
 ```
 
-
 # Add a Drop-Down List to Your Workbook
 
 Let's assume you have a workbook called `wb`.
 
 To add a drop-down list, you must first add the data to a separate sheet[^1]. We also want to keep it hidden. You can then create a drop-down list with `wb_add_data_validation()`.
 
-It is also possible to apply various styles to the values of your drop-down list with `wb_add_conditional_formatting()`.
-
 [^1]: Please refer to my older [blog post on openxlsx.demo](https://rdiscovery.netlify.app/posts/2023-04-02_openxlsxdemo/#step-2-create-a-drop-down-list).
+
+It is also possible to apply various styles to the values of your drop-down list with `wb_add_conditional_formatting()`.
 
 ```{r}
 #| label: table_ddl
@@ -565,7 +549,6 @@ table_ddl <- tribble(
 )
 ```
 
-
 ```{r}
 #| label: print_table_ddl
 #| tbl-cap: "Add a Drop-Down List to Your Workbook"
@@ -576,13 +559,10 @@ kable(table_ddl) |>
   add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
-
 ## Example
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 #### Chained
 
 ```{r}
@@ -615,7 +595,6 @@ wb_ddl <- wb$
   value = "'drop-down_list'!$A$1:$A$5"
 )
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -623,7 +602,6 @@ wb_ddl <- wb$
 :::
 
 ::: {.column width="47.5%"}
-
 #### Piped
 
 ```{r}
@@ -657,18 +635,15 @@ wb_ddl <- wb |>
     value = "'drop-down_list'!$A$1:$A$5"
   )
 ```
-
+:::
 :::
 
-::::
-
 #### Add Colors to Your Drop-Down Values
+
 In order to make it look better, we can format each of the values of the drop-down list.
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 ##### Chained
 
 ```{r}
@@ -735,7 +710,6 @@ wb_cf <- wb_ddl$
   style = "style_tiny"
 )
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -743,7 +717,6 @@ wb_cf <- wb_ddl$
 :::
 
 ::: {.column width="47.5%"}
-
 ##### Piped
 
 ```{r}
@@ -810,16 +783,12 @@ wb_cf <- wb_ddl |>
     style = "style_tiny"
   )
 ```
-
 :::
-
-::::
-
+:::
 
 # Filter Data, Protect Worksheet and Freeze your a Worksheet Pane
 
-Let's say you have a workbook called `wb` and you would like to add some filters, 
-to protect a worksheet and to freeze data.
+Let's say you have a workbook called `wb` and you would like to add some filters, to protect a worksheet and to freeze data.
 
 ```{r}
 #| label: table_protect_filter_freeze_data
@@ -836,7 +805,6 @@ table_protect_filter_freeze_data <- tribble(
 )
 ```
 
-
 ```{r}
 #| label: print_table_protect_filter_freeze_data
 #| tbl-cap: "Manage and Secure your Data"
@@ -847,23 +815,20 @@ kable(table_protect_filter_freeze_data) |>
   add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
-
 ## Example
 
 It's important to note that when you use `wb_add_filter()`, every column in between the specified ones will also inherit a filter. So, if you don't want a filter to be added to certain columns, you'll need to rearrange your dataset accordingly to achieve the desired outcome.
 
 In the following example, we will make the following improvements:
 
-- Add a filter to the two first columns, namely `species` and `island`
+-   Add a filter to the two first columns, namely `species` and `island`
 
-- Set the first active row to the one that contains data, just below the column names, and the first active column to to the `island` column (the second one)
+-   Set the first active row to the one that contains data, just below the column names, and the first active column to to the `island` column (the second one)
 
-- Protect the second worksheet called "my_second_sheet"  
+-   Protect the second worksheet called "my_second_sheet"
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 ##### Chained
 
 ```{r}
@@ -897,7 +862,6 @@ wb_pff <- wb_cf$
   )
 )
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -905,7 +869,6 @@ wb_pff <- wb_cf$
 :::
 
 ::: {.column width="47.5%"}
-
 ##### Piped
 
 ```{r}
@@ -940,16 +903,14 @@ wb_pff <- wb_cf |>
     )
   )
 ```
-
 :::
-
-::::
+:::
 
 # Make Your Data Shine
 
-Let's say you have a workbook called `wb` and you would like to some styling. 
+Let's say you have a workbook called `wb` and you would like to some styling.
 
-The following functions will help you format your data as you wish in your worksheet. 
+The following functions will help you format your data as you wish in your worksheet.
 
 ```{r}
 #| label: table_style_workbook
@@ -969,7 +930,6 @@ table_style_workbook <- tribble(
 )
 ```
 
-
 ```{r}
 #| label: print_table_style_workbook
 #| tbl-cap: "Format your Data"
@@ -982,17 +942,14 @@ kable(table_style_workbook) |>
 
 These helpers could be used to apply these formatting functions:
 
-- `wb_dims()`: Helper to specify the dims argument
+-   `wb_dims()`: Helper to specify the dims argument
 
-- `int2col()`: Convert integer to Excel column
+-   `int2col()`: Convert integer to Excel column
 
 ## Example
 
-
-:::: {.columns}
-
+::: columns
 ::: {.column width="47.5%"}
-
 ##### Chained
 
 ```{r}
@@ -1081,7 +1038,6 @@ wb_format <- wb_pff$
   color = wb_color("#d9d2e9")
 )
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -1089,7 +1045,6 @@ wb_format <- wb_pff$
 :::
 
 ::: {.column width="47.5%"}
-
 ##### Piped
 
 ```{r}
@@ -1179,7 +1134,37 @@ wb_format <- wb_pff |>
     color = wb_color("#d9d2e9")
   )
 ```
-
+:::
 :::
 
-::::
+You can download the final Excel output [here](https://github.com/Layalchristine24/rdiscovery/blob/main/posts/2023-11-11_openxlsx2/excel_demo.xlsx).
+
+# Acknowledgements
+
+Thank you for reading. Enjoy using [openxlsx2](https://github.com/JanMarvin/openxlsx2)!
+
+Many thanks to the [openxlsx2](https://github.com/JanMarvin/openxlsx2) developers: 
+
+- [\@JanMarvin](https://github.com/JanMarvin)  
+
+- [\@jmbarbone](https://github.com/jmbarbone) 
+
+- [\@olivroy](https://github.com/olivroy)
+
+- [\@sjewo](https://github.com/sjewo)
+
+
+# References
+
+- [openxlsx](https://github.com/awalker89/openxlsx) 
+
+- [openxlsx2](https://github.com/JanMarvin/openxlsx2)
+
+- [Github Gist](https://gist.github.com/JanMarvin/a0d89bb8e128899477654dd2d4f4402d)
+
+- [Update from openxlsx](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html)
+    - [Styles](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles)
+
+    - [Why openxlsx2](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2)
+
+- [Chapter 6 of "Advanced R" by Hadley Wickham](https://adv-r.hadley.nz/r6.html#r6)

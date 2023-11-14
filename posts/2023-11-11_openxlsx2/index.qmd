@@ -61,10 +61,13 @@ In the forthcoming examples, I will employ pipes and chains to illustrate divers
 #| message: false
 #| warning: false
 #| echo: false
-
+library(palmerpenguins)
+library(openxlsx2)
 library(knitr)
+library(tidyverse)
+library(kableExtra)
 
-table_read_wb <- tibble::tribble(
+table_read_wb <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Load file", "", "`wb_load()`", "`wb_load()`",
   "Read file", "", "`wb_to_df()`", "`wb_to_df()`",
@@ -82,7 +85,7 @@ Please note that while openxlsx2 can read `xlsx` or `xlsm` files, openxlsx can o
 #| echo: false
 #| output: asis
 kable(table_read_wb) |>
-  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
 Please be aware that the recently introduced functions in openxlsx2, namely `read_xlsx()` and `wb_read()`, serve as mere wrappers for `wb_to_df()`. Their purpose is to facilitate a seamless transition between openxlsx and openxlsx2.
@@ -110,7 +113,6 @@ Please refer to the [Details section](https://janmarvin.github.io/openxlsx2/refe
 #| label: example_table_read_wb
 #| message: false
 #| warning: false
-library(openxlsx2)
 file <- system.file("extdata", "openxlsx2_example.xlsx", package = "openxlsx2")
 
 # With wb_load
@@ -134,13 +136,13 @@ my_df_loaded
 my_xslx_read <- read_xlsx(file,
   convert = FALSE # to keep all variables as characters
 )
-dplyr::glimpse(my_xslx_read)
+glimpse(my_xslx_read)
 
 # With wb_read
 my_wb_read <- wb_read(file,
   detect_dates = TRUE
 )
-dplyr::glimpse(my_wb_read)
+glimpse(my_wb_read)
 ```
 
 Note that all returned objects have the class `data.frame`. 
@@ -163,9 +165,7 @@ class(my_wb_read)
 #| warning: false
 #| echo: false
 
-library(knitr)
-
-table_write_wb <- tibble::tribble(
+table_write_wb <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Create temporary xlsm file", "", "`temp_xlsx(macros = TRUE)`", "`temp_xlsx(macros = TRUE)`",
   "Create temporary xlsx file", "`temp_xlsx()`", "`temp_xlsx()`", "`temp_xlsx()`",
@@ -181,7 +181,7 @@ table_write_wb <- tibble::tribble(
 #| echo: false
 #| output: asis
 kable(table_write_wb) |>
-  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
 ## Example
@@ -196,13 +196,11 @@ Then, we would like to include `palmerpenguins::penguins_raw` in the same Excel 
 #| label: example_table_write_wb
 #| message: false
 #| warning: false
-library(palmerpenguins)
-library(openxlsx2)
 
 my_tempfile <- temp_xlsx()
 write_xlsx(penguins, my_tempfile, col_names = TRUE)
 read_xlsx(my_tempfile) |>
-  tibble::as_tibble()
+  as_tibble()
 
 my_2nd_tempfile <- temp_xlsx()
 write_xlsx(
@@ -217,11 +215,11 @@ write_xlsx(
 )
 browseURL(my_2nd_tempfile) # open in Excel
 read_xlsx(my_2nd_tempfile, sheet = "penguins") |>
-  tibble::as_tibble()
+  as_tibble()
 
 browseURL(my_2nd_tempfile)
 read_xlsx(my_2nd_tempfile, sheet = "penguins_raw") |>
-  tibble::as_tibble()
+  as_tibble()
 ```
 
 
@@ -235,9 +233,7 @@ Let's say you would like to create a workbook called `wb` and a worksheet called
 #| warning: false
 #| echo: false
 
-library(knitr)
-
-table_create_wb <- tibble::tribble(
+table_create_wb <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Create workbook", "`createWorkbook()`", "`wb_workbook()`", "`wb_workbook()`",
   "Add worksheet ", "`addWorksheet(wb, 'ws')`", "`wb$add_worksheet('ws')`", "`wb_add_worksheet('ws')`",
@@ -255,7 +251,7 @@ table_create_wb <- tibble::tribble(
 #| echo: false
 #| output: asis
 kable(table_create_wb) |>
-  kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
 ## Example
@@ -274,9 +270,6 @@ In this example, our aim is to explore various options for creating, saving, and
 #| label: chain_ex_table_create_wb_1
 #| message: false
 #| warning: false
-
-library(openxlsx2)
-library(palmerpenguins)
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
@@ -343,9 +336,6 @@ wb <- wb_workbook(
 #| label: pipe_ex_table_create_wb_1
 #| message: false
 #| warning: false
-
-library(openxlsx2)
-library(palmerpenguins)
 
 wb <- wb_workbook(
   creator = "Layal Christine Lettry",
@@ -488,12 +478,12 @@ my_df |>
 
 # Provide a summary of the data frame structure
 my_df |>
-  dplyr::glimpse()
+  glimpse()
 
 # Provide the class of the data frame
 class(my_df)
 
 # Convert it into a tibble
-my_tib <- tibble::as_tibble(my_df)
+my_tib <- as_tibble(my_df)
 my_tib
 ```

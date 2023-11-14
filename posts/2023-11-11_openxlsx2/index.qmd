@@ -1,5 +1,5 @@
 ---
-title: Analysis of the differences between openxlsx and openxlsx2
+title: Switch from openxlsx to openxlsx2
 author:
   - name:
       given: Layal Christine

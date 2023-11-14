@@ -30,11 +30,11 @@ format:
 
 *How can you create exceptional workbooks with openxlsx in R?*
 
-In this blog post, I'll walk you through the process of creating impressive workbooks in R using the openxlsx package. If you're looking to enhance your Excel workbook creation skills, you're in the right place. 
+In this blog post, I'll walk you through the process of creating impressive workbooks in R using the openxlsx package. If you're looking to enhance your Excel workbook creation skills, you're in the right place.
 
 To get started, you can explore practical examples from my [openxlsx.demo package](https://github.com/Layalchristine24/openxlsx.demo). These examples will demonstrate how to make the most of the [openxlsx library](https://github.com/ycphs/openxlsx/) to craft stunning workbooks.
 
-## Why use openxlsx in an R Package?
+# Why use openxlsx in an R Package?
 
 One of the best practices for effective workbook management is to incorporate openxlsx into an R package. This approach allows you to maintain code organization and efficiency. As suggested by Hadley Wickham and Jenny Bryan in their book [r-pkgs (2e)](https://r-pkgs.org/code.html#sec-code-organising), you can structure your code by creating separate R files, which can be stored in the `R/` directory of your package. Each file can contain a single function or multiple related functions, promoting modularity.
 
@@ -42,11 +42,11 @@ For instance, in my [openxlsx.demo package](https://github.com/Layalchristine24/
 
 Moreover, when working with openxlsx, you may define various styles for your Excel workbook. To streamline your workflow, it's advisable to store these styles in an R file, making it easy to reference and reuse them. In my [openxlsx.demo package](https://github.com/Layalchristine24/openxlsx.demo), all [openxlsx styles](https://github.com/ycphs/openxlsx/) are consolidated in the [`R/openxlsx_styles.R`](https://github.com/Layalchristine24/openxlsx.demo/blob/main/R/openxlsx_styles.R) file. By loading the package with `pkgload::load_all()`, you can conveniently access and apply your custom styles without the need for exporting them.
 
-### Step 1: Preparing Your Data and Creating Your Workbook
+## Step 1: Preparing Your Data and Creating Your Workbook
 
 Let's dive into the workbook creation process. The first step involves setting up your data and creating a workbook using the [`createWorkbook()`](https://ycphs.github.io/openxlsx/reference/createWorkbook.html) function. This function is the starting point for crafting your Excel masterpiece.
 
-```r
+``` r
 #--- install the package openxlsx.demo -----------------------------------------
 # install only if necessary
 
@@ -62,7 +62,7 @@ Since you'll be organizing your data into multiple worksheets, begin by creating
 
 In this particular example, you'll be working with the `palmerpenguins::penguins` dataset. Your initial task is to write this dataset into the first worksheet of your Excel workbook. However, your goal is not just to copy the data; you also want to enhance it by incorporating additional features and modifications. This step is essential for creating informative and visually appealing workbooks.
 
-```r
+``` r
 #--- create 1st worksheet ------------------------------------------------------
 # add a new worksheet to the workbook
 ws_penguins <- openxlsx::addWorksheet(
@@ -75,7 +75,7 @@ Moving on to the second worksheet, you'll work with the `palmerpenguins::penguin
 
 Creating a separate worksheet for this dataset allows you to preserve the raw data, which can be valuable for reference or further analysis. It's always a good practice to keep the original data intact in case you need to compare or cross-reference it with any modified versions. This approach enhances the utility of your workbook and provides a more comprehensive view of the data.
 
-```r
+``` r
 #--- create 2nd worksheet ------------------------------------------------------
 # add a new worksheet to the workbook
 ws_penguins_raw <- openxlsx::addWorksheet(
@@ -90,7 +90,7 @@ By creating a modified version of the dataset, you can focus on specific aspects
 
 Feel free to explore the [`prepare_penguins_mod()`](https://github.com/Layalchristine24/openxlsx.demo/blob/main/R/prepare_penguins_mod.R) function to see how it can be adapted to your specific use case and how it can improve the quality and relevance of your workbook.
 
-```r
+``` r
 #--- define your datasets ------------------------------------------------------
 data_penguins <- palmerpenguins::penguins
 data_penguins_raw <- palmerpenguins::penguins_raw
@@ -106,19 +106,19 @@ In order to add a specific style to the header section of your workbook, you can
 
 Here's how to set up the header style:
 
-1. Set the `textDecoration` argument to 'bold'. This makes the header text appear in a bold font, ensuring it stands out.
+1.  Set the `textDecoration` argument to 'bold'. This makes the header text appear in a bold font, ensuring it stands out.
 
-2. Define the cell borders using the `border` argument as `c("top", "bottom", "left", "right")`. This ensures that all header cells have borders on all sides, giving them a well-defined look.
+2.  Define the cell borders using the `border` argument as `c("top", "bottom", "left", "right")`. This ensures that all header cells have borders on all sides, giving them a well-defined look.
 
-3. Set the border style to 'medium' using the `borderStyle` argument. This results in medium-sized borders that create a clear distinction for your header cells.
+3.  Set the border style to 'medium' using the `borderStyle` argument. This results in medium-sized borders that create a clear distinction for your header cells.
 
-4. Enable text wrapping by setting `wrapText` to `TRUE`. This allows text in a cell to automatically wrap to the next line if it is too long, ensuring that all the header text is visible and neatly formatted.
+4.  Enable text wrapping by setting `wrapText` to `TRUE`. This allows text in a cell to automatically wrap to the next line if it is too long, ensuring that all the header text is visible and neatly formatted.
 
 By creating a dedicated header style, you can maintain a consistent and professional appearance throughout your workbook. This not only enhances the visual appeal of your Excel document but also makes it easier for readers to navigate and understand the content.
 
 Feel free to customize these style settings according to your preferences and the specific requirements of your workbook.
- 
-```r
+
+``` r
 # define style style_variables_names
 style_variables_names <- openxlsx::createStyle(
   fontSize = 12,
@@ -133,17 +133,17 @@ style_variables_names <- openxlsx::createStyle(
 
 Once you've prepared your data and defined a header style, it's time to populate your workbook. You can accomplish this using the [`writeData()`](https://ycphs.github.io/openxlsx/reference/writeData.html) function. Here are some key points to keep in mind:
 
-1. Set the first active row to start from the second row by running `first_row <- 2L`. This allows you to leave the first row free for any future comments or additional information. This is a good practice for maintaining a well-organized workbook.
+1.  Set the first active row to start from the second row by running `first_row <- 2L`. This allows you to leave the first row free for any future comments or additional information. This is a good practice for maintaining a well-organized workbook.
 
-2. Apply the header style you defined earlier, `style_variables_names`, by specifying it in the `headerStyle` argument. This ensures that the header row of your data is formatted with the predefined style, making it easily distinguishable from the rest of the content.
+2.  Apply the header style you defined earlier, `style_variables_names`, by specifying it in the `headerStyle` argument. This ensures that the header row of your data is formatted with the predefined style, making it easily distinguishable from the rest of the content.
 
-3. Optionally, you can choose to add a filter to every column by setting `withFilter` to `TRUE`. This is particularly useful when working with a large dataset, as it enables users to filter and sort data within Excel, enhancing data exploration and analysis.
+3.  Optionally, you can choose to add a filter to every column by setting `withFilter` to `TRUE`. This is particularly useful when working with a large dataset, as it enables users to filter and sort data within Excel, enhancing data exploration and analysis.
 
 You can follow these steps for the worksheet that contains the `data_penguins_raw` dataset. This method of data presentation ensures that your workbook looks professional and is equipped with user-friendly features like filtering, which can be invaluable when working with data.
 
 Remember that the goal is to create a workbook that not only contains valuable data but is also aesthetically pleasing and easy to work with for yourself and others who may use it.
 
-```r
+``` r
 #--- define first row ----------------------------------------------------------
 # first row where to write the data (set to 2 because you want to write comments
 # in the first row)
@@ -174,7 +174,7 @@ openxlsx::writeData(
 
 Before finalizing your workbook, it's a good practice to review its appearance to ensure everything is in order. You can achieve this using the [`openXL()`](https://ycphs.github.io/openxlsx/reference/openXL.html) function. Here's how to do it:
 
-1. Call the `openXL()` function to open your workbook. This allows you to view it within Excel. By doing so, you can see how your data is presented, check if the styling and formatting are as intended, and make any necessary adjustments.
+1.  Call the `openXL()` function to open your workbook. This allows you to view it within Excel. By doing so, you can see how your data is presented, check if the styling and formatting are as intended, and make any necessary adjustments.
 
 This step is crucial for quality control. It ensures that your workbook aligns with your expectations and serves its purpose effectively. You can use this opportunity to verify that all data is correctly organized, styles are applied, and filters (if added) are functional.
 
@@ -184,11 +184,12 @@ By previewing your workbook with Excel, you can catch any issues or discrepancie
 # View your workbook
 openxlsx::openXL(wb)
 ```
-### Step 2: Create a Drop-Down List
+
+## Step 2: Create a Drop-Down List
 
 In this step, we will work on creating a drop-down list within your workbook. This can be especially useful if you want to provide a predefined list of options for a specific variable. Here's how to do it:
 
-#### Step 2.1: Add Drop-Down Values to a Variable
+### Step 2.1: Add Drop-Down Values to a Variable
 
 Suppose you want to offer a selection of options in the form of a drop-down list. To achieve this, you should first create a separate worksheet where you'll define these options. Here's how to go about it:
 
@@ -200,26 +201,27 @@ By separating the options in a distinct worksheet, you keep your workbook well-o
 
 Next, we'll proceed to link this list of options to a specific variable within your workbook.
 
-```r
+``` r
 # add worksheet "Drop-down values" to the workbook
 ws_drop_down_values <- openxlsx::addWorksheet(
   wb = wb,
   sheetName = "drop-down-values"
 )
 ```
-#### Step 2.2: Write Drop-Down Options
+
+### Step 2.2: Write Drop-Down Options
 
 Once you have created a new worksheet to hold your drop-down options, it's time to populate it with the choices you want to offer in the drop-down list. You can do this using the [`writeData()`](https://ycphs.github.io/openxlsx/reference/writeData.html) function.
 
-1. Select the newly created worksheet (the one you've designated for your drop-down options) as the target worksheet for writing data.
+1.  Select the newly created worksheet (the one you've designated for your drop-down options) as the target worksheet for writing data.
 
-2. Use the [`writeData()`](https://ycphs.github.io/openxlsx/reference/writeData.html) function to input your list of options into this worksheet.
+2.  Use the [`writeData()`](https://ycphs.github.io/openxlsx/reference/writeData.html) function to input your list of options into this worksheet.
 
 This step ensures that the drop-down list worksheet is filled with the choices you want to provide to your users. Having these options in a separate worksheet keeps your workbook organized and makes it easy to update the list if needed.
 
 The data you input into this worksheet will serve as the options that users can select from when interacting with the drop-down list in your main workbook. This separation of data allows for efficient management and flexibility in modifying the choices over time.
 
-```r
+``` r
 # add options for the drop-down in a second sheet
 options <- c(
   "huge",
@@ -236,17 +238,17 @@ openxlsx::writeData(
   x = options,
   startCol = 1
 )
-
 ```
-#### Step 2.3: Apply Drop-Down List to Your Workbook
+
+### Step 2.3: Apply Drop-Down List to Your Workbook
 
 To make the drop-down options available to users in your main workbook, you need to apply the data validation feature. This ensures that the cells in a particular column contain values only from your list of choices. Here's how to do it using the [`dataValidation()`](https://ycphs.github.io/openxlsx/reference/dataValidation.html) function:
 
-1. Set the `operator` argument to `'equal'`. This indicates that the values in the cells must be equal to one of the options from the drop-down list.
+1.  Set the `operator` argument to `'equal'`. This indicates that the values in the cells must be equal to one of the options from the drop-down list.
 
-2. Define the `type` argument as `'list'` to specify that you want to create a drop-down list.
+2.  Define the `type` argument as `'list'` to specify that you want to create a drop-down list.
 
-3. In the `value` argument, refer to the cells that contain your drop-down options. This should be in the format of `'worksheet_name'!$A$1:$A$5`, where `'worksheet_name'` is the name of the worksheet where you saved your options, and `$A$1:$A$5` is the range of cells containing the choices.
+3.  In the `value` argument, refer to the cells that contain your drop-down options. This should be in the format of `'worksheet_name'!$A$1:$A$5`, where `'worksheet_name'` is the name of the worksheet where you saved your options, and `$A$1:$A$5` is the range of cells containing the choices.
 
 Note: When implementing this step, you may encounter a warning message. However, you can proceed with your workbook setup without worry, as it should work as intended despite the warning. If you encounter issues, you can refer to solutions on [Stack Overflow](https://stackoverflow.com/questions/72278966/data-validation-warning-message-with-openxlsx-package-in-r-sprintf).
 
@@ -268,22 +270,21 @@ openxlsx::dataValidation(
 openxlsx::openXL(wb)
 ```
 
-
-#### Step 2.4: Add Colors to Your Drop-Down Values
+### Step 2.4: Add Colors to Your Drop-Down Values
 
 Enhancing the readability of your drop-down list is a great way to improve the user experience. To add colors to the different options in your drop-down list, you can use the [`conditionalFormatting()`](https://ycphs.github.io/openxlsx/reference/conditionalFormatting.html) function. Here's how to achieve this:
 
-1. Define the `rule` argument to set the condition for applying formatting. In this example, the condition is based on the values in the drop-down list: `huge`, `big`, `normal`, `small`, and `tiny`.
+1.  Define the `rule` argument to set the condition for applying formatting. In this example, the condition is based on the values in the drop-down list: `huge`, `big`, `normal`, `small`, and `tiny`.
 
-2. Specify the `style` argument to define the formatting style to apply when the condition set in the `rule` is met.
+2.  Specify the `style` argument to define the formatting style to apply when the condition set in the `rule` is met.
 
-3. Set the `type` argument to `contains` to indicate that you want to apply a specific style to all cells containing the value specified in the `rule` argument.
+3.  Set the `type` argument to `contains` to indicate that you want to apply a specific style to all cells containing the value specified in the `rule` argument.
 
 To create the different styles for the colors you want, you can use the [`createStyle()`](https://ycphs.github.io/openxlsx/reference/createStyle.html) function. In the example provided, the different styles are created directly, but you can also write them in a separate R file, as explained in the first section of this post.
 
 By applying these steps, you can make your drop-down list more visually appealing and user-friendly. Users will be able to differentiate between the options based on the distinct colors associated with each choice. This not only adds an element of aesthetics but also aids in quickly identifying and selecting the desired option.
 
-```r
+``` r
 #--- add colors for drop-down values to size -----------------------------------
 openxlsx::conditionalFormatting(wb,
   sheet = ws_penguins,
@@ -344,17 +345,18 @@ openxlsx::conditionalFormatting(wb,
 # View your workbook
 openxlsx::openXL(wb)
 ```
-#### Step 2.5: Make the Sheet `drop-down-values` Invisible
+
+### Step 2.5: Make the Sheet `drop-down-values` Invisible
 
 In some cases, you may prefer not to display the sheet where you wrote the options for the drop-down list. You can easily achieve this by making the sheet invisible using the [`sheetVisibility()`](https://ycphs.github.io/openxlsx/reference/sheetVisibility.html) function. Follow these steps:
 
-1. Specify the workbook name (i.e., `wb`) and the worksheet number you want to make invisible. In this example, the worksheet number is stored in the object `ws_drop_down_values`.
+1.  Specify the workbook name (i.e., `wb`) and the worksheet number you want to make invisible. In this example, the worksheet number is stored in the object `ws_drop_down_values`.
 
-2. Assign the visibility status to `FALSE`.
+2.  Assign the visibility status to `FALSE`.
 
 By performing these steps, you can hide the `drop-down-values` worksheet, ensuring that users won't see it when interacting with the workbook. This is particularly useful if you want to keep your worksheet structure clean and organized, with only the essential information visible to users.
 
-```r
+``` r
 #--- hide sheet ----------------------------------------------------------------
 # hide sheet "drop-down-values"
 openxlsx::sheetVisibility(wb)[ws_drop_down_values] <- FALSE
@@ -363,13 +365,13 @@ openxlsx::sheetVisibility(wb)[ws_drop_down_values] <- FALSE
 openxlsx::openXL(wb)
 ```
 
-### Step 3: Set Width and Wrap Text
+## Step 3: Set Width and Wrap Text
 
 To control the width of columns and enable text wrapping in your workbook, you should first define the necessary styles. This can be done by using the [`createStyle()`](https://ycphs.github.io/openxlsx/reference/createStyle.html) function. Make sure to set the `wrapText` argument to `TRUE` in order to allow text within cells to automatically wrap when it exceeds the cell's width.
 
 By configuring your styles in this way, you ensure that your workbook content is presented neatly and legibly. This is especially important when dealing with lengthy text or data that needs to fit within specific column widths.
 
-```r
+``` r
 # create style to wrap text
 style_body <- openxlsx::createStyle(
   fontSize = 12,
@@ -378,9 +380,10 @@ style_body <- openxlsx::createStyle(
   wrapText = TRUE
 )
 ```
+
 After defining the styles for text wrapping, the next step is to set the column widths according to your preferences. You can do this by specifying the desired width using the `widths` argument. For instance, in this example, the column width is set to 22. Alternatively, you can opt for the 'auto' option to allow automatic column sizing based on the content within each column. This flexibility allows you to customize your workbook's appearance to best suit your data and presentation needs.
 
-```r
+``` r
 # set all cols but any_comment to a specific width in ws_penguins
 openxlsx::setColWidths(
   wb = wb,
@@ -400,9 +403,10 @@ openxlsx::setColWidths(
 # View your workbook
 openxlsx::openXL(wb)
 ```
+
 Now that the column widths are established, you can proceed to wrap text within the cells. To achieve this, apply the previously defined `style_body` to all the cells in your chosen columns using the `addStyle()` function. Be sure to set the `gridExpand` argument to `TRUE` as this allows the style to be applied to all combinations of rows and columns specified in the `rows` and `cols` arguments. This step enhances the readability and presentation of your data within the workbook.
 
-```r
+``` r
 # --- wrap text ----------------------------------------------------------------
 # add style_body to wrap text in ws_penguins
 # (see option 'wrapText = TRUE' in 'createStyle()')
@@ -428,20 +432,20 @@ openxlsx::addStyle(
 
 # View your workbook
 openxlsx::openXL(wb)
-
 ```
-### Step 4: Make Your Dates Shine
+
+## Step 4: Make Your Dates Shine
 
 Let's tackle a common Excel headache: the enigmatic numbers that replace your dates. In your workbook, the dates may appear as random figures, but we have a simple solution. You'll need to format your date column, and to do that, we'll create a custom style called `date_style` using the [`createStyle()`](https://ycphs.github.io/openxlsx/reference/createStyle.html) function.
 
-```r
+``` r
 # define date_style
 date_style <- openxlsx::createStyle(numFmt = "dd/mm/yyyy")
 ```
 
 Now that you've got your `date_style` ready, the next task on our list is to put it to work in your date column. To get this done, we'll rely on the dependable [`addStyle()`](https://ycphs.github.io/openxlsx/reference/addStyle.html) function.
 
-```r
+``` r
 openxlsx::addStyle(
   wb = wb,
   sheet = ws_penguins,
@@ -459,7 +463,7 @@ For more date formatting examples, you can visit this [webpage](https://ycphs.gi
 
 I've also covered this topic in another blog post, which you can find [here](https://rdiscovery.netlify.app/posts/2023-10-08_datetimes-openxlsx/). Exploring different sources can help you gain a better understanding of date formatting.
 
-### Step 5: Protect your worksheets
+## Step 5: Protect your worksheets
 
 To ensure the security of your worksheets and prevent any unauthorized modifications, you can make use of the `protectWorksheet()` function. This function is your guardian against unwanted changes.
 
@@ -467,8 +471,7 @@ By assigning `FALSE` to the `lockAutoFilter` and `lockFormattingCells` arguments
 
 For added security, you can also explore other options, such as setting a password. Find all the details you need in the function's [reference](https://ycphs.github.io/openxlsx/reference/protectWorksheet.html).
 
-
-```r
+``` r
 #--- protect worksheets --------------------------------------------------------
 # protect the worksheet ws_penguins
 openxlsx::protectWorksheet(
@@ -490,7 +493,7 @@ openxlsx::protectWorksheet(
 openxlsx::openXL(wb)
 ```
 
-### Step 6: Managing Cell Locking
+## Step 6: Managing Cell Locking
 
 With your worksheets under protection, there might still be situations where you want to unlock specific cells and clearly indicate which ones are locked. This is especially useful when some cells appear editable, but you'd like to restrict access (like the `any_comment` column in your example).
 
@@ -498,7 +501,7 @@ To achieve this, you'll start by defining styles in an external R file. If you'r
 
 This level of control ensures that your data remains secure while allowing you to manage exceptions when necessary.
 
-```r 
+``` r
 # define style style_unlocked
 style_unlocked <- openxlsx::createStyle(
   fontSize = 12,
@@ -526,7 +529,7 @@ Once you've defined the styles for locking and unlocking specific cells, the nex
 
 Make sure to keep an eye on the `gridExpand` setting, which should be set to `TRUE`. This ensures that the defined styles are applied across all combinations of rows and columns as you intended. With this approach, you have precise control over which cells are locked or unlocked.
 
-```r
+``` r
 #--- unlock column size (ws_penguins) and Comments (ws_penguins_raw) -----------
 # apply unlocked style to size column
 openxlsx::addStyle(
@@ -568,7 +571,7 @@ In your first worksheet, you might have noticed that there are some empty cells.
 
 This function is designed to locate all the `NA` values in your `data_penguins_mod` dataset and provide you with the coordinates you need. It's a handy tool to ensure that no empty cell goes unnoticed and allows you to seamlessly add data where needed.
 
-```r 
+``` r
 #--- unlock specific cells -----------------------------------------------------
 # indices of columns to be unlocked if no value in a cell
 tib_indices <- openxlsx.demo::find_cells_to_unlock(
@@ -588,9 +591,9 @@ View(isna_cases)
 
 Now that you've identified the specific cells you want to unlock using the `find_cells_to_unlock` function, the next step is to take action. You can make these cells accessible by applying the `style_unlocked` to them, and you can do this efficiently with the help of the [`addStyle()`](https://ycphs.github.io/openxlsx/reference/addStyle.html) function.
 
-One thing to remember is that you should set `gridExpand` to `FALSE` in this scenario. This setting ensures that only the chosen cells are unlocked, keeping the rest of your worksheet secure. 
+One thing to remember is that you should set `gridExpand` to `FALSE` in this scenario. This setting ensures that only the chosen cells are unlocked, keeping the rest of your worksheet secure.
 
-```r 
+``` r
 # apply unlocked style to isna_cases cells
 openxlsx::addStyle(
   wb = wb,
@@ -607,7 +610,7 @@ openxlsx::openXL(wb)
 
 You've wisely left the first row of your worksheet empty to accommodate potential future comments. To unlock this entire row, you can follow a similar approach as before. Utilize the trusty [`addStyle()`](https://ycphs.github.io/openxlsx/reference/addStyle.html) function, but this time, set `gridExpand` to `TRUE`.
 
-```r
+``` r
 # apply unlocked style to cells in 1st row of ws_penguins (for comments)
 openxlsx::addStyle(
   wb = wb,
@@ -631,22 +634,22 @@ openxlsx::addStyle(
 # View your workbook
 openxlsx::openXL(wb)
 ```
-### Step 7: Enhancing Your Data with Filters
+
+## Step 7: Enhancing Your Data with Filters
 
 Now, let's explore how to add filters to your dataset. Filters are a great way to efficiently manage and analyze your data. In this step, we'll discuss two methods to accomplish this.
 
-1. **Using `writeData()` Function:**
+1.  **Using `writeData()` Function:**
 
-   You can add filters to every column of your dataset by employing the `writeData()` function. This function has previously been used to add filters to the `data_penguins_raw` dataset.
+    You can add filters to every column of your dataset by employing the `writeData()` function. This function has previously been used to add filters to the `data_penguins_raw` dataset.
 
-2. **Leveraging `addFilter()` Function:**
+2.  **Leveraging `addFilter()` Function:**
 
-   Another option at your disposal is the `addFilter()` function. This function allows you to specify the row where you'd like to place the filter and the columns to which it should apply.
+    Another option at your disposal is the `addFilter()` function. This function allows you to specify the row where you'd like to place the filter and the columns to which it should apply.
 
-   It's important to note that when you use `addFilter()`, every column in between the specified ones will also inherit a filter. So, if you don't want a filter to be added to certain columns, you'll need to rearrange your dataset accordingly to achieve the desired outcome.
+    It's important to note that when you use `addFilter()`, every column in between the specified ones will also inherit a filter. So, if you don't want a filter to be added to certain columns, you'll need to rearrange your dataset accordingly to achieve the desired outcome.
 
-
-```r 
+``` r
 # add filtering possibility for year, species and island
 openxlsx::addFilter(
   wb = wb,
@@ -663,7 +666,7 @@ openxlsx::addFilter(
 openxlsx::openXL(wb)
 ```
 
-### Step 8: Connecting Data with Internal Hyperlinks
+## Step 8: Connecting Data with Internal Hyperlinks
 
 In this step, we'll explore how to establish internal hyperlinks between your worksheets. Imagine you want to link the `any_comment` variable on the `penguins` worksheet to the `Comments` variable on the `penguins_raw` worksheet. This connection allows the values from the `Comments` column to automatically populate the `any_comment` column. For this purpose, `any_comment` has been locked, while `Comments` remains unlocked to ensure that it's the primary source of information that you can modify.
 
@@ -671,7 +674,7 @@ To facilitate this process, a handy function named [write_hyperlink()](https://g
 
 By using this function, you can seamlessly establish these internal connections, allowing data to flow between your worksheets effortlessly. It's a great way to keep your data up-to-date and interconnected.
 
-```r
+``` r
 # internal hyperlink between any_comments (sheet "penguins") and Comments (sheet
 # "penguins_raw")
 
@@ -695,9 +698,9 @@ This function is designed to avoid writing zero values on the `penguins` workshe
 
 After this process, you can employ the [writeFormula](https://ycphs.github.io/openxlsx/reference/writeFormula.html) function to inscribe the Excel formula stored in the variable `hyperlink_tib$link_rewritten` into the `any_comment` column. This requires setting `x` to `hyperlink_tib$link_rewritten` and `startCol` to the column index of `any_comment`.
 
-By following these steps, you'll effectively create a dynamic link between the two worksheets, ensuring that the `any_comment` column always reflects the content of the `Comments` column without any zero values. 
+By following these steps, you'll effectively create a dynamic link between the two worksheets, ensuring that the `any_comment` column always reflects the content of the `Comments` column without any zero values.
 
-```r
+``` r
 # define the arguments of the write_hyperlink()
 dataset <- data_penguins_mod
 metadata <- data_penguins_raw
@@ -740,18 +743,17 @@ hyperlink_tib <- dataset |>
     startCol = which(names(dataset) == "any_comment"),
     startRow = as.integer(first_row) + 1L
   )
-
 ```
 
-### Step 9: Freezing Worksheet Panes for Clarity
+## Step 9: Freezing Worksheet Panes for Clarity
 
 In this step, we'll explore how to freeze worksheet panes for enhanced clarity. This feature is especially useful when dealing with extensive datasets, making it easier to navigate and keep track of your information.
 
 To freeze a worksheet pane, you can employ the `openxlsx::freezePane()` function. In the example provided, we'll freeze the first two rows and the first column of the `penguins` worksheet, as well as the first two rows of the `penguins_raw` worksheet.
 
-By freezing these specific sections, you can ensure that certain rows and columns remain visible even as you scroll through your data. 
+By freezing these specific sections, you can ensure that certain rows and columns remain visible even as you scroll through your data.
 
-```r
+``` r
 # freeze the first rows up to (first_row + 1L) and the first column in ws_penguins
 openxlsx::freezePane(
   wb = wb,
@@ -771,17 +773,17 @@ openxlsx::freezePane(
 openxlsx::openXL(wb)
 ```
 
-### Step 10: Save Your Workbook
+## Step 10: Save Your Workbook
 
-We've reached the final step – it's time to save your workbook. Just pick a folder, maybe a temporary one, and save your work there. 
+We've reached the final step -- it's time to save your workbook. Just pick a folder, maybe a temporary one, and save your work there.
 
-```r
+``` r
 folder_xlsx_file <- tempdir()
 ```
 
-To complete the process, all you need to do is use the `saveWorkbook` function. Specify the filename you want in the `file` argument. You also have the option to decide whether you want to overwrite any existing file by setting `TRUE` or `FALSE` in the `overwrite` argument. 
+To complete the process, all you need to do is use the `saveWorkbook` function. Specify the filename you want in the `file` argument. You also have the option to decide whether you want to overwrite any existing file by setting `TRUE` or `FALSE` in the `overwrite` argument.
 
-```r
+``` r
 # save the workbook
 openxlsx::saveWorkbook(
   wb = wb,
@@ -793,9 +795,8 @@ openxlsx::saveWorkbook(
 )
 ```
 
-## Acknowledgements
+# Acknowledgements
 
 Thank you for reading. Enjoy using [openxlsx](https://github.com/ycphs/openxlsx/)!
 
-Many thanks to the [openxlsx](https://github.com/ycphs/openxlsx/) developers: [@Philipp Schauberger](https://github.com/ycphs) and [@Alexander Walker](https://github.com/awalker89).
-
+Many thanks to the [openxlsx](https://github.com/ycphs/openxlsx/) developers: [\@PhilippSchauberger](https://github.com/ycphs) and [\@AlexanderWalker](https://github.com/awalker89).

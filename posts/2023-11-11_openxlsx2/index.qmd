@@ -25,18 +25,18 @@ format:
     toc-depth: 6
     toc-title: Contents
     toc-location: right
-    number-sections: true
+    number-sections: false
 ---
 
 *What are the main differences between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2)?*
 
-### Introduction
+# Introduction
 
 Within this blog post, my aim is to elucidate the primary distinctions between [openxlsx](https://github.com/awalker89/openxlsx) and [openxlsx2](https://github.com/JanMarvin/openxlsx2). I've encountered these variances through a [Github Gist](https://gist.github.com/JanMarvin/a0d89bb8e128899477654dd2d4f4402d), the informative vignette titled ["Update from openxlsx"](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html), and my personal hands-on experience.
 
 The provided tables are designed to offer a clear overview of the differences between openxlsx and openxlsx2. They serve as a concise presentation, illustrating the content of the vignette titled "Update from openxlsx," which can be explored in detail [here](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html).
 
-### Chaining versus Piping
+# Chaining versus Piping
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations.
 
@@ -46,11 +46,11 @@ In the tables below, we've highlighted the key arguments for each function. For 
 
 Kindly explore [this specific vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html#styles) for an example that contrasts openxlsx and openxlsx2. Unlike openxlsx, which lacks integration with pipes or chains, openxlsx2 offers flexibility in its application.
 
-In the upcoming examples, I'll use pipes, but feel free to use chains if you prefer.
+In the forthcoming examples, I will employ pipes and chains to illustrate diverse applications of the openxlsx2 functions. Feel free to use your preferred method!
 
 Building a workbook with pipes or chains, instead of relying on isolated functions, is already a significant improvement!
 
-### Read an existing Excel Workbook
+# Read an existing Excel Workbook
 
 ```{r}
 #| label: table_read_wb
@@ -84,7 +84,7 @@ kable(table_read_wb) |>
 
 Please be aware that the recently introduced functions in openxlsx2, namely `read_xlsx()` and `wb_read()`, serve as mere wrappers for `wb_to_df()`. Their purpose is to facilitate a seamless transition between openxlsx and openxlsx2.
 
-### Write a file (xlsx or xlsm)
+# Write a file (xlsx or xlsm)
 
 ```{r}
 #| label: table_write_wb
@@ -115,7 +115,7 @@ kable(table_write_wb) |>
 ```
 
 
-### Create an Excel Workbook from Scratch
+# Create an Excel Workbook from Scratch
 
 Let's say you would like to create a workbook called `wb` and a worksheet called `ws` where you want to write data `x`. 
 
@@ -148,83 +148,17 @@ kable(table_create_wb) |>
   kableExtra::add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
 ```
 
-#### Example
+## Example
 
 In this example, our aim is to explore various options for creating, saving, and importing an Excel workbook.
 
-##### Create a workbook with multiple sheets
+### Create a workbook with multiple sheets
 
 :::: {.columns}
 
-::: {.column width="50%"}
-###### Piped
+::: {.column width="45%"}
 
-```{r}
-#| label: pipe_ex_table_create_wb_1
-#| message: false
-#| warning: false
-
-library(openxlsx2)
-library(palmerpenguins)
-
-wb <- wb_workbook(
-  creator = "Layal Christine Lettry",
-  title = "My Test",
-  subject = "Create a Workbook",
-  category = "Test",
-  datetime_created = Sys.time(),
-  theme = "Office Theme",
-  keywords = "test",
-  comments = "This is my test",
-  manager = "Me",
-  company = "My Company"
-) |>
-  wb_add_worksheet(
-    sheet = "my_first_sheet",
-    tab_color = "blue",
-    zoom = 150L,
-    visible = TRUE,
-    orientation = "portrait",
-    header = c("ODD HEAD LEFT", "ODD HEAD CENTER", "ODD HEAD RIGHT"),
-    footer = c("ODD FOOT RIGHT", "ODD FOOT CENTER", "ODD FOOT RIGHT"),
-    even_header = c("EVEN HEAD LEFT", "EVEN HEAD CENTER", "EVEN HEAD RIGHT"),
-    even_footer = c("EVEN FOOT RIGHT", "EVEN FOOT CENTER", "EVEN FOOT RIGHT"),
-    first_header = c("TOP", "OF FIRST", "PAGE"),
-    first_footer = c("BOTTOM", "OF FIRST", "PAGE")
-  ) |>
-  wb_add_data(
-    x = penguins,
-    start_col = 3,
-    start_row = 10,
-    array = FALSE,
-    col_names = TRUE,
-    row_names = FALSE,
-    with_filter = FALSE
-  ) |>
-  wb_add_worksheet(
-    sheet = "my_second_sheet",
-    tab_color = "red",
-    zoom = 75L,
-    visible = TRUE,
-    orientation = "landscape"
-  ) |>
-  wb_add_data(
-    x = penguins_raw,
-    dims = wb_dims(2, 1),
-    col_names = TRUE,
-    row_names = TRUE,
-    with_filter = TRUE
-  )
-```
-
-:::
-
-::: {.column width="10%"}
-<!-- empty column to create gap -->
-:::
-
-::: {.column width="40%"}
-###### Chained
+#### Chained
 
 ```{r}
 #| label: chain_ex_table_create_wb_1
@@ -286,17 +220,114 @@ wb <- wb_workbook(
 
 :::
 
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+
+
+#### Piped
+
+```{r}
+#| label: pipe_ex_table_create_wb_1
+#| message: false
+#| warning: false
+
+library(openxlsx2)
+library(palmerpenguins)
+
+wb <- wb_workbook(
+  creator = "Layal Christine Lettry",
+  title = "My Test",
+  subject = "Create a Workbook",
+  category = "Test",
+  datetime_created = Sys.time(),
+  theme = "Office Theme",
+  keywords = "test",
+  comments = "This is my test",
+  manager = "Me",
+  company = "My Company"
+) |>
+  wb_add_worksheet(
+    sheet = "my_first_sheet",
+    tab_color = "blue",
+    zoom = 150L,
+    visible = TRUE,
+    orientation = "portrait",
+    header = c("ODD HEAD LEFT", "ODD HEAD CENTER", "ODD HEAD RIGHT"),
+    footer = c("ODD FOOT RIGHT", "ODD FOOT CENTER", "ODD FOOT RIGHT"),
+    even_header = c("EVEN HEAD LEFT", "EVEN HEAD CENTER", "EVEN HEAD RIGHT"),
+    even_footer = c("EVEN FOOT RIGHT", "EVEN FOOT CENTER", "EVEN FOOT RIGHT"),
+    first_header = c("TOP", "OF FIRST", "PAGE"),
+    first_footer = c("BOTTOM", "OF FIRST", "PAGE")
+  ) |>
+  wb_add_data(
+    x = penguins,
+    start_col = 3,
+    start_row = 10,
+    array = FALSE,
+    col_names = TRUE,
+    row_names = FALSE,
+    with_filter = FALSE
+  ) |>
+  wb_add_worksheet(
+    sheet = "my_second_sheet",
+    tab_color = "red",
+    zoom = 75L,
+    visible = TRUE,
+    orientation = "landscape"
+  ) |>
+  wb_add_data(
+    x = penguins_raw,
+    dims = wb_dims(2, 1),
+    col_names = TRUE,
+    row_names = TRUE,
+    with_filter = TRUE
+  )
+```
+
+:::
+
 ::::
 
-##### Inspect and write the workbook data
+### Inspect and write the workbook data
 
 You can perform the following steps to examine the data and save it to a temporary xlsx file.
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="45%"}
 
-###### Piped
+#### Chained
+
+```{r}
+#| label: chain_ex_table_create_wb_2
+#| message: false
+#| warning: false
+
+# Inspect the workbook
+wb$open()
+
+# Create a new temporary file
+myfile <- temp_xlsx()
+
+# Write the workbook into a temporary xlsx file
+wb$save(file = myfile, overwrite = TRUE)
+
+# Open the xlsx file
+browseURL(myfile)
+```
+
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+
+#### Piped
 
 ```{r}
 #| label: pipe_ex_table_create_wb_2
@@ -320,43 +351,13 @@ browseURL(myfile)
 
 :::
 
-::: {.column width="10%"}
-<!-- empty column to create gap -->
-:::
-
-::: {.column width="40%"}
-
-##### Chained
-
-You can perform the following steps to examine the data and save it to a temporary xlsx file.
-
-```{r}
-#| label: chain_ex_table_create_wb_2
-#| message: false
-#| warning: false
-
-# Inspect the workbook
-wb$open()
-
-# Create a new temporary file
-myfile <- temp_xlsx()
-
-# Write the workbook into a temporary xlsx file
-wb$save(file = myfile, overwrite = TRUE)
-
-# Open the xlsx file
-browseURL(myfile)
-```
-
-:::
-
 ::::
 
 Please be aware that in order to view the headers and footers, you should click on "View" and select "Header and Footer" (for Mac users). This option enables you to distinguish between the landscape and portrait orientations on the two sheets.
 
-##### Import workbook and start working on the data with dplyr
+### Import workbook and start working on the data with dplyr
 
-Here, there is no operations which could be chained. 
+Here, no operations are available for chaining.
 
 ```{r}
 #| label: ex_table_create_wb_3

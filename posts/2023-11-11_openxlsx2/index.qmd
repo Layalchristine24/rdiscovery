@@ -40,7 +40,7 @@ The provided tables are designed to offer a clear overview of the differences be
 
 In contrast to openxlsx, openxlsx2 enables the creation of workbooks, the addition of styles, data writing, and other operations through the use of chained or piped operations. 
 
-In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared a significant development in this ["vignette section"](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
+In their recent update on openxlsx2, Jordan Mark Barbone and Jan Marvin Garbuszus shared two significant developments in this [vignette section](https://janmarvin.github.io/openxlsx2/articles/Update-from-openxlsx.html?q=r6#why-openxlsx2): the inclusion of pugixml to reliably parse XML files and the transition to R6 in openxlsx2. This shift signifies a fundamental change in the relationship between `methods` and `objects` within openxlsx2, where `methods` are now associated with `objects` rather than `generics`. 
 
 Therefore, functions can now be seamlessly chained. Moreover, operation pipelines can now be used in openxlsx2 as opposed to openxlsx. This change was triggered by the restructuration of the internal framework of openxlsx.
 
@@ -877,3 +877,46 @@ wb_pff <- wb_cf |>
 :::
 
 ::::
+
+# Make Your Data Shine
+
+Let's say you have a workbook called `wb` and you would like to some styling. 
+
+The following functions will help you format your data as you wish in your worksheet. 
+
+```{r}
+#| label: table_style_workbook
+#| tbl-cap: "Format your Data"
+#| message: false
+#| warning: false
+#| echo: false
+
+table_style_workbook <- tribble(
+  ~Action, ~openxlsx, ~`chain`, ~`pipe`,
+  "Add font", "`addStyle()`, `createStyle()`", "`wb$add_font()`", "`wb_add_font()`",
+  "Add cell style", "`addStyle()`, `createStyle()`", "`wb$add_cell_style()`", "`wb_add_cell_style()`",
+  "Add background fill color", "`addStyle()`, `createStyle()`", "`wb$add_fill()`", "`wb_add_fill()`",
+  "Add number formatting", "`addStyle()`, `createStyle()`", "`wb$add_numfmt()`", "`wb_add_numfmt()`",
+  "Set column width", "`setColWidths()`", "`wb$set_col_widths()`", "`wb_set_col_widths()`",
+  "Add border", "`addStyle()`, `createStyle()`", "`wb$add_border()`", "`wb_add_border()`"
+)
+```
+
+
+```{r}
+#| label: print_table_style_workbook
+#| tbl-cap: "Format your Data"
+#| tbl-colwidths: [50,60,60,60]
+#| echo: false
+#| output: asis
+kable(table_style_workbook) |>
+  add_header_above(c(" " = 1, " " = 1, "openxlsx2" = 2))
+```
+
+These helpers could be used to apply these formatting functions:
+
+- `wb_dims()`: Helper to specify the dims argument
+
+- `int2col()`: Convert integer to Excel column
+
+## Example

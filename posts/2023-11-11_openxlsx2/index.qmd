@@ -75,7 +75,6 @@ table_read_wb <- tribble(
 )
 ```
 
-Please note that while openxlsx2 can read `xlsx` or `xlsm` files, openxlsx can only read `xlsx` files.
 
 ```{r}
 #| label: print_table_read_wb

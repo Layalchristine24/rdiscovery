@@ -1149,6 +1149,8 @@ wb_format <- wb_pff |>
 :::
 :::
 
+# Output
+
 You can download the final Excel output [here](https://github.com/Layalchristine24/rdiscovery/blob/main/posts/2023-11-11_openxlsx2/excel_demo.xlsx).
 
 # Acknowledgements

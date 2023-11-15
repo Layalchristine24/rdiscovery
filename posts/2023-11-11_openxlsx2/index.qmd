@@ -14,7 +14,7 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2023-11-14
+date: 2023-11-15
 categories: [openxlsx, openxlsx2]
 image: image.jpg
 citation: 
@@ -328,7 +328,7 @@ start_col_ws1 <- 3L
 start_row_ws1 <- 10L
 
 wb <- wb_workbook(
-  creator = "Layal Christine Lettry",
+  creator = "My Name",
   title = "My Test",
   subject = "Create a Workbook",
   category = "Test",
@@ -394,7 +394,7 @@ start_col_ws1 <- 3L
 start_row_ws1 <- 10L
 
 wb <- wb_workbook(
-  creator = "Layal Christine Lettry",
+  creator = "My Name",
   title = "My Test",
   subject = "Create a Workbook",
   category = "Test",

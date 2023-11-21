@@ -557,6 +557,7 @@ It is also possible to apply various styles to the values of your drop-down list
 table_ddl <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Add a drop-down list", "`dataValidation()`", "`wb$add_data_validation()`", "`wb_add_data_validation()`",
+  "Add a style", "`addStyle()`", "`add_dxfs_style()`", "`wb_add_dxfs_style()`",
   "Add conditional formatting", "`conditionalFormatting()`", "`wb$add_conditional_formatting()`", "`wb_add_conditional_formatting()`"
 )
 ```

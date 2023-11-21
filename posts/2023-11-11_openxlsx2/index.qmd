@@ -801,7 +801,7 @@ wb_cf <- wb_ddl |>
 :::
 :::
 
-# Filter Data, Protect Worksheet and Freeze your a Worksheet Pane
+# Filter Data, Protect Worksheet and Freeze a Worksheet Pane
 
 Let's say you have a workbook called `wb` and you would like to add some filters, to protect a worksheet and to freeze data.
 

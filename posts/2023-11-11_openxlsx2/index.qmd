@@ -541,11 +541,13 @@ my_tib
 
 Let's assume you have a workbook called `wb`.
 
-To add a drop-down list, you must first add the data to a separate sheet[^1]. We also want to keep it hidden. You can then create a drop-down list with `wb_add_data_validation()`.
+To add a drop-down list, you must first add the data to a separate sheet[^1]. We also want to keep it hidden, so we set the argument `visible` to `"hidden"`. You can then create a drop-down list with `wb_add_data_validation()`.
 
 [^1]: Please refer to my older [blog post on openxlsx.demo](https://rdiscovery.netlify.app/posts/2023-04-02_openxlsxdemo/#step-2-create-a-drop-down-list).
 
-It is also possible to apply various styles to the values of your drop-down list with `wb_add_conditional_formatting()`.
+It is also possible to apply various styles created with `wb_add_dxfs_style()`[^2] to the values of your drop-down list with `wb_add_conditional_formatting()`.
+
+[^2]: The function `wb_add_dxfs_style()` creates a dxfs styling for the workbook. The element `<dxfs>` defines a specific formatting. Please refer to [c-rex.net](https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_dxfs_topic_ID0ETGB6.html) for more information.
 
 ```{r}
 #| label: table_ddl
@@ -557,7 +559,7 @@ It is also possible to apply various styles to the values of your drop-down list
 table_ddl <- tribble(
   ~Action, ~openxlsx, ~`chain`, ~`pipe`,
   "Add a drop-down list", "`dataValidation()`", "`wb$add_data_validation()`", "`wb_add_data_validation()`",
-  "Add a style", "`addStyle()`", "`add_dxfs_style()`", "`wb_add_dxfs_style()`",
+  "Create a dxfs styling for the workbook", "`createStyle()`", "`wb$add_dxfs_style()`", "`wb_add_dxfs_style()`",
   "Add conditional formatting", "`conditionalFormatting()`", "`wb$add_conditional_formatting()`", "`wb_add_conditional_formatting()`"
 )
 ```

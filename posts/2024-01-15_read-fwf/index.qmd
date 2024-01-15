@@ -15,7 +15,7 @@ author:
         city: Fribourg
         state: CH
 date: 2024-01-15
-categories: [readr, read_fwf, tab, CSV]
+categories: [readr, read_delim, read_fwf, tab, CSV]
 image: image.jpg
 citation: 
   url: https://rdiscovery.netlify.app/posts/2024-01-15_read-fwf/

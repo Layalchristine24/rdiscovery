@@ -1,0 +1,118 @@
+---
+title: Read dirty tab-separated csv files
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-01-15
+categories: [readr, read_fwf, tab, csv]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-01-15_read-fwf/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+---
+
+*When should `&` and `|` rather than `&&` or `||` be used?*
+
+I would like to make clear when to use `&` and when to use `&&` in R. I will also explain the difference between `|` and `||`.
+
+# `&` and `&&`
+
+The `&` operator is used to combine two logical vectors and returns a logical vector of the same length as the two input vectors. The `&&` operator is used to combine two logical vectors and returns a single logical value. Let's assume the following objects.
+
+## Theory
+
+The following table and its content is from the [this article](https://www.geeksforgeeks.org/difference-between-and-in-r/) book. It shows the difference between `&` and `&&`.
+
+```{r}
+#| label: table_diff
+#| tbl-cap: "& and &&"
+#| message: false
+#| warning: false
+#| echo: false
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+
+table_diff <- tribble(
+  ~`Comparison criterion`, ~`&`, ~`&&`, 
+  "Title", "element-wise logical AND", "logical AND operator", 
+  "Definition", "It is used to compare two logical vectors element by element and returns the new logical vector indicating which elements are TRUE in both vectors.", "It is used to evaluate two logical expressions and return a single logical value indicating whether both expressions are TRUE or not.",
+  "Input", "Two logical vectors, matrices, or arrays of the same length and dimension.", "Two logical expressions or scalar values.", 
+  "Output", "A logical vector of the same length and dimension as the inputs.", "A single logical value.", 
+  "Evaluation", "Element-wise on both inputs, even if they are of different lengths.", "Short-circuited: Only the second expression is evaluated if the first is TRUE.", 
+  "Use in if statements", "Returns a warning if the length of the inputs is not a multiple of each other.", "Returns an error if the length of the inputs is greater than one.",
+  "Use in loops", "Returns a logical vector of the same length as the inputs.", "Returns a single logical value, so not typically used in loops.",
+
+)
+```
+
+```{r}
+#| label: print_table_diff
+#| tbl-cap: "& and &&"
+#| tbl-colwidths: [20,75,75]
+#| echo: false
+#| output: asis
+kable(table_diff)
+
+```
+
+## Examples
+
+::: columns
+::: {.column width="47.5%"}
+### `&` Input
+
+```{r}
+#| label: input_ex_&
+#| message: false  
+#| warning: false
+x <- c(TRUE, TRUE, FALSE, FALSE)
+y <- c(TRUE, FALSE, TRUE, FALSE)
+x & y
+
+x <- TRUE
+y <- TRUE
+x & y
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+### `&&` Input
+
+```{r}
+#| label: input_ex_&&
+#| message: false  
+#| warning: false
+#| error: true
+
+x <- c(TRUE, TRUE, FALSE, FALSE)
+y <- c(TRUE, FALSE, TRUE, FALSE)
+x && y
+
+x <- TRUE
+y <- TRUE
+x && y
+```
+:::
+:::

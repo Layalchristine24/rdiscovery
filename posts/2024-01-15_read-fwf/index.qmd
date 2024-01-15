@@ -1,0 +1,162 @@
+---
+title: Read dirty tab-separated CSV files
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-01-15
+categories: [readr, read_fwf, tab, CSV]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-01-15_read-fwf/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*What function could be used to read tab-separated CSV files with values containing a tab?*
+
+# Template CSV
+
+Let's create a new tab-separated CSV. The second observation contains a tab instead of a space in the `name` variable. This will lead to a problem when reading the CSV file.
+
+```{r}
+#| label: tab-sep-CSV
+#| tbl-cap: "Create a tab-separated CSV"
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+data <- tibble(
+  id = c(1, 2, 3),
+  name = c("John Doe", "Jane\tSmith", "Bob Johnson"),
+  age =  c(25, 30, 35)
+)
+
+file <- tempfile(fileext = ".csv")
+
+write.table(data, file, sep = "\t", quote = FALSE, row.names = FALSE)
+
+file_encoding <-
+  guess_encoding(file) |>
+  pull(encoding)
+```
+
+# Reading problem 
+
+When you read your data, you will receive a warning message telling you to run `vroom::problems()` on your output. This shows how many columns were expected and actually read. You can see that only three columns were expected but four columns were actually detected. 
+
+Moreover, the family name of the second observation was merged to the `age` value, which leads to a `NA` when converting it to an integer.
+
+This is due to the tab contained in the value of the `name` variable for the second observation. 
+
+You could also get the following error message (sorry, I could not reproduce this error that led me to write this post):
+
+`` `Stopped early on line 2. Expected 3 fields but found 4 Consider fill=TRUE and comment.char=.` ``
+
+
+```{r}
+#| label: read_delim
+#| tbl-cap: "Read with `read_delim()`"
+#| message: false
+#| warning: false
+
+read_data <- read_delim(file,
+  delim = "\t",
+  locale = readr::locale(encoding = file_encoding),
+  col_types = cols(age = col_integer(), .default = col_character())
+)
+
+read_data
+
+vroom::problems(read_data)
+```
+
+# Reading solution
+One solution I found to override the error quoted above was to read the entire CSV file except for the first row with variable names, thanks to the function `read_fwf()`. All the information is then saved in a single column called `X1`. 
+
+```{r}
+#| label: read-data-in-one-var
+#| tbl-cap: "Save the data in one column with `read_fwf()`"
+#| message: false
+#| warning: false
+
+raw_data <-
+  read_fwf(
+    file,
+    col_types = cols(.default = col_character()),
+    locale = locale(encoding = file_encoding),
+    skip = 1L
+  )
+
+raw_data
+```
+
+The next thing to do is to read the headers separately and to separate the columns thanks to `separate_wider_delim()`. The problematic value containing a tab will be merged with the following column value, leading to an `NA` when setting the integer type to this column. 
+
+```{r}
+#| label: clean-data
+#| tbl-cap: "Clean the data"
+#| message: false
+#| warning: false
+
+
+headers <- strsplit(readLines(file, n = 1L), "\t")[[1]]
+col_names <- gsub("\"", "", headers)
+
+out <- raw_data |>
+  separate_wider_delim(
+    cols = X1,
+    names = col_names,
+    delim = "\t",
+    too_many = "merge" 
+  ) |>
+  mutate(
+    across(everything(), \(x) gsub('"', "", x))
+  )
+
+raw_dirty <- out |>
+  mutate(
+    id = as.integer(id),
+    age = as.integer(age)
+  )
+
+raw_clean <- janitor::clean_names(raw_dirty)
+
+raw_clean
+```
+
+
+# Conclusion
+
+I agree with you that the solution I found with `read_fwf()` and `separate_wider_delim()` is more complicated than the one with `read_delim()`. 
+
+However, this solved my problem of partially reading the CSV file, although I could not reproduce it in this example, namely:
+
+`` `Stopped early on line 2. Expected 3 fields but found 4 Consider fill=TRUE and comment.char=.` ``
+
+Thanks to `read_fwf()`, I can read all the rows. Then, I separate the columns with `separate_wider_delim()` and merge the wrong additional columns values containing an extra tab together thanks to the option `too_many = "merge"`. 
+
+Eventually, by converting my `age` variable to an integer type, the merged values are transformed into an `NA`. This does not bother me, since this row will certainly get dropped in my following calculations, as the original typed data were wrong for this observation.
+
+# Acknowledgements
+
+Thank you for reading. I hope you can find a solution that works well for you!
+

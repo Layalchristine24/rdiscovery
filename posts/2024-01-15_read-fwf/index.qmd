@@ -1,5 +1,5 @@
 ---
-title: Read dirty tab-separated csv files
+title: Read dirty tab-separated CSV files
 author:
   - name:
       given: Layal Christine
@@ -15,7 +15,7 @@ author:
         city: Fribourg
         state: CH
 date: 2024-01-15
-categories: [readr, read_fwf, tab, csv]
+categories: [readr, read_fwf, tab, CSV]
 image: image.jpg
 citation: 
   url: https://rdiscovery.netlify.app/posts/2024-01-15_read-fwf/
@@ -26,78 +26,77 @@ format:
     toc-title: Contents
     toc-location: right
     number-sections: false
+editor_options: 
+  chunk_output_type: console
 ---
 
-*What function could be used to read tab-separated csv files with values containing a tab?*
+*What function could be used to read tab-separated CSV files with values containing a tab?*
+
+# Template CSV
+
+Let's create a new tab-separated CSV. The second observation contains a tab instead of a space in the `name` variable. This will lead to a problem when reading the CSV file.
 
 ```{r}
-#| label: table_diff
-#| tbl-cap: "& and &&"
+#| label: tab-sep-CSV
+#| tbl-cap: "Create a tab-separated CSV"
 #| message: false
 #| warning: false
-#| echo: false
-penguins_test_tab <- tibble::tribble(
-  ~species, ~island, ~bill_length_mm, ~bill_depth_mm, ~flipper_length_mm, ~body_mass_g, ~sex, ~year,
-  "Adelie", "Torgersen", "39.1", "18.7", "181", "3750", "male", "2007",
-  "Adelie", "Tor gersen", "39.5", "17.4", "186", "3800", "female", "2007",
-  "Adelie", "Torgersen", "40.3", "18", "195", "3250", "female", "2007",
-  "Adelie", "Torgersen", "NA", "NA", "NA", "NA", "NA", "2007",
-  "Adelie", "Torgersen", "test   tab", "19.3", "193", "3450", "female", "2007",
-  "Adelie", "Torgersen", "39.3", "20.6", "190", "3650", "male", "2007",
-  "Adelie", "Torgersen", "38.9", "17.8", "181", "3625", "female", "2007",
-  "Adelie", "Torgersen", "39.2", "19.6", "195", "4675", "male", "2007",
-  "Adelie", "Torgersen", "34.1", "18.1", "193", "3475", "NA", "2007",
-  "Adelie", "Torgersen", "42", "20.2", "190", "4250", "NA", "2007",
-  "Adelie", "Torgersen", "37.8", "17.1", "186", "3300", "NA", "2007",
-  "Adelie", "Torgersen", "37.8", "17.3", "180", "3700", "NA", "2007",
-  "Adelie", "Torgersen", "41.1", "17.6", "182", "3200", "female", "2007",
-  "Adelie", "Torgersen", "38.6", "21.2", "191", "3800", "male", "2007",
-  "Adelie", "Torgersen", "34.6", "21.1", "198", "4400", "male", "2007",
-  "Adelie", "Torgersen", "36.6", "17.8", "185", "3700", "female", "2007",
-  "Adelie", "Torgersen", "38.7", "19", "195", "3450", "female", "2007",
-  "Adelie", "Torgersen", "42.5", "20.7", "197", "4500", "male", "2007",
-  "Adelie", "Torgersen", "34.4", "18.4", "184", "3325", "female", "2007",
-  "Adelie", "Torgersen", "46", "21.5", "194", "4200", "male", "2007",
-  "Adelie", "Biscoe", "37.8", "18.3", "174", "3400", "female", "2007",
-  "Adelie", "Bisc    oe", "37.7", "18.7", "180", "3600", "male", "2007",
-  "Adelie", "Biscoe", "35.9", "19.2", "189", "3800", "female", "2007",
-  "Adelie", "Biscoe", "38.2", "18.1", "185", "3950", "male", "2007",
-  "Adelie", "Biscoe", "38.8", "17.2", "180", "3800", "male", "2007",
-  "Adelie", "Biscoe", "35.3", "18.9", "187", "3800", "female", "2007",
-  "Adelie", "Biscoe", "40.6", "18.6", "183", "3550", "male", "2007",
-  "Adelie", "Biscoe", "40.5", "17.9", "187", "3200", "female", "2007",
-  "Adelie", "Biscoe", "37.9", "18.6", "172", "3150", "female", "2007",
-  "Adelie", "Biscoe", "40.5", "18.9", "180", "3950", "male", "2007",
-  "Adelie", "Dream", "39.5", "16.7", "178", "3250", "female", "2007",
-  "Adelie", "Dream", "37.2", "18.1", "178", "3900", "male", "2007",
-  "Adelie", "Dream", "39.5", "17.8", "188", "3300", "female", "2007",
-  "Adelie", "Dream", "40.9", "18.9", "184", "3900", "male", "2007",
-  "Adelie", "Dream", "36.4", "17", "195", "3325", "female", "2007",
-  "Adelie", "Dream", "39.2", "21.1", "196", "4150", "male", "2007",
-  "Adelie", "Dream", "38.8", "20", "190", "3950", "male", "2007",
-  "Adelie", "Dream", "42.2", "18.5", "180", "3550", "female", "2007",
-  "Adelie", "Dream", "37.6", "19.3", "181", "3300", "female", "2007",
-  "Adelie", "Dream", "39.8", "19.1", "184", "4650", "male", "2007",
-  "Adelie", "Dream", "36.5", "18", "182", "3150", "female", "2007",
-  "Adelie", "Dream", "40.8", "18.4", "195", "3900", "male", "2007",
-  "Adelie", "Dream", "36", "18.5", "186", "3100", "female", "2007",
-  "Adelie", "Dream", "44.1", "19.7", "196", "4400", "male", "2007",
-  "Adelie", "Dream", "37", "16.9", "185", "3000", "female", "2007",
-  "Adelie", "Dream", "39.6", "18.8", "190", "4600", "male", "2007",
-  "Adelie", "Dream", "41.1", "19", "182", "3425", "male", "2007",
-  "Adelie", "Dream", "37.5", "18.9", "179", "2975", "NA", "2007",
-  "Adelie", "Dream", "36", "17.9", "190", "3450", "female", "2007",
-  "Adelie", "Dream", "42.3", "21.2", "191", "4150", "male", "2007"
-)
-path <- tempfile(fileext = ".csv")
-readr::write_delim(penguins_test_tab, path, delim = "\t")
 
 library(tidyverse)
 
-file <- path
+data <- tibble(
+  id = c(1, 2, 3),
+  name = c("John Doe", "Jane\tSmith", "Bob Johnson"),
+  age =  c(25, 30, 35)
+)
+
+file <- tempfile(fileext = ".csv")
+
+write.table(data, file, sep = "\t", quote = FALSE, row.names = FALSE)
+
 file_encoding <-
   guess_encoding(file) |>
   pull(encoding)
+```
+
+# Reading problem 
+
+When you read your data, you will receive a warning message telling you to run `vroom::problems()` on your output. This shows how many columns were expected and actually read. You can see that only three columns were expected but four columns were actually detected. 
+
+Moreover, the family name of the second observation was merged to the `age` value, which leads to a `NA` when converting it to an integer.
+
+This is due to the tab contained in the value of the `name` variable for the second observation. 
+
+You could also get the following error message (sorry, I could not reproduce this error that led me to write this post):
+
+`` `Stopped early on line 2. Expected 3 fields but found 4 Consider fill=TRUE and comment.char=.` ``
+
+
+```{r}
+#| label: read_delim
+#| tbl-cap: "Read with `read_delim()`"
+#| message: false
+#| warning: false
+
+read_data <- read_delim(file,
+  delim = "\t",
+  locale = readr::locale(encoding = file_encoding),
+  col_types = cols(age = col_integer(), .default = col_character())
+)
+
+read_data
+
+vroom::problems(read_data)
+```
+
+# Reading solution
+One solution I found to override the error quoted above was to read the entire CSV file except for the first row with variable names, thanks to the function `read_fwf()`. All the information is then saved in a single column called `X1`. 
+
+```{r}
+#| label: read-data-in-one-var
+#| tbl-cap: "Save the data in one column with `read_fwf()`"
+#| message: false
+#| warning: false
 
 raw_data <-
   read_fwf(
@@ -107,6 +106,18 @@ raw_data <-
     skip = 1L
   )
 
+raw_data
+```
+
+The next thing to do is to read the headers separately and to separate the columns thanks to `separate_wider_delim()`. The problematic value containing a tab will be merged with the following column value, leading to an `NA` when setting the integer type to this column. 
+
+```{r}
+#| label: clean-data
+#| tbl-cap: "Clean the data"
+#| message: false
+#| warning: false
+
+
 headers <- strsplit(readLines(file, n = 1L), "\t")[[1]]
 col_names <- gsub("\"", "", headers)
 
@@ -115,7 +126,7 @@ out <- raw_data |>
     cols = X1,
     names = col_names,
     delim = "\t",
-    too_many = "merge" # due to some comments in the VALUE column that contain a tab, which creates a wrong new column
+    too_many = "merge" 
   ) |>
   mutate(
     across(everything(), \(x) gsub('"', "", x))
@@ -123,36 +134,29 @@ out <- raw_data |>
 
 raw_dirty <- out |>
   mutate(
-    bill_length_mm = as.double(bill_length_mm),
-    bill_depth_mm = as.double(bill_depth_mm),
-    flipper_length_mm = as.double(flipper_length_mm),
-    body_mass_g = as.double(body_mass_g),
-    year = as.integer(body_mass_g)
+    id = as.integer(id),
+    age = as.integer(age)
   )
-#> Warning: There were 4 warnings in `mutate()`.
-#> The first warning was:
-#> ℹ In argument: `bill_length_mm = as.double(bill_length_mm)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
 
 raw_clean <- janitor::clean_names(raw_dirty)
 
 raw_clean
-#> # A tibble: 50 × 8
-#>    species island     bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-#>    <chr>   <chr>               <dbl>         <dbl>             <dbl>       <dbl>
-#>  1 Adelie  Torgersen            39.1          18.7               181        3750
-#>  2 Adelie  Tor gersen           39.5          17.4               186        3800
-#>  3 Adelie  Torgersen            40.3          18                 195        3250
-#>  4 Adelie  Torgersen            NA            NA                  NA          NA
-#>  5 Adelie  Torgersen            NA            19.3               193        3450
-#>  6 Adelie  Torgersen            39.3          20.6               190        3650
-#>  7 Adelie  Torgersen            38.9          17.8               181        3625
-#>  8 Adelie  Torgersen            39.2          19.6               195        4675
-#>  9 Adelie  Torgersen            34.1          18.1               193        3475
-#> 10 Adelie  Torgersen            42            20.2               190        4250
-#> # ℹ 40 more rows
-#> # ℹ 2 more variables: sex <chr>, year <int>
 ```
+
+
+# Conclusion
+
+I agree with you that the solution I found with `read_fwf()` and `separate_wider_delim()` is more complicated than the one with `read_delim()`. 
+
+However, this solved my problem of partially reading the CSV file, although I could not reproduce it in this example, namely:
+
+`` `Stopped early on line 2. Expected 3 fields but found 4 Consider fill=TRUE and comment.char=.` ``
+
+Thanks to `read_fwf()`, I can read all the rows. Then, I separate the columns with `separate_wider_delim()` and merge the wrong additional columns values containing an extra tab together thanks to the option `too_many = "merge"`. 
+
+Eventually, by converting my `age` variable to an integer type, the merged values are transformed into an `NA`. This does not bother me, since this row will certainly get dropped in my following calculations, as the original typed data were wrong for this observation.
+
+# Acknowledgements
+
+Thank you for reading. I hope you can find a solution that works well for you!
 

@@ -36,7 +36,7 @@ editor_options:
 
 Flying over the [GitHub repository about useful and powerful shortcuts in base R]("https://github.com/nanxstats/r-base-shortcuts#run-length-encoding"), I stumbled upon an easy way to split a vector into sequences of equal values.
 
-The function `rle()` allows you to deconstruct a vector. This function shows the frequency of an instance in a certain sequence. If a value is followed by the same one, the `rle()` function will count the frequency of these successive instances. 
+The function `rle()` allows you to deconstruct a vector. This function shows the frequency of an instance in a certain sequence. If a value is followed by the same one, the `rle()` function will count the number of these successive instances. 
 
 The `rle()` function returns a list of the values and their respective lengths in a vector sequence. The class of this list is `"rle"`. 
 
@@ -60,6 +60,15 @@ tidyr::tibble(
 typeof(z)
 class(z)
 
+
+m <- c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE)
+(n <- rle(m))
+tidyr::tibble(
+  length_m = n[["lengths"]], values_m = n[["values"]]
+)
+
+typeof(n)
+class(n)
 ```
 
 # Reverse operation
@@ -76,7 +85,9 @@ class(inv_y)
 typeof(inv_z)
 class(inv_z)
 
-
+(inv_n <- inverse.rle(n))
+typeof(inv_n)
+class(inv_n)
 ```
 
 

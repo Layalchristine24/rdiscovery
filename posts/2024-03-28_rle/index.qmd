@@ -34,7 +34,7 @@ editor_options:
 
 # Run-length encoding
 
-Flying over the [GitHub repository about useful and powerful shortcuts in base R]("https://github.com/nanxstats/r-base-shortcuts#run-length-encoding"), I stumbled upon an easy way to split a vector into sequences of equal values.
+Flying over the [GitHub repository about useful and powerful shortcuts in base R](https://github.com/nanxstats/r-base-shortcuts#run-length-encoding), I stumbled upon an easy way to split a vector into sequences of equal values.
 
 The function `rle()` allows you to deconstruct a vector. This function shows the frequency of an instance in a certain sequence. If a value is followed by the same one, the `rle()` function will count the number of these successive instances. 
 

@@ -1,0 +1,82 @@
+---
+title: Analyse vector sequences
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-03-28
+categories: [rle]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-03-28_rle/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*How can you easily analyse vector sequences in base R?*
+
+# Run-length encoding
+
+Flying over the [GitHub repository about useful and powerful shortcuts in base R]("https://github.com/nanxstats/r-base-shortcuts#run-length-encoding"), I stumbled upon an easy way to split a vector into sequences of equal values.
+
+The function `rle()` allows you to deconstruct a vector. This function shows the frequency of an instance in a certain sequence. If a value is followed by the same one, the `rle()` function will count the frequency of these successive instances. 
+
+The `rle()` function returns a list of the values and their respective lengths in a vector sequence. The class of this list is `"rle"`. 
+
+```{r}
+x <- c(1L, 5L, 7L, 2L, 2L, 7L, 7L, 7L, 8L, 1L)
+(y <- rle(x))
+
+tidyr::tibble(
+  length_x = y[["lengths"]], values_x = y[["values"]]
+)
+
+typeof(y)
+class(y)
+
+w <- c(2.0, 3.0, 8.0, 8.0, 5.0, 5.0, 5.0, 7.0, 9.0, 9.0)
+(z <- rle(w))
+tidyr::tibble(
+  length_w = z[["lengths"]], values_w = z[["values"]]
+)
+
+typeof(z)
+class(z)
+
+```
+
+# Reverse operation
+
+You can get the vector back with `inverse.rle()`.
+
+```{r}
+(inv_y <- inverse.rle(y))
+typeof(inv_y)
+class(inv_y)
+
+
+(inv_z <- inverse.rle(z))
+typeof(inv_z)
+class(inv_z)
+
+
+```
+
+

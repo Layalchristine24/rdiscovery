@@ -14,7 +14,7 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2024-03-28
+date: 2024-03-29
 categories: [rlang, glue, sym, englue, name injection, curly curly]
 image: image.jpg
 citation: 
@@ -32,7 +32,7 @@ editor_options:
 
 *How can you create, transform and filter several variables in a function by using the glue syntax and rlang?*
 
-The following example helps me to remind how to deal with the rlang and glue syntax. However, this is very complicated and this is intended to be a simple means of finding working ways of using the *curly-curly* (`{{ x }}`) and the *name injection* `:=` operators as well as the functions `englue` and `sym` in other use cases.
+The following example helps me to remind how to deal with the rlang and glue syntax. However, this is very complicated and this is intended to be a simple means of finding working ways of using the operators *curly-curly* (`{{ x }}`) and the *name injection* (`:=`) as well as the functions `englue` and `sym` in other use cases.
 
 Please always try to find an easy way to solve your problem. If it is too complicated (like it is below), try to think again about how you can solve your problem in an easier way.
 
@@ -81,7 +81,7 @@ out
 
 # Easy alternative solution
 
-A simpler way to obtain a much better result in a tidied data frame would be using `dplyr::across()`.
+A simple way to obtain a much better result in a tidied data frame would be using `dplyr::across()`.
 
 ```{r}
 palmerpenguins::penguins |>

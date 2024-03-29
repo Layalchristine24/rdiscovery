@@ -1,5 +1,5 @@
 ---
-title: Analyse vector sequences
+title: Use rlang and glue syntax to create new variables
 author:
   - name:
       given: Layal Christine
@@ -15,10 +15,10 @@ author:
         city: Fribourg
         state: CH
 date: 2024-03-28
-categories: [rle]
+categories: [rlang, glue, sym, englue, name injection, curly curly]
 image: image.jpg
 citation: 
-  url: https://rdiscovery.netlify.app/posts/2024-03-28_rle/
+  url: https://rdiscovery.netlify.app/posts/2024-03-29_rlang-glue/
 format:
   html:
     toc: true
@@ -30,64 +30,70 @@ editor_options:
   chunk_output_type: console
 ---
 
-*How can you easily analyse vector sequences in base R?*
+*How can you create, transform and filter several variables in a function by using the glue syntax and rlang?*
 
-# Run-length encoding
+The following example helps me to remind how to deal with the rlang and glue syntax. However, this is very complicated and this is intended to be a simple means of finding working ways of using the *curly-curly* (`{{ x }}`) and the *name injection* `:=` operators as well as the functions `englue` and `sym` in other use cases.
 
-Flying over the [GitHub repository](https://github.com/nanxstats/r-base-shortcuts#run-length-encoding) about useful and powerful shortcuts in base R, I stumbled upon an easy way to split a vector into sequences of equal values.
+Please always try to find an easy way to solve your problem. 
+If it is too complicated (like it is below), try to think again about how you can solve your problem in an easier way.
 
-The function `rle()` allows you to deconstruct a vector. This function shows the frequency of an instance in a certain sequence. If a value is followed by the same one, the `rle()` function will count the number of these successive instances. 
-
-The `rle()` function returns a list of the values and their respective lengths in a vector sequence. The class of this list is `"rle"`. 
-
-```{r}
-x <- c(1L, 5L, 7L, 2L, 2L, 7L, 7L, 7L, 8L, 1L)
-(y <- rle(x))
-
-tidyr::tibble(
-  length_x = y[["lengths"]], values_x = y[["values"]]
-)
-
-typeof(y)
-class(y)
-
-w <- c(2.0, 3.0, 8.0, 8.0, 5.0, 5.0, 5.0, 7.0, 9.0, 9.0)
-(z <- rle(w))
-tidyr::tibble(
-  length_w = z[["lengths"]], values_w = z[["values"]]
-)
-
-typeof(z)
-class(z)
-
-
-m <- c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE)
-(n <- rle(m))
-tidyr::tibble(
-  length_m = n[["lengths"]], values_m = n[["values"]]
-)
-
-typeof(n)
-class(n)
-```
-
-# Reverse operation
-
-You can get the vector back with `inverse.rle()`.
+You may want to look at the article sections about [indirection](https://dplyr.tidyverse.org/articles/programming.html#indirection) and [name injection](https://dplyr.tidyverse.org/articles/programming.html#name-injection). 
+Additionally, you will find further information in the vignette about [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html).
 
 ```{r}
-(inv_y <- inverse.rle(y))
-typeof(inv_y)
-class(inv_y)
+my_mean <- function(data,
+                    input_var1,
+                    output_var) {
+  input_var1_name_torgersen <- rlang::englue("{{ input_var1 }}.Torgersen")
+  input_var1_name_biscoe <- rlang::englue("{{ input_var1 }}.Biscoe")
+  input_var1 <- rlang::englue("{{ input_var1 }}")
+  output_name_torgersen <- rlang::englue("{{ output_var }}.Torgersen")
+  output_name_biscoe <- rlang::englue("{{ output_var }}.Biscoe")
 
-
-(inv_z <- inverse.rle(z))
-typeof(inv_z)
-class(inv_z)
-
-(inv_n <- inverse.rle(n))
-typeof(inv_n)
-class(inv_n)
+  res <- data |>
+    dplyr::filter(island %in% c("Torgersen", "Biscoe")) |>
+    tidyr::pivot_wider(
+      names_from = c(species, island),
+      names_sep = ".",
+      values_from = body_mass_g
+    ) |>
+    dplyr::reframe(
+      "{output_name_torgersen}" := mean(eval(rlang::sym({
+        input_var1_name_torgersen
+      })), na.rm = TRUE),
+      "{output_name_biscoe}" := mean(eval(rlang::sym({
+        input_var1_name_biscoe
+      })), na.rm = TRUE),
+      .by = c(year, sex)
+    ) |>
+    dplyr::distinct() |> 
+    tidyr::drop_na()
+}
+out <- palmerpenguins::penguins |>
+  dplyr::mutate(
+    species = as.character(species),
+    island = as.character(island)
+  ) |>
+  my_mean(
+    input_var1 = Adelie,
+    output_var = Adelie.mean_bodymass
+  )
+out
 ```
 
 
+# Easy alternative solution
+
+A simpler way to obtain a much better result in a tidied data frame would be using `dplyr::across()`.
+
+```{r}
+palmerpenguins::penguins |>
+  dplyr::reframe(dplyr::across(body_mass_g, \(x) mean(x, na.rm = TRUE), .names = "mean_{.col}"),
+    .by = c(year, sex, island, species)
+  ) |>
+  dplyr::filter(
+    island %in% c("Torgersen", "Biscoe"),
+    species == "Adelie"
+  ) |> 
+  tidyr::drop_na(sex)
+```

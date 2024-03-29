@@ -15,7 +15,7 @@ author:
         city: Fribourg
         state: CH
 date: 2024-03-29
-categories: [rlang, glue, sym, englue, name injection, curly curly, dynamic dots, indirection]
+categories: [rlang, glue, sym, englue, name-injection, curly-curly, dyn-dots, indirection]
 image: image.jpg
 citation: 
   url: https://rdiscovery.netlify.app/posts/2024-03-29_rlang-glue/

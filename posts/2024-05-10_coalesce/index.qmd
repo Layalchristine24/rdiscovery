@@ -1,0 +1,85 @@
+---
+title: How to replace some non-available values in a vector with values coming from another vector?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-05-10
+categories: [dplyr, coalesce, if_else, is.na]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-05-10_coalesce/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*How to replace some non-available values in a vector with values coming from another vector?*
+
+Until recently, I used to write the following code to fix `NA` values.
+
+```{r}
+my_tib <- tibble::tribble(
+  ~var_with_na, ~var_non_na,
+  NA_real_, 1.4,
+  5.4, 5.0,
+  NA_real_, 9.4,
+  13.4, 13.0,
+  NA_real_, 17.4
+)
+
+my_tib |>
+  dplyr::mutate(
+    my_fixed_var = dplyr::if_else(
+      is.na(var_with_na), var_non_na, var_with_na
+    )
+  )
+```
+
+A more efficient way to do this is to use the function [`coalesce()`](https://dplyr.tidyverse.org/reference/coalesce.html) from the dplyr package. This will allow you to **find the first non-missing element in a set of vectors**.
+
+```{r}
+my_tib |>
+  dplyr::mutate(
+    my_fixed_var = dplyr::coalesce(var_with_na, var_non_na)
+  )
+```
+
+This function takes all the available values from the vector you set in the first argument and replaces its non-available values with the first non-missing values from the vector in the second argument.
+
+You could also do this with more than two vectors.
+
+```{r}
+my_tib_2 <- tibble::tribble(
+  ~var_with_na_1, ~var_with_na_2, ~var_with_na_3,
+  NA_real_, 1.2, 1.4,
+  5.4, 5.2, NA_real_,
+  NA_real_, NA_real_, NA_real_,
+  13.4, NA_real_, 13.0,
+  NA_real_, NA_real_, 17.4
+)
+
+my_tib_2 |>
+  dplyr::mutate(
+    my_fixed_var =
+      dplyr::coalesce(var_with_na_1, var_with_na_2, var_with_na_3)
+  )
+```
+
+The sequence of the vectors specified as arguments in the `coalesce` function determines the order in which the `NA` values of the initial vectors will be replaced with the values of the remaining ones. Remember that **the first non-missing element in a set of vectors** will be taken as a replacement value for the `NA` values in the first vectors. If all values are not available, then the result will also be.

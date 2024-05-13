@@ -32,7 +32,7 @@ editor_options:
 
 *How can you create, transform and filter several variables in a function by using the glue syntax and rlang?*
 
-The following example helps me to remind how to deal with the rlang and glue syntax. However, this is very complicated and this is intended to be a simple means of finding working ways of using the operators *curly-curly* (`{{ x }}`) and the *name injection* (`:=`) as well as the functions `englue` and `sym` in other use cases.
+The following example helps me to remind how to deal with the rlang and glue syntax. However, this is very complicated and this is intended to be a simple means of finding working ways of using the operator *curly-curly* (`{{ x }}`) and the *Walrus operator* for the *name injection* (`:=`) as well as the functions `englue` and `sym` in other use cases.
 
 Please always try to find an easy way to solve your problem. If it is too complicated (like it is below), try to think again about how you can solve your problem in an easier way.
 

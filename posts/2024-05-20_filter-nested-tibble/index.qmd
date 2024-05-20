@@ -1,0 +1,130 @@
+---
+title: How to filter values in a nested tibble without using `filter()` from dplyr?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-05-20
+categories: [dplyr, arrow, nested, purrr, constructive]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-05-20_filter-nested-tibble/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*How to filter values in a nested tibble?*
+
+
+# Object
+
+Recently, I have been working with arrow objects. 
+I came across the following object, retrieved using the function `constructive::construct()`.
+
+```{r}
+my_tib <-
+  tibble::tibble(
+    my_data = vctrs::list_of(
+      tibble::tibble(
+        year = vctrs::list_of(2018:2022, .ptype = integer(0)) |>
+          structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+        records = vctrs::list_of(
+          tibble::tibble(
+            category = c(
+              "categ1", "categ2", "categ3", "categ4", "categ5", "categ6",
+              "categ7"
+            ),
+            values = vctrs::list_of(
+              c(100, 110, 120, 130, 140),
+              c(200, 210, 220, 230, 240),
+              c(300, 310, 320, 330, 340),
+              c(400, 410, 420, 430, 440),
+              c(500, 510, 520, 530, 540),
+              c(600, 610, 620, 630, 640),
+              c(700, 710, 720, 730, 740),
+              .ptype = numeric(0)
+            ) |>
+              structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+          ),
+          .ptype = tibble::tibble(
+            category = character(0),
+            values = vctrs::list_of(.ptype = numeric(0)) |>
+              structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+          )
+        ) |>
+          structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+      ),
+      .ptype = tibble::tibble(
+        year = vctrs::list_of(.ptype = integer(0)) |>
+          structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+        records = vctrs::list_of(
+          .ptype = tibble::tibble(
+            category = character(0),
+            values = vctrs::list_of(.ptype = numeric(0)) |>
+              structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+          )
+        ) |>
+          structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+      )
+    ) |>
+      structure(class = c("arrow_list", "vctrs_list_of", "vctrs_vctr", "list")),
+  )
+
+my_tib
+
+```
+
+
+# Filter values according to years
+
+I need to filter values according to selected years, without modifying the initial format of the tibble. 
+Thanks to [@moodymudskipper](https://github.com/moodymudskipper)'s help, I found a way of solving this problem. 
+
+So I am writing this blog post to keep this solution safe.
+
+As the years are not side by side with the values, we cannot simply use the `filter()` function from the dplyr package. Instead, we need to go into the nested tibble and filter values according to the selected years.
+
+```{r}
+my_tib$my_data
+```
+
+
+Let's say we want only the years 2018 and 2021. You need to use the functions `map()` and `map2_dfr()` from the purrr package in order to filter the list elements according to the vector `my_years`.
+
+```{r}
+my_years <- c(2018L, 2021L)
+my_tib$my_data <-
+  purrr::map(my_tib$my_data, ~ {
+    # we're in a nested tibble
+    # now iterating on observations of the cols of the nested tibble
+    purrr::map2_dfr(.x$year, .x$records, function(year, record) {
+      record$values <- purrr::map(record$values, \(x) x[year %in% my_years])
+
+      tibble::tibble(
+        year = vctrs::list_of(year[year %in% my_years]),
+        records = vctrs::list_of(record)
+      )
+    })
+  })
+
+constructive::construct(my_tib)
+```
+
+We end up with the same structure as the initial tibble. Our mission is fulfilled!

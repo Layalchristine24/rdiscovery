@@ -15,7 +15,7 @@ author:
         city: Fribourg
         state: CH
 date: 2024-05-30
-categories: [nest, unnest, pack, unpack, tidyr, constructive]
+categories: [nest, unnest, pack, unpack, tidyr, json, constructive]
 image: image.jpg
 citation: 
   url: https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/
@@ -34,7 +34,7 @@ editor_options:
 
 # Initial object
 
-Let's assume that we have the object `my_tib` which is a nested tibble containing a list, namely `my_values`, with another tibble where the variables are `my_ints` and `my_chars`. 
+Let's assume that we have the object `my_tib` which is a nested tibble containing a list, namely `my_values`, with another tibble where the variables are `my_ints` and `my_chars`.
 
 ```{r}
 my_tib <-
@@ -71,6 +71,7 @@ waldo::compare(my_tib, my_nested_tib)
 ```
 
 # What is the difference between a nested and a packed tibble?
+
 To obtain a packed tibble, we should pack the variables `my_ints` and `my_chars` together so that we have a tibble in another tibble instead of a list with an element that is a tibble.
 
 ```{r}
@@ -87,7 +88,8 @@ my_packed_tib <-
 constructive::construct(my_packed_tib)
 ```
 
-We can assess the difference between `my_nested_tib` and `my_packed_tib` with `waldo::compare()`. 
+We can assess the difference between `my_nested_tib` and `my_packed_tib` with `waldo::compare()`.
+
 ```{r}
 waldo::compare(my_nested_tib, my_packed_tib)
 ```
@@ -99,10 +101,10 @@ class(my_packed_tib$my_values)
 ```
 
 For the record, a data frame is a special list where every element has the same length.
+
 ```{r}
 typeof(my_packed_tib$my_values)
 ```
-
 
 # How to unnest or unpack a tibble?
 
@@ -127,3 +129,14 @@ constructive::construct(my_unpacked_tib)
 ```
 
 Here again, we obtain a simple tibble with two variables instead of one single variable that has the class `data.frame`.
+
+# What do the packed tibble and nested tibble look like in a JSON format?
+
+The main difference is that the instances of the variable `my_values` of the nested tibble will be written between extra square brackets to represent the `list` class of `my_values`. On the contrary, each row of the variable `my_values` of the packed tibble will be displayed separately between curly brackets given that `my_values` has the class `data.frame` in the packed case. 
+
+```{r}
+jsonlite::toJSON(my_nested_tib)
+
+jsonlite::toJSON(my_packed_tib)
+```
+

@@ -1,0 +1,93 @@
+---
+title: What is the difference between (un)packing and (un)nesting a tibble?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-05-30
+categories: [nest, unnest, pack, unpack, tidyr, constructive]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*What is the difference between (un)packing and (un)nesting a tibble?*
+
+# Initial object
+
+Let's assume that `my_tib` is a nested tibble containing a list, namely `my_values`, with another tibble whose variables are `my_ints` and `my_chars`. 
+
+```{r}
+my_tib <-
+  tibble::tibble(
+    my_values = list(tibble::tibble(
+      my_ints = 1L:5L,
+      my_chars = LETTERS[my_ints]
+    ))
+  )
+constructive::construct(my_tib)
+```
+
+We could also use `tidyr::nest()` to create `my_tib` (please refer to [this article](https://tidyr.tidyverse.org/articles/nest.html) for more info).
+
+```{r}
+my_nested_tib <-
+  tibble::tribble(
+    ~my_ints, ~my_chars,
+    1L, "A",
+    2L, "B",
+    3L, "C",
+    4L, "D",
+    5L, "E"
+  ) |>
+  tidyr::nest(my_values = c(my_ints, my_chars))
+
+constructive::construct(my_nested_tib)
+```
+
+As you can see, there is no difference between `my_tib` and `my_nested_tib`.
+
+```{r}
+waldo::compare(my_tib, my_nested_tib)
+```
+
+# What if we do not want any nested tibble?
+In this case, we should pack the variables `my_ints` and `my_chars` so that we have a tibble in a tibble instead of having a list with a tibble element.
+
+```{r}
+my_packed_tib <-
+  tibble::tribble(
+    ~my_ints, ~my_chars,
+    1L, "A",
+    2L, "B",
+    3L, "C",
+    4L, "D",
+    5L, "E"
+  ) |>
+  tidyr::pack(my_values = c(my_ints, my_chars))
+constructive::construct(my_packed_tib)
+```
+
+We can assess the difference with `waldo::compare()`.
+```{r}
+waldo::compare(my_nested_tib, my_packed_tib)
+```

@@ -30,11 +30,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-*What is the difference between (un)packing and (un)nesting a tibble?*
+*Does a nested tibble have the same structure as a packed tibble?*
 
 # Initial object
 
-Let's assume that `my_tib` is a nested tibble containing a list, namely `my_values`, with another tibble where the variables are `my_ints` and `my_chars`. 
+Let's assume that we have the object `my_tib` which is a nested tibble containing a list, namely `my_values`, with another tibble where the variables are `my_ints` and `my_chars`. 
 
 ```{r}
 my_tib <-
@@ -70,8 +70,8 @@ As you can see, there is no difference between `my_tib` and `my_nested_tib`.
 waldo::compare(my_tib, my_nested_tib)
 ```
 
-# What if we do not want any nested tibble?
-In this case, we should pack the variables `my_ints` and `my_chars` together so that we have a tibble in another tibble instead of a list with an element that is a tibble.
+# What is the difference between a nested and a packed tibble?
+To obtain a packed tibble, we should pack the variables `my_ints` and `my_chars` together so that we have a tibble in another tibble instead of a list with an element that is a tibble.
 
 ```{r}
 my_packed_tib <-
@@ -92,9 +92,38 @@ We can assess the difference between `my_nested_tib` and `my_packed_tib` with `w
 waldo::compare(my_nested_tib, my_packed_tib)
 ```
 
-This tells us that `my_nested_tib` has only one row and contains the variable `my_values` that is a list, whereas `my_packed_tib` has 5 rows and is constituted by the variable `my_values` that is, in this case, a data frame. 
-For the record, a data frame is a special list where every element has the same length.
+This tells us that `my_nested_tib` has only one row and contains the variable `my_values` that is a list, whereas `my_packed_tib` has 5 rows and is constituted by the variable `my_values` that has, in this case, the class `data.frame`.
 
 ```{r}
-typeof(my_packed_tib)
+class(my_packed_tib$my_values)
 ```
+
+For the record, a data frame is a special list where every element has the same length.
+```{r}
+typeof(my_packed_tib$my_values)
+```
+
+
+# How to unnest or unpack a tibble?
+
+To get a tibble without any variable that is a list or a tibble, we should unnest and, respectively, unpack our nested/packed tibble.
+
+```{r}
+my_unnested_tib <-
+  my_nested_tib |>
+  tidyr::unnest(my_values)
+
+constructive::construct(my_unnested_tib)
+```
+
+Now, we have a simple tibble with two variables instead of one single variable that is a list.
+
+```{r}
+my_unpacked_tib <-
+  my_packed_tib |>
+  tidyr::unpack(my_values)
+
+constructive::construct(my_unpacked_tib)
+```
+
+Here again, we obtain a simple tibble with two variables instead of one single variable that has the class `data.frame`.

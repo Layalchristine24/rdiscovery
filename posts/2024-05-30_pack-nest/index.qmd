@@ -34,7 +34,7 @@ editor_options:
 
 # Initial object
 
-Let's assume that `my_tib` is a nested tibble containing a list, namely `my_values`, with another tibble whose variables are `my_ints` and `my_chars`. 
+Let's assume that `my_tib` is a nested tibble containing a list, namely `my_values`, with another tibble where the variables are `my_ints` and `my_chars`. 
 
 ```{r}
 my_tib <-
@@ -71,7 +71,7 @@ waldo::compare(my_tib, my_nested_tib)
 ```
 
 # What if we do not want any nested tibble?
-In this case, we should pack the variables `my_ints` and `my_chars` so that we have a tibble in a tibble instead of having a list with a tibble element.
+In this case, we should pack the variables `my_ints` and `my_chars` together so that we have a tibble in another tibble instead of a list with an element that is a tibble.
 
 ```{r}
 my_packed_tib <-
@@ -87,7 +87,14 @@ my_packed_tib <-
 constructive::construct(my_packed_tib)
 ```
 
-We can assess the difference with `waldo::compare()`.
+We can assess the difference between `my_nested_tib` and `my_packed_tib` with `waldo::compare()`. 
 ```{r}
 waldo::compare(my_nested_tib, my_packed_tib)
+```
+
+This tells us that `my_nested_tib` has only one row and contains the variable `my_values` that is a list, whereas `my_packed_tib` has 5 rows and is constituted by the variable `my_values` that is, in this case, a data frame. 
+For the record, a data frame is a special list where every element has the same length.
+
+```{r}
+typeof(my_packed_tib)
 ```

@@ -135,8 +135,8 @@ Here again, we obtain a simple tibble with two variables instead of one single v
 The main difference is that the instances of the variable `my_values` of the nested tibble will be written between extra square brackets to represent the `list` class of `my_values`. On the contrary, each row of the variable `my_values` of the packed tibble will be displayed separately between curly brackets given that `my_values` has the class `data.frame` in the packed case. 
 
 ```{r}
-jsonlite::toJSON(my_nested_tib)
+jsonlite::toJSON(my_nested_tib, pretty = TRUE)
 
-jsonlite::toJSON(my_packed_tib)
+jsonlite::toJSON(my_packed_tib, pretty = TRUE)
 ```
 

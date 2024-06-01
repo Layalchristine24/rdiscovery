@@ -1,0 +1,33 @@
+---
+title: What are the use cases of using nested versus packed data?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-05-30
+categories: [nest, unnest, pack, unpack, tidyr, json, constructive]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-06-01_use-case-pack-nest/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*When would you use nested instead packed data (and vice versa)?*

@@ -31,3 +31,42 @@ editor_options:
 ---
 
 *When would you use nested instead packed data (and vice versa)?*
+
+In my last [blog post](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/), we could see what the difference was between the structure of nested data opposite to packed data. 
+
+In this article, I would like to show when we could use nested and packed data.
+
+*Nested data*
+
+In the following example, we can nest data from the tibble `palmerpenguins::penguins` with the initial raw tibble `palmerpenguins::penguins_raw`.
+
+
+```{r}
+my_nested_tib <-
+  palmerpenguins::penguins |>
+  dplyr::distinct(island) |>
+  dplyr::rename(my_island = island) |>
+  dplyr::mutate(
+    penguins_data = purrr::map(
+      my_island, \(x) dplyr::filter(palmerpenguins::penguins, island == x)
+    ),
+    penguins_raw_data = purrr::map(
+      my_island, \(x) dplyr::filter(palmerpenguins::penguins_raw, Island == x)
+    )
+  )
+
+dplyr::glimpse(my_nested_tib)
+```
+
+We can see that `palmerpenguins::penguins` and `palmerpenguins::penguins_raw` have different dimensions. They have the same number of rows but a different number of columns.
+
+To remove both lists from our tibble, we can unnest the columns `penguins_data` and `penguins_raw_data`.
+
+```{r}
+my_unnested_tib <-
+  my_nested_tib |>
+  tidyr::unnest(
+    cols = c(penguins_data, penguins_raw_data)
+  )
+dplyr::glimpse(my_unnested_tib)
+```

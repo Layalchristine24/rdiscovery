@@ -40,7 +40,6 @@ In this article, I would like to show when we could use nested and packed data.
 
 In the following example, we can nest data from the tibble `palmerpenguins::penguins` to the raw data `palmerpenguins::penguins_raw`.
 
-
 ```{r}
 my_nested_tib <-
   palmerpenguins::penguins |>
@@ -53,14 +52,14 @@ my_nested_tib <-
     penguins_raw_data = purrr::map(
       my_island, \(x) dplyr::filter(palmerpenguins::penguins_raw, Island == x)
     )
-  ) |> 
-  dplyr::select(-my_island) 
+  ) |>
+  dplyr::select(-my_island)
 
 dplyr::glimpse(my_nested_tib)
 ```
 
-We can see that `palmerpenguins::penguins` and `palmerpenguins::penguins_raw` have different dimensions.
-They have the same number of rows but a different number of columns.
+The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data` which are both lists with 3 tibble elements of with different dimensions.
+We can handle these variable a normal lists.
 
 To unlist our data, we can unnest the columns `penguins_data` and `penguins_raw_data`.
 
@@ -108,36 +107,44 @@ For example, you could write `my_packed_data$all_body_mass_g$body_mass_g`, `my_p
 This will give you the same result.
 ```{r}
 waldo::compare(
-  my_packed_data$all_body_mass_g$body_mass_g, 
-  my_packed_data$all_body_mass_g[["body_mass_g"]])
+  my_packed_data$all_body_mass_g$body_mass_g,
+  my_packed_data$all_body_mass_g[["body_mass_g"]]
+)
 
 waldo::compare(
-  my_packed_data$all_body_mass_g$body_mass_g, 
-  my_packed_data[["all_body_mass_g"]][["body_mass_g"]])
+  my_packed_data$all_body_mass_g$body_mass_g,
+  my_packed_data[["all_body_mass_g"]][["body_mass_g"]]
+)
 ```
 
 Furthermore, it is so organised that you easily can analyse the differences between `palmerpenguins::penguins` and `palmerpenguins::penguins_raw`.
 
 ```{r}
-# Species from penguins_raw and species from penguins (old vs new) 
-waldo::compare(my_packed_data$all_species$Species, 
-               my_packed_data$all_species$species)
+# Species from penguins_raw and species from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_species$Species,
+  my_packed_data$all_species$species
+)
 
-# Island from penguins_raw and island from penguins (old vs new) 
-waldo::compare(my_packed_data$all_island$Island, 
-               my_packed_data$all_island$island)
+# Island from penguins_raw and island from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_island$Island,
+  my_packed_data$all_island$island
+)
 
-# `Culmen Length (mm)` from penguins_raw and bill_length_mm from penguins (old vs new) 
-waldo::compare(my_packed_data$all_bill_length_mm$`Culmen Length (mm)`, 
-               my_packed_data$all_bill_length_mm$bill_length_mm)
+# `Culmen Length (mm)` from penguins_raw and bill_length_mm from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_bill_length_mm$`Culmen Length (mm)`,
+  my_packed_data$all_bill_length_mm$bill_length_mm
+)
 ```
 
 You can also easily get the columns `palmerpenguins::penguins_raw` which were not included into ``palmerpenguins::penguins` and unpack them.
 
 ```{r}
-my_raw_additional_columns <- 
-my_packed_data |> 
-  dplyr::select(all_remaining_raw_data) |> 
+my_raw_additional_columns <-
+  my_packed_data |>
+  dplyr::select(all_remaining_raw_data) |>
   tidyr::unpack(all_remaining_raw_data)
 
 dplyr::glimpse(my_raw_additional_columns)

@@ -32,13 +32,13 @@ editor_options:
 
 *When would you use nested instead packed data (and vice versa)?*
 
-In my last [blog post](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/), we could see what the difference was between the structure of nested data opposite to packed data. 
+In my last [blog post](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/), we saw how nested data was different from packed data.
 
-In this article, I would like to show when we could use nested and packed data.
+In this article, I would like to explain when we can use nested and packed data.
 
 # Nested data
 
-In the following example, we can nest data from the tibble `palmerpenguins::penguins` to the raw data `palmerpenguins::penguins_raw`.
+In the following example, we will nest data from the tibble `palmerpenguins::penguins` to the raw data `palmerpenguins::penguins_raw`.
 
 ```{r}
 my_nested_tib <-
@@ -58,10 +58,10 @@ my_nested_tib <-
 dplyr::glimpse(my_nested_tib)
 ```
 
-The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data` which are both lists with 3 tibble elements of with different dimensions.
-We can handle these variable a normal lists.
+The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data`, which are both lists with 3 tibble elements of different dimensions.
+We can handle these variables like any normal list.
 
-To unlist our data, we can unnest the columns `penguins_data` and `penguins_raw_data`.
+To unlist our data, we will unnest the columns `penguins_data` and `penguins_raw_data`.
 
 ```{r}
 my_unnested_tib <-
@@ -75,9 +75,9 @@ dplyr::glimpse(my_unnested_tib)
 
 # Packed data
 
-You would need to pack data to group similar variables, so that you can easily compare them. 
-Opposite to `my_unnested_tib`, our tibble `my_packed_data` will be narrow because similar columns will be collapsed into a single variable. 
-You can find more information about the packing process in this [article](https://tidyr.tidyverse.org/reference/pack.html).
+You would need to pack data into groups so that you can easily compare them. 
+Opposite to `my_unnested_tib`, our tibble `my_packed_data` will be narrow because similar columns will be consolidated into a single variable. 
+You will find additional information about the packing process in this [article](https://tidyr.tidyverse.org/reference/pack.html).
 
 ```{r}
 my_packed_data <-
@@ -102,9 +102,10 @@ dplyr::glimpse(my_packed_data)
 
 Now, `my_packed_data` is a tibble with 9 columns instead of 25 for `my_unnested_tib`.
 
-You can subset it either by using the dollar sign `$` or the brackets `[[]]`.
+You can either subset it using the dollar sign `$` or square brackets `[[]]`.
 For example, you could write `my_packed_data$all_body_mass_g$body_mass_g`, `my_packed_data$all_body_mass_g[["body_mass_g"]]` or `my_packed_data[["all_body_mass_g"]][["body_mass_g"]]`.
 This will give you the same result.
+
 ```{r}
 waldo::compare(
   my_packed_data$all_body_mass_g$body_mass_g,
@@ -117,7 +118,7 @@ waldo::compare(
 )
 ```
 
-Furthermore, it is so organised that you easily can analyse the differences between `palmerpenguins::penguins` and `palmerpenguins::penguins_raw`.
+Furthermore, it is so organised that you can easily analyse the differences between `palmerpenguins::penguins` and `palmerpenguins::penguins_raw`.
 
 ```{r}
 # Species from penguins_raw and species from penguins (old vs new)
@@ -139,7 +140,7 @@ waldo::compare(
 )
 ```
 
-You can also easily get the columns `palmerpenguins::penguins_raw` which were not included into ``palmerpenguins::penguins` and unpack them.
+You can also easily obtain the columns `palmerpenguins::penguins_raw` that were not included in `palmerpenguins::penguins` and unpack them.
 
 ```{r}
 my_raw_additional_columns <-

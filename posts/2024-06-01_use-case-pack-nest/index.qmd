@@ -1,0 +1,184 @@
+---
+title: What are the use cases of using nested versus packed data?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-05-30
+categories: [nest, unnest, pack, unpack, tidyr, json, constructive]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-06-01_use-case-pack-nest/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*When would you use nested instead packed data (and vice versa)?*
+
+In my last [blog post](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/), we saw how nested data was different from packed data.
+
+In this article, I would like to explain when we can use nested and packed data.
+
+# Nested data
+
+In the following example, we will nest data from the tibble `palmerpenguins::penguins` to the raw data `palmerpenguins::penguins_raw`.
+
+```{r}
+my_nested_tib <-
+  palmerpenguins::penguins |>
+  dplyr::distinct(island) |>
+  dplyr::rename(my_island = island) |>
+  dplyr::mutate(
+    penguins_data = purrr::map(
+      my_island, \(x) dplyr::filter(palmerpenguins::penguins, island == x)
+    ),
+    penguins_raw_data = purrr::map(
+      my_island, \(x) dplyr::filter(palmerpenguins::penguins_raw, Island == x)
+    )
+  ) |>
+  dplyr::select(-my_island)
+
+dplyr::glimpse(my_nested_tib)
+```
+
+The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data`, which are both lists with 3 tibble elements of different dimensions.
+We can handle these variables like any normal list.
+
+To unlist our data, we will unnest the columns `penguins_data` and `penguins_raw_data`.
+
+```{r}
+my_unnested_tib <-
+  my_nested_tib |>
+  tidyr::unnest(
+    cols = c(penguins_data, penguins_raw_data)
+  )
+dplyr::glimpse(my_unnested_tib)
+```
+
+
+# Packed data
+
+You would need to pack data into groups so that you can easily compare them. 
+Opposite to `my_unnested_tib`, our tibble `my_packed_data` will be narrow because similar columns will be consolidated into a single variable. 
+You will find additional information about the packing process in this [article](https://tidyr.tidyverse.org/reference/pack.html).
+
+```{r}
+my_packed_data <-
+  my_unnested_tib |>
+  tidyr::pack(
+    all_species = c(species, Species),
+    all_island = c(island, Island),
+    all_bill_length_mm = c(bill_length_mm, `Culmen Length (mm)`),
+    all_bill_depth_mm = c(bill_depth_mm, `Culmen Depth (mm)`),
+    all_flipper_length_mm = c(flipper_length_mm, `Flipper Length (mm)`),
+    all_body_mass_g = c(body_mass_g, `Body Mass (g)`),
+    all_sex = c(sex, Sex),
+    all_date = c(year, `Date Egg`),
+    all_remaining_raw_data = c(
+      studyName, `Sample Number`, Region, Stage, `Individual ID`,
+      `Clutch Completion`, `Delta 15 N (o/oo)`, `Delta 13 C (o/oo)`,
+      Comments
+    )
+  )
+dplyr::glimpse(my_packed_data)
+```
+
+Now, `my_packed_data` is a tibble with 9 columns instead of 25 for `my_unnested_tib`.
+
+You can either subset it using the dollar sign `$` or square brackets `[[]]`.
+For example, you could write `my_packed_data$all_body_mass_g$body_mass_g`, `my_packed_data$all_body_mass_g[["body_mass_g"]]` or `my_packed_data[["all_body_mass_g"]][["body_mass_g"]]`.
+This will give you the same result.
+
+```{r}
+waldo::compare(
+  my_packed_data$all_body_mass_g$body_mass_g,
+  my_packed_data$all_body_mass_g[["body_mass_g"]]
+)
+
+waldo::compare(
+  my_packed_data$all_body_mass_g$body_mass_g,
+  my_packed_data[["all_body_mass_g"]][["body_mass_g"]]
+)
+```
+
+Furthermore, it is so organised that you can easily analyse the differences between `palmerpenguins::penguins` and `palmerpenguins::penguins_raw`.
+
+```{r}
+# Species from penguins_raw and species from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_species$Species,
+  my_packed_data$all_species$species
+)
+
+# Island from penguins_raw and island from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_island$Island,
+  my_packed_data$all_island$island
+)
+
+# `Culmen Length (mm)` from penguins_raw and bill_length_mm from penguins (old vs new)
+waldo::compare(
+  my_packed_data$all_bill_length_mm$`Culmen Length (mm)`,
+  my_packed_data$all_bill_length_mm$bill_length_mm
+)
+```
+
+You can also easily obtain the columns `palmerpenguins::penguins_raw` that were not included in `palmerpenguins::penguins` and unpack them.
+
+```{r}
+my_raw_additional_columns <-
+  my_packed_data |>
+  dplyr::select(all_remaining_raw_data) |>
+  tidyr::unpack(all_remaining_raw_data)
+
+dplyr::glimpse(my_raw_additional_columns)
+```
+
+# When should you use nested data or packed data when using a JSON format?
+
+In my experience, I used nested and packed data in an API so that you could read it in JSON format at the end.
+
+In my opinion, it is preferable to use nested data when you have a tibble of several rows. 
+On the contrary, when a single row is involved, it is recommended to use packed data to avoid square brackets.
+
+```{r}
+multiple_rows_tib <-
+  tibble::tribble(
+    ~category, ~value,
+    "category1", seq(from = 1.092, to = 1.098, by = 0.001),
+    "category2", seq(from = 352.15, to = 352.2, by = 0.01),
+    "category3", seq(from = 25.63, to = 25.7, by = 0.01)
+  )
+
+my_date <- "2022-09-12"
+single_row_tib <-
+  tibble::tribble(
+    ~year, ~month, ~day,
+    lubridate::year(my_date), lubridate::month(my_date, label = TRUE), lubridate::day(my_date)
+  )
+
+my_tib <-
+  tibble::tibble(
+    all_values = vctrs::list_of(multiple_rows_tib),
+    date = tidyr::pack(single_row_tib)
+  )
+
+jsonlite::toJSON(my_tib, pretty = TRUE)
+```

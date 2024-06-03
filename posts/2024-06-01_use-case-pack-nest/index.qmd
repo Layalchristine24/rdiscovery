@@ -150,3 +150,35 @@ my_raw_additional_columns <-
 
 dplyr::glimpse(my_raw_additional_columns)
 ```
+
+# When should you use nested data or packed data when using a JSON format?
+
+In my experience, I used nested and packed data in an API so that you could read it in JSON format at the end.
+
+In my opinion, it is preferable to use nested data when you have a tibble of several rows. 
+On the contrary, when a single row is involved, it is recommended to use packed data to avoid square brackets.
+
+```{r}
+multiple_rows_tib <-
+  tibble::tribble(
+    ~category, ~value,
+    "category1", seq(from = 1.092, to = 1.098, by = 0.001),
+    "category2", seq(from = 352.15, to = 352.2, by = 0.01),
+    "category3", seq(from = 25.63, to = 25.7, by = 0.01)
+  )
+
+my_date <- "2022-09-12"
+single_row_tib <-
+  tibble::tribble(
+    ~year, ~month, ~day,
+    lubridate::year(my_date), lubridate::month(my_date, label = TRUE), lubridate::day(my_date)
+  )
+
+my_tib <-
+  tibble::tibble(
+    all_values = vctrs::list_of(multiple_rows_tib),
+    date = tidyr::pack(single_row_tib)
+  )
+
+jsonlite::toJSON(my_tib, pretty = TRUE)
+```

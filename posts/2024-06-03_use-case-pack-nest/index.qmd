@@ -32,6 +32,8 @@ editor_options:
 
 *When should you use packed data instead of nested data, and vice versa?*
 
+# Introduction
+
 In my last [blog post](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/), we saw how nested data was different from packed data.
 
 In this article, I would like to explain when we can use nested and packed data.

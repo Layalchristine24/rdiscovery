@@ -14,11 +14,11 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2024-05-30
-categories: [nest, unnest, pack, unpack, tidyr, json, constructive]
+date: 2024-06-03
+categories: [nest, unnest, pack, unpack, tidyr, jsonlite]
 image: image.jpg
 citation: 
-  url: https://rdiscovery.netlify.app/posts/2024-06-01_use-case-pack-nest/
+  url: https://rdiscovery.netlify.app/posts/2024-06-03_use-case-pack-nest/
 format:
   html:
     toc: true
@@ -58,8 +58,7 @@ my_nested_tib <-
 dplyr::glimpse(my_nested_tib)
 ```
 
-The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data`, which are both lists with 3 tibble elements of different dimensions.
-We can handle these variables like any normal list.
+The tibble `my_nested_tib` is a nested tibble containing the variables `penguins_data` and `penguins_raw_data`, which are both lists with 3 tibble elements of different dimensions. We can handle these variables like any normal list.
 
 To unlist our data, we will unnest the columns `penguins_data` and `penguins_raw_data`.
 
@@ -72,12 +71,9 @@ my_unnested_tib <-
 dplyr::glimpse(my_unnested_tib)
 ```
 
-
 # Packed data
 
-You would need to pack data into groups so that you can easily compare them. 
-Opposite to `my_unnested_tib`, our tibble `my_packed_data` will be narrow because similar columns will be consolidated into a single variable. 
-You will find additional information about the packing process in this [article](https://tidyr.tidyverse.org/reference/pack.html).
+You would need to pack data into groups so that you can easily compare them. Opposite to `my_unnested_tib`, our tibble `my_packed_data` will be narrow because similar columns will be consolidated into a single variable. You will find additional information about the packing process in this [article](https://tidyr.tidyverse.org/reference/pack.html).
 
 ```{r}
 my_packed_data <-
@@ -102,9 +98,7 @@ dplyr::glimpse(my_packed_data)
 
 Now, `my_packed_data` is a tibble with 9 columns instead of 25 for `my_unnested_tib`.
 
-You can either subset it using the dollar sign `$` or square brackets `[[]]`.
-For example, you could write `my_packed_data$all_body_mass_g$body_mass_g`, `my_packed_data$all_body_mass_g[["body_mass_g"]]` or `my_packed_data[["all_body_mass_g"]][["body_mass_g"]]`.
-This will give you the same result.
+You can either subset it using the dollar sign `$` or square brackets `[[]]`. For example, you could write `my_packed_data$all_body_mass_g$body_mass_g`, `my_packed_data$all_body_mass_g[["body_mass_g"]]` or `my_packed_data[["all_body_mass_g"]][["body_mass_g"]]`. This will give you the same result.
 
 ```{r}
 waldo::compare(
@@ -155,8 +149,7 @@ dplyr::glimpse(my_raw_additional_columns)
 
 In my experience, I used nested and packed data in an API so that you could read it in JSON format at the end.
 
-In my opinion, it is preferable to use nested data when you have a tibble of several rows. 
-On the contrary, when a single row is involved, it is recommended to use packed data to avoid square brackets.
+In my opinion, it is preferable to use nested data when you have a tibble of several rows. On the contrary, when a single row is involved, it is recommended to use packed data to avoid square brackets.
 
 ```{r}
 multiple_rows_tib <-

@@ -1,0 +1,120 @@
+---
+title: What are the different ways of summing a variable?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-08-23
+categories: [dplyr, constructive, groups, reframe, summarise, count]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-08-23_sums/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*How can you summarise a tibble?*
+
+# Initial object
+
+Let's assume that we have the tibble `my_tib` where the variables are `my_chars`, `my_years`, `my_ints` and `my_nums`.
+
+```{r}
+my_tib <-
+  tibble::tibble(
+    my_chars = c(rep(LETTERS[1:2], 2), LETTERS[1]),
+    my_years = rep(c(2021L, 2025L), 2:3),
+    my_ints = 1L:5L,
+    my_nums = 1.5:5.5
+  )
+
+constructive::construct(my_tib)
+```
+
+# Use `summarise()` from dplyr
+
+To obtain the total sum of each of the variables for each of the letters `A` and `B` and for each year, we can use `dplyr::summarise()` (or `dplyr::summarize()`) together with `dplyr::goup_by()` before it and `dplyr::ungroup()` at the end, to ensure we have an ungrouped tibble to work with.
+
+```{r}
+my_summarised_tib_grouped <-
+  my_tib |>
+  dplyr::group_by(my_chars, my_years) |>
+  dplyr::summarise(
+    my_ints_sum = sum(my_ints),
+    my_nums_sum = sum(my_nums)
+  )
+constructive::construct(my_summarised_tib_grouped)
+```
+
+To remove the groups, use `dplyr::ungroup()`.
+```{r}
+my_summarised_tib <-
+  my_summarised_tib_grouped |>
+  dplyr::ungroup() |>
+  dplyr::arrange(my_chars)
+constructive::construct(my_summarised_tib)
+``` 
+
+# Use `reframe()` from dplyr
+
+We can also use `dplyr::reframe()`. We obtain directly an ungrouped tibble. 
+
+```{r}
+my_reframed_tib <-
+  my_tib |>
+  dplyr::reframe(
+    my_ints_sum = sum(my_ints),
+    my_nums_sum = sum(my_nums),
+    .by = c(my_chars, my_years)
+  ) |>
+  dplyr::arrange(my_chars)
+constructive::construct(my_reframed_tib)
+```
+
+
+# Use `count()` from dplyr
+
+Eventually, we can run `dplyr::count()` by specifying the frequency weights with the argument `wt`.
+If `wt` is not `NULL`, the sum of the specified variable is returned for each group given in the first argument.
+We obtain directly an ungrouped tibble. 
+
+```{r}
+my_counted_tib <-
+  my_tib |>
+  dplyr::count(my_chars, my_years, wt = my_ints, name = "my_ints_sum") |>
+  dplyr::left_join(
+    my_tib |>
+      dplyr::count(my_chars, my_years, wt = my_nums, name = "my_nums_sum"),
+    by = dplyr::join_by(my_chars, my_years)
+  ) |>
+  dplyr::arrange(my_chars)
+
+constructive::construct(my_counted_tib)
+```
+
+
+# Comparison of the three solutions
+
+In my opinion, the `reframe()` solution is the best and the easiest one because you do not need to worry about ungrouping the tibble at the end of your pipe (with `summarise()`) nor joining another summarised tibble (with `count()`) to obtain the sums of the variables you want.
+
+```{r}
+waldo::compare(my_reframed_tib, my_counted_tib)
+waldo::compare(my_reframed_tib, my_summarised_tib)
+```

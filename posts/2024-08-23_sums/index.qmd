@@ -50,7 +50,7 @@ constructive::construct(my_tib)
 
 # Use `summarise()` from dplyr
 
-To obtain the total sum of each of the variables for each of the letters `A` and `B` and for each year, we can use `dplyr::summarise()` (or `dplyr::summarize()`) together with `dplyr::goup_by()` before it and `dplyr::ungroup()` at the end, to ensure we have an ungrouped tibble to work with.
+To obtain the total sum of each of the variables for each of the letters `A` and `B` and for each year, we can use [`dplyr::summarise()`](https://dplyr.tidyverse.org/reference/summarise.html) (or `dplyr::summarize()`) together with `dplyr::goup_by()` before it and `dplyr::ungroup()` at the end, to ensure we have an ungrouped tibble to work with.
 
 ```{r}
 my_summarised_tib_grouped <-
@@ -72,9 +72,35 @@ my_summarised_tib <-
 constructive::construct(my_summarised_tib)
 ``` 
 
+Please note that using `.by` or `.groups = "drop"` will allow you to return an ungrouped tibble automatically.
+
+```{r}
+my_summarised_tib_alt <-
+  my_tib |>
+  dplyr::summarise(
+    my_ints_sum = sum(my_ints),
+    my_nums_sum = sum(my_nums),
+    .by = c(my_chars, my_years)
+  )
+constructive::construct(my_summarised_tib_alt)
+```
+
+
+```{r}
+my_summarised_tib_alt_drop <-
+  my_tib |>
+  dplyr::group_by(my_chars, my_years) |>
+  dplyr::summarise(
+    my_ints_sum = sum(my_ints),
+    my_nums_sum = sum(my_nums),
+    .groups = "drop"
+  )
+constructive::construct(my_summarised_tib_alt_drop)
+```
+
 # Use `reframe()` from dplyr
 
-We can also use `dplyr::reframe()`. We obtain directly an ungrouped tibble. 
+We can also use [`dplyr::reframe()`](https://dplyr.tidyverse.org/reference/reframe.html). We obtain directly an ungrouped tibble. 
 
 ```{r}
 my_reframed_tib <-
@@ -88,10 +114,23 @@ my_reframed_tib <-
 constructive::construct(my_reframed_tib)
 ```
 
+An alternative using `dplyr::group_by()` also exists. Note that this solution also returns an ungrouped tibble automatically thanks to `dplyr::reframe()`.
+
+```{r}
+my_reframed_tib_alt <-
+  my_tib |>
+  dplyr::group_by(my_chars, my_years) |>
+  dplyr::reframe(
+    my_ints_sum = sum(my_ints),
+    my_nums_sum = sum(my_nums)
+  ) |>
+  dplyr::arrange(my_chars)
+constructive::construct(my_reframed_tib_alt)
+```
 
 # Use `count()` from dplyr
 
-Eventually, we can run `dplyr::count()` by specifying the frequency weights with the argument `wt`.
+Eventually, we can run [`dplyr::count()`](https://dplyr.tidyverse.org/reference/count.html) by specifying the frequency weights with the argument `wt`.
 If `wt` is not `NULL`, the sum of the specified variable is returned for each group given in the first argument.
 We obtain directly an ungrouped tibble. 
 
@@ -112,7 +151,7 @@ constructive::construct(my_counted_tib)
 
 # Comparison of the three solutions
 
-In my opinion, the `reframe()` solution is the best and the easiest one because you do not need to worry about ungrouping the tibble at the end of your pipe (with `summarise()`) nor joining another summarised tibble (with `count()`) to obtain the sums of the variables you want.
+In my opinion, the `reframe()` solution is the best and the safest one because you do not need to worry about ungrouping the tibble at the end of your pipe (happening in some cases with `summarise()`) nor joining another summarised tibble (with `count()`) to obtain the sums of the variables you want.
 
 ```{r}
 waldo::compare(my_reframed_tib, my_counted_tib)

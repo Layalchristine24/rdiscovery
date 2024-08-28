@@ -1,0 +1,103 @@
+---
+title: How can you use the *frame functions from the package tibble?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-08-28
+categories: [dplyr, constructive, tibble, enframe, deframe, nested]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-08-28_frame-functions/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*In which case can you use `enframe` and `deframe`?*
+
+# Initial object
+
+Let's assume that we have a numeric vector and a list.
+
+```{r}
+my_vec <- c("first" = 1L, "second" = 2L, "third" = 3L)
+constructive::construct(my_vec)
+
+my_list <- list(my_vec = my_vec)
+constructive::construct(my_list)
+```
+
+# Use `enframe()` from tibble
+
+Let's say we need to convert our vector and our list to tibbles. 
+We can use the function `enframe()` from the tibble package to achieve this.
+
+
+```{r}
+my_tib_vec <- tibble::enframe(my_vec)
+constructive::construct(my_tib_vec)
+
+my_tib_list <- tibble::enframe(my_list)
+constructive::construct(my_tib_list)
+```
+
+We can see that `my_tib_vec` and `my_tib_list` are not the same. 
+
+```{r}
+waldo::compare(my_tib_vec, my_tib_list)
+```
+
+This difference comes from the fact that the `enframe()` function converts a named vector into a regular tibble, while a list will be transformed into a nested[^nested_tib_posts] tibble.
+
+[^nested_tib_posts]: You can refer to my former blog posts [What is the difference between (un)packing and (un)nesting a tibble?](https://rdiscovery.netlify.app/posts/2024-05-30_pack-nest/) and [What are the use cases for using nested data over packed data?](https://rdiscovery.netlify.app/posts/2024-06-03_use-case-pack-nest/).
+
+To obtain the same tibbles, we need to perform operations on the nested tibble. 
+First, we need to unlist the `value` variable and to enframe it in a list to retrieve the name of each element. 
+Eventually, we can unnest the column `value`.
+
+Note that we remove the initial `name` column which contained the name of the list, namely `my_vec`, to only keep the `name` variable corresponding to the names of the list values, i.e. `"first"`, `"second"` and `"third"`.
+
+```{r}
+my_unnested_tib_list <-
+  my_tib_list |>
+  dplyr::mutate(value = list(tibble::enframe(unlist(my_tib_list$value)))) |>
+  dplyr::select(-name) |>
+  tidyr::unnest(cols = value)
+
+constructive::construct(my_unnested_tib_list)
+
+waldo::compare(my_tib_vec, my_unnested_tib_list)
+```
+
+# Use `deframe()` from tibble
+
+To recover our original vector and list, we can use `deframe()` from tibble.
+
+```{r}
+my_original_vec <- tibble::deframe(my_tib_vec)
+constructive::construct(my_original_vec)
+waldo::compare(my_vec, my_original_vec)
+
+my_original_list <- tibble::deframe(my_tib_list)
+constructive::construct(my_original_list)
+waldo::compare(my_list, my_original_list)
+```
+
+Note that the nested tibble is automatically converted to a list thanks to `deframe()`.

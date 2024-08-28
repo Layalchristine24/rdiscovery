@@ -47,7 +47,7 @@ constructive::construct(my_list)
 # Use `enframe()` from tibble
 
 Let's say we need to convert our vector and our list to tibbles. 
-We can use the function `enframe()` from the tibble package to achieve this.
+We can use the function [`enframe()`](https://tibble.tidyverse.org/reference/enframe.html) from the tibble package to achieve this.
 
 
 ```{r}
@@ -88,7 +88,7 @@ waldo::compare(my_tib_vec, my_unnested_tib_list)
 
 # Use `deframe()` from tibble
 
-To recover our original vector and list, we can use `deframe()` from tibble.
+To recover our original vector and list, we can use [`deframe()`](https://tibble.tidyverse.org/reference/enframe.html) from tibble.
 
 ```{r}
 my_original_vec <- tibble::deframe(my_tib_vec)

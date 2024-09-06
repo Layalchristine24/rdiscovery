@@ -1,0 +1,68 @@
+---
+title: What functions can you use to iterate a vector?
+author:
+  - name:
+      given: Layal Christine
+      family: Lettry
+      orcid: 0009-0008-6396-0523
+    affiliations:
+      - id: cynkra
+      - name: cynkra GmbH
+        city: Zurich
+        state: CH
+      - id: unifr
+      - name: University of Fribourg, Dept. of Informatics, ASAM Group
+        city: Fribourg
+        state: CH
+date: 2024-09-05
+categories: [purrr, constructive, reduce]
+image: image.jpg
+citation: 
+  url: https://rdiscovery.netlify.app/posts/2024-08-28_frame-functions/
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    toc-title: Contents
+    toc-location: right
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+*Which functions could you use to replace a loop?*
+
+# Initial object
+
+Let's assume that we have a numeric vector and a list.
+
+```{r}
+my_vec <- c("first" = 1L, "second" = 2L, "third" = 3L, "fourth" = 4L)
+constructive::construct(my_vec)
+```
+
+# Use `reduce()` from purrr
+
+Let's say we want to compute the sum and the product of all the elements of our vector.
+
+```{r}
+my_vec |> 
+  purrr::reduce(`+`)
+
+my_vec |> 
+  purrr::reduce(`*`)
+```
+
+It is the same as doing
+
+```{r}
+my_vec |> sum()
+
+my_vec |> prod()
+```
+
+This means that `reduce()` took the vector values and applied the `+` or `*` function iteratively in the `forward` direction (default). 
+
+Let `f(a, b) = a + b`, then `reduce()` will apply this to `my_vec`, i.e. `f(f(f(1, 2), 3), 4) = f(f(3, 3), 4) = f(6, 4) = 10`.
+
+If the direction had been set to `backwards`, the following would have happened: `f(f(f(4, 3), 2), 1) = f(f(7, 2), 1) = f(9, 1) = 10`.

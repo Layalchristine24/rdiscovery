@@ -14,7 +14,7 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2024-09-05
+date: 2024-09-07
 categories: [purrr, constructive, reduce]
 image: image.jpg
 citation: 

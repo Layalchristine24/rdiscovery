@@ -63,6 +63,54 @@ my_vec |> prod()
 
 This means that `reduce()` took the vector values and applied the `+` or `*` function iteratively in the `forward` direction (default). 
 
-Let `f(a, b) = a + b`, then `reduce()` will apply this to `my_vec`, i.e. `f(f(f(1, 2), 3), 4) = f(f(3, 3), 4) = f(6, 4) = 10`.
+## Difference between the forward and the backward direction
 
-If the direction had been set to `backwards`, the following would have happened: `f(f(f(4, 3), 2), 1) = f(f(7, 2), 1) = f(9, 1) = 10`.
+Let the function `f` be defined by `f(a, b) = a + b`, then `reduce()` will apply this to `my_vec`, i.e. 
+$$
+f(f(f(1, 2), 3), 4) = f(f(3, 3), 4) = f(6, 4) = 10.
+$$
+
+If the direction had been set to `backwards`, the following would have happened: 
+$$
+f(f(f(4, 3), 2), 1) = f(f(7, 2), 1) = f(9, 1) = 10.
+$$
+To see the difference between `forward` and `backward`, let us subtract the elements of our vector iteratively.
+
+```{r}
+my_vec |> 
+  purrr::reduce(`-`)
+
+my_vec |> 
+  purrr::reduce(`-`, .dir = "backward")
+```
+
+Indeed, let the function `g` be defined by `g(a, b) = a - b`, then the `forward` subtraction corresponds to this operation: 
+$$
+g(g(g(1, 2), 3), 4) = g(g(-1, 3), 4) = g(-4, 4) = -8. 
+$$
+
+The  the `backward` subtraction would be: 
+
+$$ 
+g(g(g(4, 3), 2), 1) = g(g(1, 2), 1) = g(-1, 1) = -2.
+$$
+
+## Initial value of the accumulation
+
+We could set the initial value of the accumulation. 
+
+```{r}
+my_vec[[3]]
+
+my_vec |> 
+  purrr::reduce(`-`, .init = my_vec[[3]])
+```
+
+The above operation corresponds to the same operation as the one before, but starting with the value of `3`: 
+
+$$
+g(g(g(g(3, 1), 2), 3), 4) = g(g(g(2, 2), 3), 4) = g(g(0, 3), 4) = g(-3, 4) = -7.
+$$
+
+
+

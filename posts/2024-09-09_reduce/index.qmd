@@ -14,11 +14,11 @@ author:
       - name: University of Fribourg, Dept. of Informatics, ASAM Group
         city: Fribourg
         state: CH
-date: 2024-09-07
-categories: [purrr, constructive, reduce]
+date: 2024-09-09
+categories: [purrr, constructive, reduce, accumulate, loop, iteration]
 image: image.jpg
 citation: 
-  url: https://rdiscovery.netlify.app/posts/2024-08-28_frame-functions/
+  url: https://rdiscovery.netlify.app/posts/2024-09-09_reduce/
 format:
   html:
     toc: true
@@ -85,18 +85,17 @@ These results show that `reduce()` takes the vector values and applies the `+` o
 
 ## Difference between the forward and the backward direction
 
-Let the function `f` be defined by `f(a, b) = a + b`, then `reduce()` will apply this to `my_vec`, i.e. 
+Let the function `f` be defined by `f(a, b) = a + b`, then `reduce()` will apply this to `my_vec`, i.e.
 
 $$
 f(f(f(1, 2), 3), 4) = f(f(3, 3), 4) = f(6, 4) = 10.
 $$
 
-If the direction had been set to `backwards`, the following would have happened: 
+If the direction had been set to `backwards`, the following would have happened:
 
 $$
 f(f(f(4, 3), 2), 1) = f(f(7, 2), 1) = f(9, 1) = 10.
-$$ 
-To see the difference between `forward` and `backward`, let us subtract the elements of our vector iteratively.
+$$ To see the difference between `forward` and `backward`, let us subtract the elements of our vector iteratively.
 
 ```{r}
 my_vec |>
@@ -106,7 +105,7 @@ my_vec |>
   purrr::reduce(`-`, .dir = "backward")
 ```
 
-Indeed, let the function `g` be defined by `g(a, b) = a - b`, then the `forward` subtraction corresponds to this operation: 
+Indeed, let the function `g` be defined by `g(a, b) = a - b`, then the `forward` subtraction corresponds to this operation:
 
 $$
 g(g(g(1, 2), 3), 4) = g(g(-1, 3), 4) = g(-4, 4) = -8. 
@@ -139,22 +138,19 @@ $$
 
 ### With two arguments
 
-Let's say we want to compute the empiric variance for our vector. 
+Let's say we want to compute the empiric variance for our vector.
 
-We usually compute it with `var(my_vec) =` `r var(my_vec)`. 
-This is an unbiased estimator of the variance because the denominator is `n-1 = length(my_vec) - 1 =` `r length(my_vec) - 1`. 
-The following operation:
+We usually compute it with `var(my_vec) =` `r var(my_vec)`. This is an unbiased estimator of the variance because the denominator is `n-1 = length(my_vec) - 1 =` `r length(my_vec) - 1`. The following operation:
 
 ```{r}
 1 / (length(my_vec) - 1) * sum((my_vec - mean(my_vec))^2)
 ```
 
-corresponds to 
+corresponds to
 
 $$ 
 1/(n-1) \sum_{(i = 1)}^n (x_i - \bar{x})^2.
-$$
-However, it does not work when we try to apply this formula using `reduce()`, because we need to supply two arguments. 
+$$ However, it does not work when we try to apply this formula using `reduce()`, because we need to supply two arguments.
 
 ```{r}
 #| error: true
@@ -185,8 +181,7 @@ Let $x =$ `my_vec` and $h(x_1, x_2)$ be a function defined by
 
 $$
 h(x_1, x_2) = var(x_1, x_2) = 1/(2-1) \sum_{(i = 1)}^2 (x_i - \bar{x})^2 = \left[x_1 - \frac{(x_1 + x_2)}{2}\right]^2 + \left[x_2 - \frac{(x_1 + x_2)}{2}\right]^2.
-$$
-Thus, we get `r purrr::reduce(my_vec, \(x, y) var(c(x, y)))` because `reduce()` computes $h(h(h(1, 2), 3), 4)$ which is equal to 
+$$ Thus, we get `r purrr::reduce(my_vec, \(x, y) var(c(x, y)))` because `reduce()` computes $h(h(h(1, 2), 3), 4)$ which is equal to
 
 ```{r}
 var(c(var(c(var(my_vec[1:2]), my_vec[3])), my_vec[4]))
@@ -196,11 +191,9 @@ var(c(var(c(var(my_vec[1:2]), my_vec[3])), my_vec[4]))
 my_var(my_var(my_var(my_vec[[1]], my_vec[[2]]), my_vec[[3]]), my_vec[[4]])
 ```
 
-
 ### With three arguments
 
-The function `reduce2()` takes as arguments a first vector and a second one which is shorter than the former by one element, if `.init` is not specified. 
-Otherwise, both arguments should have  the same number of of elements.
+The function `reduce2()` takes as arguments a first vector and a second one which is shorter than the former by one element, if `.init` is not specified. Otherwise, both arguments should have the same number of of elements.
 
 ```{r}
 my_x <- my_vec
@@ -214,10 +207,7 @@ my_y <- my_x[-length(my_x)] + 6
 purrr::reduce2(my_x, my_y, paste)
 ```
 
-The `reduce2()` function takes as the initial value the first element of the first argument, if `.init` is not specified. 
-Otherwise, the argument `.init` gives the first element. 
-This is the first argument. 
-Then, the values going from the first non-used element of the two arguments (here `my_x` and `my_y`) will be the second and the third elements. 
+The `reduce2()` function takes as the initial value the first element of the first argument, if `.init` is not specified. Otherwise, the argument `.init` gives the first element. This is the first argument. Then, the values going from the first non-used element of the two arguments (here `my_x` and `my_y`) will be the second and the third elements.
 
 # Use `accumulate()` from purrr
 
@@ -247,4 +237,3 @@ my_y <- my_x[-length(my_x)] + 6
 
 purrr::accumulate2(my_x, my_y, paste)
 ```
-

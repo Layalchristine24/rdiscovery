@@ -43,7 +43,8 @@ constructive::construct(my_vec)
 
 # Use `reduce()` from purrr
 
-Let's say we want to compute the sum and the product of all the elements of our vector.
+Let's say we want to compute the sum and the product of all the elements of our vector. 
+We can use the [`reduce()`](https://purrr.tidyverse.org/reference/reduce.html) function.
 
 ```{r}
 my_vec |>
@@ -95,7 +96,7 @@ If the direction had been set `backwards`, the following would have occurred:
 
 $$
 f(f(f(4, 3), 2), 1) = f(f(7, 2), 1) = f(9, 1) = 10.
-$$ 
+$$
 
 To see the difference between `forward` and `backward`, let's subtract the elements of our vector iteratively.
 
@@ -209,15 +210,15 @@ my_y <- my_x[-length(my_x)] + 6
 purrr::reduce2(my_x, my_y, paste)
 ```
 
-If `.init` is not specified, the `reduce2()` function takes as the initial value the first element of the first argument. 
+If `.init` is not specified, the `reduce2()` function takes as the initial value the first element of the first argument.
 
-Otherwise, the argument `.init` gives the first element. This is the first argument. 
+Otherwise, the argument `.init` gives the first element. This is the first argument.
 
 Then, the values going from the first non-used element of the two arguments (here `my_x` and `my_y`) will be the second and the third elements.
 
 # Use `accumulate()` from purrr
 
-The function `accumulate()` will give the intermediate results of the `reduce()` function.
+The function [`accumulate()`](https://purrr.tidyverse.org/reference/accumulate.html) will give the intermediate results of the [`reduce()`](https://purrr.tidyverse.org/reference/reduce.html) function.
 
 ```{r}
 my_vec |>
